@@ -547,7 +547,8 @@ Valid Commands:
 						if(src.Chan) src.Chan.chanbot.Say("I'm sorry, but you appear to be muted.", src)
 						return
 
-				var/iCode = input("Paste your code below") as message
+				var/iCode = input("Paste your code below") as message | null
+				if(!iCode) {del(S); return 0}
 				S.owner = "[src.name]"
 				S.code = iCode
 				S.Send(1)
@@ -577,7 +578,8 @@ Valid Commands:
 						if(src.Chan) src.Chan.chanbot.Say("I'm sorry, but you appear to be muted.", src)
 						return
 
-				var/iCode = input("Paste your text below") as message
+				var/iCode = input("Paste your text below") as message | null
+				if(!iCode) {del(S); return 0}
 				S.owner = "[src.name]"
 				S.code = iCode
 				S.Send()

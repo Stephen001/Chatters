@@ -6,6 +6,17 @@
 // END_INTERNALS
 // BEGIN_FILE_DIR
 #define FILE_DIR .
+#define FILE_DIR "data"
+#define FILE_DIR "data/sndfx"
+#define FILE_DIR "resources"
+#define FILE_DIR "resources/icons"
+#define FILE_DIR "resources/icons/smileys"
+#define FILE_DIR "resources/images"
+#define FILE_DIR "resources/images/interface"
+#define FILE_DIR "resources/images/interface/arrows"
+#define FILE_DIR "resources/images/interface/locks"
+#define FILE_DIR "resources/images/menu"
+#define FILE_DIR "resources/images/smileys"
 // END_FILE_DIR
 #define FILE_DIR "resources"
 
