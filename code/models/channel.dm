@@ -193,8 +193,8 @@ Channel
 <span style='text-align: center;'><b><font color='#0000ff'>[world.name] - Created by Xooxer</font></b></span>
 <span style='text-align: center;'><b><font color='#0000ff'>and the BYOND Community</font></b></span>
 <span style='text-align: center;'><b>[TextMan.fadetext("Still the greatest chat program on BYOND!", list("102000000","255000000","102000000","000000000","000000255"))]</b></span>
-<span style='text-align: center;'>Source available on the <a href='http://www.github.com/kevans91/Chatters/'>Chatters Repository</a>.</span>
-<span style='text-align: center;'>Copyright � 2008 Andrew "Xooxer" Arnold</span>
+<span style='text-align: center;'>Source available on the <a href='http://www.github.com/Stephen001/Chatters/'>Chatters Repository</a>.</span>
+<span style='text-align: center;'>Copyright (c) 2008 Andrew "Xooxer" Arnold</span>
 <span style='text-align: center;'><b>[TextMan.fadetext("##########################################",list("000000000","255000000","255255255"))]</b></span>
 <span style='text-align: center;'><font color=red>- All Rights  Reserved -</font></span>
 "}, "[ckey(name)].chat.default_output")
@@ -204,8 +204,8 @@ Channel
 <span style='text-align: center;'><b>[world.name] - Created by Xooxer</b></span>
 <span style='text-align: center;'><b>and the BYOND Community</b></span>
 <span style='text-align: center;'><b>Still the greatest chat program on BYOND!</b></span>
-<span style='text-align: center;'>Source available on the <a href='http://www.github.com/kevans91/Chatters/'>Chatters Repository</a>.</span>
-<span style='text-align: center;'>Copyright � 2008 Andrew "Xooxer" Arnold</span>
+<span style='text-align: center;'>Source available on the <a href='http://www.github.com/Stephen001/Chatters/'>Chatters Repository</a>.</span>
+<span style='text-align: center;'>Copyright (c) 2008 Andrew "Xooxer" Arnold</span>
 <span style='text-align: center;'><b>##########################################</b></span>
 <span style='text-align: center;'>- All Rights  Reserved -</span>
 "}, "[ckey(name)].chat.default_output")
