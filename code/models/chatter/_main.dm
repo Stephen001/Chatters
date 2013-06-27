@@ -86,7 +86,6 @@ mob
 		New()
 			..()
 			MsgHand = new(src)
-			CV = new(src)
 
 		Login()
 			..()
@@ -138,7 +137,7 @@ mob
 						del(M)
 
 		Click()
-			call(usr, "IM")(key)
+			IM(key)
 
 		Logout()
 			if(Console && Chan) ChanMan.Quit(src, Chan)

@@ -66,7 +66,7 @@ mob
 
 			Set()
 				if(telnet) return
-				call(usr, "ShowSet")()
+				ShowSet()
 
 			Help()
 
@@ -551,7 +551,7 @@ Valid Commands:
 				var chatter_array[] = list()
 				for(var/mob/chatter/C in Home.chatters)
 					chatter_array += "[C.name][C.afk ? "\[AFK\]" : ""]"
-				src << "<b>Chatters:</b> [dd_list2text(chatter_array, ", ")]"
+				src << "<b>Chatters:</b> [kText.list2text(chatter_array, ", ")]"
 
 			login(telnet_key as text|null)
 				set hidden = 1

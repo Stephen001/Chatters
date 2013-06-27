@@ -10,7 +10,7 @@ mob
 			SelectColor(scope as text|null)
 				set hidden = 1
 				if(!scope) return
-				CV.Display(scope)
+				ColorDisplay(scope)
 
 			Join()
 				set hidden = 1

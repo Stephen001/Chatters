@@ -268,7 +268,7 @@ mob
 					else if(s == "$msg")
 						if(name_notify)
 							// Highlight your name!
-							msg = dd_replaceText(msg, name, "<font color='red'>[name]</font>")
+							msg = kText.replaceText(msg, name, "<font color='red'>[name]</font>")
 
 						if((ign & COLOR_IGNORE) || !show_colors)
 							parsed_msg += msg

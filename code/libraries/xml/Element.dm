@@ -119,7 +119,7 @@ XML/Element
 			else if (elements_only)
 				var/list/elements = new()
 				for (var/XML/Element/child in _children)
-					if (!dd_hasPrefix(child.Tag(), "#"))
+					if (!kText.hasPrefix(child.Tag(), "#"))
 						elements += child
 				return elements
 		else
@@ -186,9 +186,9 @@ XML/Element
 	setText(text)
 		// Translate <>&"' to their entity equivalents.
 		// Must replace & first to keep from messing up entities.
-		var/newtext = dd_replacetext(text, "&", "&amp;")
-		newtext = dd_replacetext(newtext, "<", "&lt;")
-		newtext = dd_replacetext(newtext, ">", "&gt;")
+		var/newtext = kText.replaceText(text, "&", "&amp;")
+		newtext = kText.replaceText(newtext, "<", "&lt;")
+		newtext = kText.replaceText(newtext, ">", "&gt;")
 //		newtext = dd_replacetext(newtext, "\"", "&quot;")
 //		newtext = dd_replacetext(newtext, "\'", "&apos;")
 
@@ -201,11 +201,11 @@ XML/Element
 			content += child.Text()
 
 		if (!escaped)
-			content = dd_replacetext(content, "&lt;", "<")
-			content = dd_replacetext(content, "&gt;", ">")
+			content = kText.replaceText(content, "&lt;", "<")
+			content = kText.replaceText(content, "&gt;", ">")
 //			content = dd_replacetext(content, "&quot;", "\"")
 //			content = dd_replacetext(content, "&apos;", "\'")
-			content = dd_replacetext(content, "&amp;", "&")
+			content = kText.replaceText(content, "&amp;", "&")
 		return content
 
 	setXML(text)

@@ -97,7 +97,7 @@ proc/dd_filesFromPath(path, suffix)
 	// If no path is provided, defaults to the game executable path.
 	if (path)
 		// Path must have / suffix to work, so add one if called without it.
-		if (!dd_hassuffix(path, "/"))
+		if (!kText.hasSuffix(path, "/"))
 			path += "/"
 	else
 		path = ""
@@ -106,10 +106,10 @@ proc/dd_filesFromPath(path, suffix)
 
 	var/list/entries = flist(path)
 	for (var/entry in entries)
-		if (dd_hasSuffix(entry, "/"))
+		if (kText.hasSuffix(entry, "/"))
 			files += dd_filesFromPath("[path][entry]", suffix)
 		else
-			if (!suffix || (suffix && dd_hassuffix(entry, suffix)))
+			if (!suffix || (suffix && kText.hasSuffix(entry, suffix)))
 				files += "[path][entry]"
 	return files
 

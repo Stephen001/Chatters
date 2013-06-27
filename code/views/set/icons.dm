@@ -1,11 +1,9 @@
-Settings
-	Icons
-		proc
+mob
+	chatter
+		verb
 			BrowseIcons()
 				set hidden = 1
-				var/SetView/Set = new()
-				Set.Display(src, "icons")
-				del(Set)
+				SetDisplay("icons")
 
 			UpdateIcons()
 				set hidden = 1

@@ -1,11 +1,10 @@
-Settings
-	Style
-		proc
+mob
+	chatter
+		verb
 			BrowseStyle()
 				set hidden = 1
-				var/SetView/Set = new()
-				Set.Display(src, "style")
-				del(Set)
+
+				SetDisplay("style")
 
 /*
 		proc

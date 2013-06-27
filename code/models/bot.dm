@@ -426,7 +426,6 @@ _____________________ \[end of announcement\] _____________________
 			call(usr, "RoomDesc")(newValue)
 			if(save) ChanMan.SaveChan(src.Chan)
 
-
 		SpamTimer(mob/chatter/C, msg)
 			if(!C || !C.Chan || !Chan.spam_control || (C==Host)) return
 			if((++C.flood_num) > Chan.max_msgs) C.flood_flag++

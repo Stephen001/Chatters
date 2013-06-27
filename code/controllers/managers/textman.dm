@@ -634,7 +634,7 @@ TextManager
 
 
 		escapeQuotes(text)
-			text = dd_replaceText(text, "\\", "\\\\")
+			text = kText.replaceText(text, "\\", "\\\\")
 		//	text = dd_replaceText(text, "\"", "\\\"")
-			text = dd_replaceText(text, "'" , "\\'" )
+			text = kText.replaceText(text, "'" , "\\'" )
 			return text
