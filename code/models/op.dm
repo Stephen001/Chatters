@@ -1,54 +1,6 @@
 
 Operator
 	proc
-		ShowOps()
-			set hidden = 1
-			winshow(Host, "ops", 1)
-			var/OpsView/OV = new()
-			OV.Initialize(usr)
-			OV.Display(usr, "general")
-			del(OV)
-
-		HideOps()
-			set hidden = 1
-			winshow(Host, "ops", 0)
-
-		BrowseOpsGeneral()
-			set hidden = 1
-			var/OpsView/OV = new()
-			OV.Display(usr, "general")
-			del(OV)
-
-		BrowseOpsSettings()
-			set hidden = 1
-			var/OpsView/OV = new()
-			OV.Display(usr, "settings")
-			del(OV)
-
-		BrowseOpsRanks()
-			set hidden = 1
-			var/OpsView/OV = new()
-			OV.Display(usr, "ranks")
-			del(OV)
-
-		BrowseOpsPrivileges()
-			set hidden = 1
-			var/OpsView/OV = new()
-			OV.Display(usr, "privileges")
-			del(OV)
-
-		BrowseOpsActions()
-			set hidden = 1
-			var/OpsView/OV = new()
-			OV.Display(usr, "actions")
-			del(OV)
-
-		BrowseOpsMonitor()
-			set hidden = 1
-			var/OpsView/OV = new()
-			OV.Display(usr, "monitor")
-			del(OV)
-
 		Promote(mob/target as text|null|mob in Home.chatters - usr)
 			if(!target) return
 			var/mob/chatter/M = usr
@@ -202,10 +154,8 @@ _____________________ \[end of announcement\] _____________________
 				// clear the chat window of everything but the output
 				// to reinforce that they are really out of the program
 				winset(C, "default", "menu=")
-				if(C.quickbar) C.ToggleQuickBar(1)
 				C << output(null, "[ckey(M.Chan.name)].chat.default_output")
 				winset(C, "[ckey(M.Chan.name)].child", "right=")
-				winset(C, "[ckey(M.Chan.name)].toggle_quickbar", "is-visible=false")
 				winset(C, "[ckey(M.Chan.name)].set", "is-visible=false")
 				winset(C, "[ckey(M.Chan.name)].help", "is-visible=false")
 				winset(C, "[ckey(M.Chan.name)].default_input", "is-disabled=true")
@@ -246,10 +196,8 @@ _____________________ \[end of announcement\] _____________________
 					// clear the chat window of everything but the output
 					// to reinforce that they are really out of the program
 					winset(C, "default", "menu=")
-					if(C.quickbar) C.ToggleQuickBar(1)
 					C << output(null, "[ckey(M.Chan.name)].chat.default_output")
 					winset(C, "[ckey(M.Chan.name)].child", "right=")
-					winset(C, "[ckey(M.Chan.name)].toggle_quickbar", "is-visible=false")
 					winset(C, "[ckey(M.Chan.name)].set", "is-visible=false")
 					winset(C, "[ckey(M.Chan.name)].help", "is-visible=false")
 					winset(C, "[ckey(M.Chan.name)].default_input", "is-disabled=true")

@@ -41,7 +41,7 @@ Settings
 				call(C, "SetDateFormat")()
 				call(C, "SetLongDateFormat")()
 				winset(C, "style_formats.updated", "is-visible=true")
-				var/save = winget(C, "style_format.save", "is-checked")
+				var/save = winget(C, "style_formats.save", "is-checked")
 				if(save == "true")
 					C.winsize = winget(C, "default", "size")
 					ChatMan.Save(C)
@@ -68,7 +68,7 @@ Settings
 
 			SetChatFormat(t as text|null)
 				set hidden = 1
-				if(isnull(t)) t = "$ts <b>$name:</b>   $msg"
+				if(isnull(t)) t = "$ts <b>$name:</b> $msg"
 				var/mob/chatter/C = usr
 				if(!C) return
 				var/list/variables = list("$ts","$name","$msg","says","said")
@@ -88,7 +88,7 @@ Settings
 
 			SetInlineEmoteFormat(t as text|null)
 				set hidden = 1
-				if(isnull(t)) t = "$ts $name $rp:   $msg"
+				if(isnull(t)) t = "$ts $name $rp: $msg"
 				var/mob/chatter/C = usr
 				if(!C) return
 				var/list/variables = list("$ts","$name","$rp","$msg","says","said")
@@ -98,7 +98,7 @@ Settings
 
 			SetTimeFormat(t as text|null)
 				set hidden = 1
-				if(isnull(t)) t = "<b>\[</b>hh:mm:ss<b>]</b>"
+				if(isnull(t)) t = "<font size=1>\[hh:mm:ss]</font>"
 				var/mob/chatter/C = usr
 				if(!C) return
 				var/list/variables = list("hh","mm","ss")

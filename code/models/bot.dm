@@ -460,10 +460,8 @@ _____________________ \[end of announcement\] _____________________
 				// clear the chat window of everything but the output
 				// to reinforce that they are really out of the program
 				winset(C, "default", "menu=")
-				if(C.quickbar) C.ToggleQuickBar(1)
 				C << output(null, "[ckey(Chan.name)].chat.default_output")
 				winset(C, "[ckey(Chan.name)].child", "right=")
-				winset(C, "[ckey(Chan.name)].toggle_quickbar", "is-visible=false")
 				winset(C, "[ckey(Chan.name)].set", "is-visible=false")
 				winset(C, "[ckey(Chan.name)].help", "is-visible=false")
 				winset(C, "[ckey(Chan.name)].default_input", "is-disabled=true")

@@ -150,63 +150,35 @@ Channel
 				var/size = winget(C, "[ckey(name)].child", "size")
 				var/X = copytext(size, 1, findtext(size,"x"))
 				var/Y = text2num(copytext(size, findtext(size, "x")+1)) - 44
-				winset(C, null, "[window].toggle_quickbar.is-visible=true;\
-								[window].set.is-visible=true;\
+				winset(C, null, "[window].set.is-visible=true;\
 								[window].help.is-visible=true;\
 								[window].default_input.is-disabled=false;\
 								[window].child.size=[X]x[Y];\
 								[window].child.pos=0,0;")
-				C.ToggleQuickBar(1)
-
-			if(!C.quickbar)
-				C.quickbar = TRUE
-				C.ToggleQuickBar(1)
-//				if(Host == C) winset(C, "host.quickbar_toggle", "is-checked=false;")
-//				else winset(C, "menu.quickbar_toggle", "is-checked=false;")
-
-			if(!C.showwho)
-				C.showwho = TRUE
-				C.ToggleWho(1)
-				if(Host == C)
-					winset(C, "host.who_toggle", "is-checked=false;")
-				else
-					winset(C, "menu.who_toggle", "is-checked=false;")
-
-			if(!C.showtopic)
-				C.showtopic = TRUE
-				C.ToggleTopic(1)
-				if(Host == C)
-					winset(C, "host.topic_toggle", "is-checked=false;")
-				else
-					winset(C, "menu.topic_toggle", "is-checked=false;")
-
-			if(C.swaped_panes)
-				C.swaped_panes = FALSE
-				C.SwapPanes(1)
 
 			winshow(C, ckey(name), 1)
 
 			winset(C, "[ckey(C.Chan.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
 			if(C.show_title)
 				if(C.show_colors)
-					C << output({"<span style='text-align: center;'><b>[TextMan.fadetext("##########################################",list("000000000","255000000","255255255"))]</b></span>
+					C << output({"<span style='text-align: center;'><b>[TextMan.fadetext("#######################################",list("000000000","255000000","255255255"))]</b></span>
 <span style='text-align: center;'><b><font color='#0000ff'>[world.name] - Created by Xooxer</font></b></span>
 <span style='text-align: center;'><b><font color='#0000ff'>and the BYOND Community</font></b></span>
 <span style='text-align: center;'><b>[TextMan.fadetext("Still the greatest chat program on BYOND!", list("102000000","255000000","102000000","000000000","000000255"))]</b></span>
 <span style='text-align: center;'>Source available on the <a href='http://www.github.com/Stephen001/Chatters/'>Chatters Repository</a>.</span>
 <span style='text-align: center;'>Copyright (c) 2008 Andrew "Xooxer" Arnold</span>
-<span style='text-align: center;'><b>[TextMan.fadetext("##########################################",list("000000000","255000000","255255255"))]</b></span>
-<span style='text-align: center;'><font color=red>- All Rights  Reserved -</font></span>
+<span style='text-align: center;'><b>[TextMan.fadetext("#######################################",list("000000000","255000000","255255255"))]</b></span>
+<span style='text-align: center;'><font color=red>- All Rights Reserved -</font></span>
 "}, "[ckey(name)].chat.default_output")
 
 				else
-					C << output({"<span style='text-align: center;'><b>##########################################</b></span>
+					C << output({"<span style='text-align: center;'><b>#######################################</b></span>
 <span style='text-align: center;'><b>[world.name] - Created by Xooxer</b></span>
 <span style='text-align: center;'><b>and the BYOND Community</b></span>
 <span style='text-align: center;'><b>Still the greatest chat program on BYOND!</b></span>
 <span style='text-align: center;'>Source available on the <a href='http://www.github.com/Stephen001/Chatters/'>Chatters Repository</a>.</span>
 <span style='text-align: center;'>Copyright (c) 2008 Andrew "Xooxer" Arnold</span>
-<span style='text-align: center;'><b>##########################################</b></span>
+<span style='text-align: center;'><b>#######################################</b></span>
 <span style='text-align: center;'>- All Rights  Reserved -</span>
 "}, "[ckey(name)].chat.default_output")
 
@@ -221,12 +193,12 @@ Channel
 
 			UpdateWho()
 
-			world.status = "[Home.name] founded by [Home.founder] - [Home.chatters.len] chatter\s"
+			world.status = "[Home.name] founded by [Home.founder] ([Home.chatters.len] chatter\s)"
 
 			winset(C, "[ckey(Home.name)].default_input", "text='> ';focus=true;")
 
-			chanbot.Say("[C.name] has joined [name]")
-			chanbot.Say("You have joined [name] founded by [founder]",C)
+			chanbot.Say("[C.name] has joined [name].")
+			chanbot.Say("You have joined [name] founded by [founder].",C)
 			chanbot.Say("[topic]",C)
 			if(!Home.ismute(C)) EventMan.Parse(C, C.onJoin)
 
@@ -257,9 +229,6 @@ Channel
 		UpdateWho()
 
 			for(var/mob/chatter/C in chatters)
-
-				var/active = chatters.len
-
 				if(!ChatMan.istelnet(C.key))
 					for(var/i=1, i<=chatters.len, i++)
 						var/mob/chatter/c = chatters[i]
@@ -270,7 +239,6 @@ Channel
 						var/n = c.name
 						if(c==C)
 							if(c.afk)
-								active--
 								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:gray;font-weight:bold}'")
 								c.name += " \[AFK]"
 							else if(C.ckey in C.Chan.operators)
@@ -280,7 +248,6 @@ Channel
 								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{font-weight:bold}'")
 						else
 							if(!ChatMan.istelnet(c.key) && c.afk)
-								active--
 								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:gray}'")
 								c.name += " \[AFK]"
 							else if(c.ckey in C.Chan.operators)
@@ -291,8 +258,6 @@ Channel
 						C << output(c, "[ckey(name)].who.grid")
 						c.name = n
 				if(C.client)
-					winset(C, "[ckey(name)].online", "text='[chatters.len] Chatter\s - [active] Active:';")
-					winset(C, "[ckey(name)].online_left", "text='[chatters.len] Chatter\s - [active] Active:';")
 					winset(C, "[ckey(name)].who.grid", "cells=1x[chatters.len]")
 
 		SortWho(list/L)
@@ -664,10 +629,8 @@ Channel
 								// clear the chat window of everything but the output
 								// to reinforce that they are really out of the program
 								winset(C, "default", "menu=")
-								if(C.quickbar) C.ToggleQuickBar(1)
 								C << output(null, "[ckey(name)].chat.default_output")
 								winset(C, "[ckey(name)].child", "right=")
-								winset(C, "[ckey(name)].toggle_quickbar", "is-visible=false")
 								winset(C, "[ckey(name)].set", "is-visible=false")
 								winset(C, "[ckey(name)].help", "is-visible=false")
 								winset(C, "[ckey(name)].default_input", "is-disabled=true")
@@ -712,10 +675,8 @@ Channel
 									// clear the chat window of everything but the output
 									// to reinforce that they are really out of the program
 									winset(C, "default", "menu=")
-									if(C.quickbar) C.ToggleQuickBar(1)
 									C << output(null, "[ckey(name)].chat.default_output")
 									winset(C, "[ckey(name)].child", "right=")
-									winset(C, "[ckey(name)].toggle_quickbar", "is-visible=false")
 									winset(C, "[ckey(name)].set", "is-visible=false")
 									winset(C, "[ckey(name)].help", "is-visible=false")
 									winset(C, "[ckey(name)].default_input", "is-disabled=true")

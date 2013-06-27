@@ -51,7 +51,6 @@ Settings
 				set hidden = 1
 				var/mob/chatter/C = usr
 				if(!C) return
-				winset(C, "style_colors.define", "is-visible=false")
 
 				winset(C, "style_colors.fade_help", "is-visible=true")
 				winset(C, "style_colors.fadecolors", "is-visible=true")
@@ -106,7 +105,6 @@ Settings
 					winset(C, "style_colors.color[i]", "is-visible=false")
 
 				C << output("<b>[C.fade_name]</b>", "style_colors.output")
-				winset(C, "style_colors.define", "is-visible=true")
 
 			SetNameColor(t as text|null)
 				set hidden = 1
