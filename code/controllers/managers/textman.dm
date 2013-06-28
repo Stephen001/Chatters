@@ -240,21 +240,16 @@ TextManager
 			if(!Target || !Target.client)
 				del Target
 				return
-			var/month = text2num(time2text(world.realtime+Target.time_offset,"MM"))
-			var/day = text2num(time2text(world.realtime+Target.time_offset, "DD"))
-			var/XML/Element/root = xmlRootFromFile("./data/xml/quotes/quotes[month].xml")
-			if(!root) return
-			var/list/Quotes = root.Descendants("quote")
-			if(day > Quotes.len) day = Quotes.len
-			var/XML/Element/Quote = Quotes[day]
-			Home.QOTD = TextMan.ParseTags(Quote.Text(), Target.show_colors, Target.show_highlight)
+
+			var/qotd = QuoteMan.getQOTD()
+
+			Home.QOTD = TextMan.ParseTags(qotd, Target.show_colors, Target.show_highlight)
 
 			if(Home.QOTD)
-				if(Target.show_colors)
-					Target << output("<b>[fadetext("Quote of the Day", list("102102255","255204000"))]:</b>", "[ckey(Target.Chan.name)].chat.default_output")
-				else
-					Target << output("<b>Quote of the Day:</b>", "[ckey(Target.Chan.name)].chat.default_output")
-				Target << output("<i style='font-family: Verdana'>[Home.QOTD]</i>\n", "[ckey(Target.Chan.name)].chat.default_output")
+				if(Target.show_colors) Target << output("<b>[fadetext("Developer Quote of the Day", list("102102255","255204000"))]:</b>", "[ckey(Target.Chan.name)].chat.default_output")
+				else Target << output("<b>Developer Quote of the Day:</b>", "[ckey(Target.Chan.name)].chat.default_output")
+
+				Target << output("<i style='font-family: Arial'>&nbsp;&nbsp;&nbsp;&nbsp;[Home.QOTD]</i>\n", "[ckey(Target.Chan.name)].chat.default_output")
 
 
 		// Simple string matching procedure.

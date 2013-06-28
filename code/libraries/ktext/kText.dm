@@ -2,8 +2,6 @@
 kText by Keeth
 */
 
-var/kText/kText = new
-
 kText
 	var
 		const

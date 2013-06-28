@@ -95,7 +95,9 @@ var/global
 	Channel			// Main server channel
 		Home
 
+	kText/kText = new
 	// Global Managers
+
 	BotManager/BotMan
 	ChannelManager/ChanMan
 	ChatterManager/ChatMan
@@ -106,6 +108,7 @@ var/global
 	MessageManager/MsgMan
 	OperatorManager/OpMan
 	TextManager/TextMan
+	QuoteManager/QuoteMan = new
 
 	savefile_version = "0.1.6" // savefile versioning to reduce needless wipes
 

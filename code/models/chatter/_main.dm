@@ -137,7 +137,8 @@ mob
 						del(M)
 
 		Click()
-			IM(key)
+			var/Messenger/im = new(usr, key)
+			im.Display(usr)
 
 		Logout()
 			if(Console && Chan) ChanMan.Quit(src, Chan)
