@@ -4,7 +4,7 @@ mob/chatter
 			set hidden = 1
 			set name = ".settings"
 
-			SetDisplay(src, winget(src, "set.tab1", "current-tab"))
+			SetDisplay(winget(src, "set.tab1", "current-tab"))
 
 		ShowSet()
 			set hidden = 1
@@ -50,6 +50,7 @@ mob/chatter
 					winset(src, "style_formats.time_format", "text='[TextMan.escapeQuotes(list2text(time_format))]'")
 					winset(src, "style_formats.date_format", "text='[TextMan.escapeQuotes(list2text(date_format))]'")
 					winset(src, "style_formats.long_date_format", "text='[TextMan.escapeQuotes(list2text(long_date_format))]'")
+					winset(src, "style_formats.output_style", "text='[TextMan.escapeQuotes(default_output_style)]'")
 
 				if("icons")
 				if("filters")

@@ -7707,7 +7707,7 @@ window "filters"
 		on-close = ""
 	elem "updated"
 		type = LABEL
-		pos = 332,284
+		pos = 326,421
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -7733,7 +7733,7 @@ window "filters"
 		text-wrap = false
 	elem "saved"
 		type = LABEL
-		pos = 333,261
+		pos = 327,398
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -7759,7 +7759,7 @@ window "filters"
 		text-wrap = false
 	elem "save"
 		type = BUTTON
-		pos = 332,238
+		pos = 326,375
 		size = 135x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -7787,7 +7787,7 @@ window "filters"
 		button-type = checkbox
 	elem "button17"
 		type = BUTTON
-		pos = 401,260
+		pos = 395,397
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -7815,7 +7815,7 @@ window "filters"
 		button-type = pushbutton
 	elem "button12"
 		type = BUTTON
-		pos = 401,285
+		pos = 395,422
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -8181,7 +8181,7 @@ window "icons"
 		on-close = ""
 	elem "updated"
 		type = LABEL
-		pos = 337,148
+		pos = 329,422
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -8207,7 +8207,7 @@ window "icons"
 		text-wrap = false
 	elem "saved"
 		type = LABEL
-		pos = 338,125
+		pos = 330,399
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -8233,7 +8233,7 @@ window "icons"
 		text-wrap = false
 	elem "save"
 		type = BUTTON
-		pos = 334,101
+		pos = 326,375
 		size = 135x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -8261,7 +8261,7 @@ window "icons"
 		button-type = checkbox
 	elem "button17"
 		type = BUTTON
-		pos = 403,123
+		pos = 395,397
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -8289,7 +8289,7 @@ window "icons"
 		button-type = pushbutton
 	elem "button12"
 		type = BUTTON
-		pos = 403,148
+		pos = 395,422
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -8323,7 +8323,7 @@ window "icons"
 		anchor2 = none
 		font-family = "Arial"
 		font-size = 10
-		font-style = "bold"
+		font-style = ""
 		text-color = #333333
 		background-color = #fafafa
 		is-visible = true
@@ -8351,7 +8351,7 @@ window "icons"
 		anchor2 = none
 		font-family = "Arial"
 		font-size = 10
-		font-style = "bold"
+		font-style = ""
 		text-color = #333333
 		background-color = #fafafa
 		is-visible = true
@@ -8376,7 +8376,7 @@ window "set"
 	elem "set"
 		type = MAIN
 		pos = 281,0
-		size = 484x410
+		size = 484x570
 		anchor1 = none
 		anchor2 = none
 		font-family = "Times New Roman"
@@ -8441,7 +8441,7 @@ window "set"
 	elem "tab1"
 		type = TAB
 		pos = -1,21
-		size = 486x390
+		size = 486x550
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = "Arial"
@@ -8532,7 +8532,7 @@ window "style_colors"
 	elem "style_colors"
 		type = MAIN
 		pos = 281,0
-		size = 476x368
+		size = 476x454
 		anchor1 = none
 		anchor2 = none
 		font-family = "Times New Roman"
@@ -8570,7 +8570,7 @@ window "style_colors"
 		on-close = ""
 	elem "updated"
 		type = LABEL
-		pos = 327,305
+		pos = 329,422
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -8596,7 +8596,7 @@ window "style_colors"
 		text-wrap = false
 	elem "saved"
 		type = LABEL
-		pos = 328,282
+		pos = 330,399
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -8648,7 +8648,7 @@ window "style_colors"
 		text-wrap = false
 	elem "save"
 		type = BUTTON
-		pos = 324,258
+		pos = 326,375
 		size = 135x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9044,7 +9044,7 @@ window "style_colors"
 		no-command = false
 	elem "button17"
 		type = BUTTON
-		pos = 393,280
+		pos = 395,397
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9514,7 +9514,7 @@ window "style_colors"
 		button-type = pushbutton
 	elem "button12"
 		type = BUTTON
-		pos = 393,305
+		pos = 395,422
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9599,7 +9599,7 @@ window "style_formats"
 	elem "style_formats"
 		type = MAIN
 		pos = 281,0
-		size = 476x370
+		size = 476x459
 		anchor1 = none
 		anchor2 = none
 		font-family = "Times New Roman"
@@ -9635,9 +9635,59 @@ window "style_formats"
 		macro = ""
 		menu = ""
 		on-close = ""
+	elem "label15"
+		type = LABEL
+		pos = 21,168
+		size = 114x20
+		anchor1 = 0,0
+		anchor2 = 0,0
+		font-family = "Arial"
+		font-size = 10
+		font-style = "bold"
+		text-color = #333333
+		background-color = #fafafa
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "Output Style"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = left
+		text-wrap = false
+	elem "output_style"
+		type = INPUT
+		pos = 19,188
+		size = 436x176
+		anchor1 = none
+		anchor2 = none
+		font-family = "Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #ffffff
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = line
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		command = ""
+		multi-line = true
+		is-password = false
+		no-command = false
 	elem "updated"
 		type = LABEL
-		pos = 325,298
+		pos = 328,422
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9663,7 +9713,7 @@ window "style_formats"
 		text-wrap = false
 	elem "saved"
 		type = LABEL
-		pos = 326,275
+		pos = 329,399
 		size = 60x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9689,7 +9739,7 @@ window "style_formats"
 		text-wrap = false
 	elem "save"
 		type = BUTTON
-		pos = 323,251
+		pos = 326,375
 		size = 135x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9717,7 +9767,7 @@ window "style_formats"
 		button-type = checkbox
 	elem "button3"
 		type = BUTTON
-		pos = 392,273
+		pos = 395,397
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9745,7 +9795,7 @@ window "style_formats"
 		button-type = pushbutton
 	elem "button2"
 		type = BUTTON
-		pos = 392,298
+		pos = 395,422
 		size = 60x22
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9773,7 +9823,7 @@ window "style_formats"
 		button-type = pushbutton
 	elem "label14"
 		type = LABEL
-		pos = 261,149
+		pos = 261,115
 		size = 114x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9799,7 +9849,7 @@ window "style_formats"
 		text-wrap = false
 	elem "label13"
 		type = LABEL
-		pos = 261,97
+		pos = 261,63
 		size = 114x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9825,7 +9875,7 @@ window "style_formats"
 		text-wrap = false
 	elem "label12"
 		type = LABEL
-		pos = 261,45
+		pos = 261,11
 		size = 132x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9851,7 +9901,7 @@ window "style_formats"
 		text-wrap = false
 	elem "label11"
 		type = LABEL
-		pos = 21,148
+		pos = 21,114
 		size = 114x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9877,7 +9927,7 @@ window "style_formats"
 		text-wrap = false
 	elem "label9"
 		type = LABEL
-		pos = 21,96
+		pos = 21,62
 		size = 114x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9903,7 +9953,7 @@ window "style_formats"
 		text-wrap = false
 	elem "chat_format"
 		type = INPUT
-		pos = 20,64
+		pos = 20,30
 		size = 196x22
 		anchor1 = 6,0
 		anchor2 = 47,0
@@ -9927,7 +9977,7 @@ window "style_formats"
 		no-command = false
 	elem "label17"
 		type = LABEL
-		pos = 21,44
+		pos = 21,10
 		size = 114x20
 		anchor1 = 0,0
 		anchor2 = 0,0
@@ -9953,7 +10003,7 @@ window "style_formats"
 		text-wrap = false
 	elem "forced"
 		type = BUTTON
-		pos = 354,204
+		pos = 186,390
 		size = 48x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -9981,7 +10031,7 @@ window "style_formats"
 		button-type = radio
 	elem "no_forced"
 		type = BUTTON
-		pos = 410,204
+		pos = 242,390
 		size = 48x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -10009,7 +10059,7 @@ window "style_formats"
 		button-type = radio
 	elem "label19"
 		type = LABEL
-		pos = 204,202
+		pos = 37,390
 		size = 137x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -10035,7 +10085,7 @@ window "style_formats"
 		text-wrap = false
 	elem "emote_format"
 		type = INPUT
-		pos = 20,116
+		pos = 20,82
 		size = 196x22
 		anchor1 = 6,0
 		anchor2 = 47,0
@@ -10059,7 +10109,7 @@ window "style_formats"
 		no-command = false
 	elem "inline_emote_format"
 		type = INPUT
-		pos = 260,64
+		pos = 260,30
 		size = 196x22
 		anchor1 = 56,0
 		anchor2 = 97,0
@@ -10083,7 +10133,7 @@ window "style_formats"
 		no-command = false
 	elem "time_format"
 		type = INPUT
-		pos = 260,168
+		pos = 260,134
 		size = 196x22
 		anchor1 = 6,0
 		anchor2 = 47,0
@@ -10107,7 +10157,7 @@ window "style_formats"
 		no-command = false
 	elem "date_format"
 		type = INPUT
-		pos = 260,116
+		pos = 260,82
 		size = 196x22
 		anchor1 = 56,0
 		anchor2 = 97,0
@@ -10131,7 +10181,7 @@ window "style_formats"
 		no-command = false
 	elem "long_date_format"
 		type = INPUT
-		pos = 20,168
+		pos = 20,134
 		size = 196x22
 		anchor1 = 56,0
 		anchor2 = 97,0
@@ -10155,7 +10205,7 @@ window "style_formats"
 		no-command = false
 	elem "label19"
 		type = LABEL
-		pos = 253,223
+		pos = 85,409
 		size = 92x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -10181,7 +10231,7 @@ window "style_formats"
 		text-wrap = false
 	elem "forced"
 		type = BUTTON
-		pos = 354,224
+		pos = 186,410
 		size = 48x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -10209,7 +10259,7 @@ window "style_formats"
 		button-type = radio
 	elem "no_forced"
 		type = BUTTON
-		pos = 410,224
+		pos = 242,410
 		size = 48x20
 		anchor1 = 100,0
 		anchor2 = 100,0
@@ -10278,8 +10328,8 @@ window "system"
 		on-close = ""
 	elem "save"
 		type = BUTTON
-		pos = 333,227
-		size = 135x20
+		pos = 322,397
+		size = 137x20
 		anchor1 = 100,0
 		anchor2 = 100,0
 		font-family = "Arial"
@@ -10306,8 +10356,8 @@ window "system"
 		button-type = checkbox
 	elem "button17"
 		type = BUTTON
-		pos = 402,249
-		size = 60x22
+		pos = 391,419
+		size = 62x22
 		anchor1 = 100,0
 		anchor2 = 100,0
 		font-family = "Arial"
@@ -10334,8 +10384,8 @@ window "system"
 		button-type = pushbutton
 	elem "button12"
 		type = BUTTON
-		pos = 402,274
-		size = 60x22
+		pos = 391,444
+		size = 62x22
 		anchor1 = 100,0
 		anchor2 = 100,0
 		font-family = "Arial"
@@ -10362,8 +10412,8 @@ window "system"
 		button-type = pushbutton
 	elem "updated"
 		type = LABEL
-		pos = 332,275
-		size = 60x20
+		pos = 321,445
+		size = 62x20
 		anchor1 = 0,0
 		anchor2 = 0,0
 		font-family = "Arial"
@@ -10388,8 +10438,8 @@ window "system"
 		text-wrap = false
 	elem "saved"
 		type = LABEL
-		pos = 333,252
-		size = 60x20
+		pos = 322,422
+		size = 62x20
 		anchor1 = 0,0
 		anchor2 = 0,0
 		font-family = "Arial"

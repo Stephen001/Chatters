@@ -4,7 +4,7 @@ mob
 			BrowseSystem()
 				set hidden = 1
 
-				SetDisplay(src, "system")
+				SetDisplay("system")
 
 			UpdateSystem()
 				set hidden = 1

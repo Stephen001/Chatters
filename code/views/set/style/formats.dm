@@ -11,6 +11,7 @@ mob
 					TimeFormat = winget(src, "style_formats.time_format", "text")
 					DateFormat = winget(src, "style_formats.date_format", "text")
 					LongDateFormat = winget(src, "style_formats.long_date_format", "text")
+					OutputStyle = winget(src, "style_formats.output_style", "text")
 
 				SetDateFormat(DateFormat)
 				SetTimeFormat(TimeFormat)
@@ -18,6 +19,7 @@ mob
 				SetEmoteFormat(EmoteFormat)
 				SetChatFormat(ChatFormat)
 				SetLongDateFormat(LongDateFormat)
+				SetOutputStyle(OutputStyle)
 
 				winset(src, "style_formats.updated", "is-visible=true")
 
@@ -43,6 +45,7 @@ mob
 				SetTimeFormat()
 				SetDateFormat()
 				SetLongDateFormat()
+				SetOutputStyle()
 
 				winset(src, "style_formats.updated", "is-visible=true")
 
@@ -134,3 +137,11 @@ mob
 				var/list/variables = list("YYYY","YY","Month","MMM","MM","Day","DDD","DD")
 				long_date_format = ChatMan.ParseFormat(t, variables)
 				winset(src, "style_formats.long_date_format", "text='[TextMan.escapeQuotes(t)]'")
+
+			SetOutputStyle(t as text|null)
+				set hidden = 1
+				if(isnull(t)) t = ".code{color:#000000}.ident {color:#606}.comment {color:#666}.preproc {color:#008000}.keyword {color:#00f}.string {color:#0096b4}.number {color:#800000}body {text-indent: -8px;}"
+
+				default_output_style = t
+				if(Chan) winset(src, "[ckey(Home.name)].chat.default_output", "style='[TextMan.escapeQuotes(t)]';")
+				winset(src, "style_formats.output_style", "text='[TextMan.escapeQuotes(default_output_style)]';")

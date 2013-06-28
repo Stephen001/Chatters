@@ -4,7 +4,7 @@ mob
 			BrowseFilters()
 				set hidden = 1
 
-				SetDisplay(src, "filters")
+				SetDisplay("filters")
 
 			UpdateFilters()
 				set hidden = 1

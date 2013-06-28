@@ -118,13 +118,12 @@ mob
 			SetNameColor(t as text|null)
 				set hidden = 1
 
-				if(isnull(t)) t = "#000000"
-				t = "#"+ckey(t)
+				if(!t) t = "#000000"
+				if(copytext(t, 1, 2) != "#") t = "#" + t
+				name_color = uppertext(t)
 
 				if(fade_name == "<font color=[name_color]>[name]</font>") fade_name = null
 
-				if(t == "#000000") name_color = null
-				else name_color = uppertext(t)
 
 				if(!fade_name || (fade_name == name))
 					if(name_color) fade_name = "<font color=[name_color]>[name]</font>"
@@ -138,11 +137,9 @@ mob
 			SetTextColor(t as text|null)
 				set hidden = 1
 
-				if(isnull(t)) t = "#000000"
-
-				t = "#"+ckey(t)
-				if(t == "#000000") name_color = null
-				else text_color = uppertext(t)
+				if(!t) t = "#000000"
+				if(copytext(t, 1, 2) != "#") t = "#" + t
+				text_color = uppertext(t)
 
 				winset(src, "style_colors.text_color_button", "background-color='[t]'")
 				winset(src, "style_colors.text_color", "text='[t]'")
@@ -150,12 +147,14 @@ mob
 			SetBackground(t as text|null)
 				set hidden = 1
 
-				if(isnull(t)) t = "#ffffff"
-
+				if(!t) t = "#ffffff"
+				if(copytext(t, 1, 2) != "#") t = "#" + t
 				background = uppertext(t)
 
 				winset(src, "style_colors.background_button", "background-color='[t]'")
 				winset(src, "style_colors.background", "text='[background]'")
+
+				if(Chan) winset(src, "[ckey(Chan.name)].chat.default_output", "background-color='[TextMan.escapeQuotes(background)]';")
 
 			SetShowColors(t as text|null)
 				set hidden = 1
