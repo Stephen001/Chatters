@@ -6,12 +6,12 @@ mob
 				Home.ReturnAFK(src)
 
 
-			Ticker()
-				if(!src.client) return
-				if(winget(src, "style", "is-visible") == "true")
-					src << output(TextMan.strip_html(ParseTime(ticker)), "style.time")
-					ticker ^= 1
-				spawn(5) Ticker()
+			//Ticker()
+			//	if(!src.client) return
+			//	if(winget(src, "style", "is-visible") == "true")
+			//		src << output(TextMan.strip_html(ParseTime(ticker)), "style.time")
+			//		ticker ^= 1
+			//	spawn(5) Ticker()
 
 
 			votePromote(privilege, OpRank/Rank, target)
@@ -241,30 +241,20 @@ mob
 								var/end = "'s"
 								if(copytext(M.name, length(M.name)-1) == "s")
 									end = "'"
-								if(M.name_color)
-									parsed_msg += "<font color=[M.name_color]>[M.name][end]</font>"
-								else
-									parsed_msg += "[M.name][end]"
+								parsed_msg += "<font color=[M.name_color]>[M.name][end]</font>"
 							else
-								if(M.name_color)
-									parsed_msg += "<font color=[M.name_color]>[M.name]</font>"
-								else
-									parsed_msg += M.name
-						else
-							if(M.fade_name != M.name)
-								parsed_msg += M.fade_name
-							else if(M.name_color)
 								parsed_msg += "<font color=[M.name_color]>[M.name]</font>"
+						else
+							if(M.fade_name)
+								parsed_msg += M.fade_name
 							else
-								parsed_msg += M.name
+								parsed_msg += "<font color=[M.name_color]>[M.name]</font>"
 					else if(s == "$rp")
 						if((ign & COLOR_IGNORE) || !show_colors)
 							parsed_msg += rp
 						else
 							if(M.name_color)
 								parsed_msg += "<font color=[M.name_color]>[rp]</font>"
-							else
-								parsed_msg += rp
 					else if(s == "$msg")
 						if(name_notify)
 							// Highlight your name!
@@ -273,15 +263,9 @@ mob
 						if((ign & COLOR_IGNORE) || !show_colors)
 							parsed_msg += msg
 						else if(!emote)
-							if(M.text_color)
-								parsed_msg += "<font color=[M.text_color]>[msg]</font>"
-							else
-								parsed_msg += msg
+							parsed_msg += "<font color=[M.text_color]>[msg]</font>"
 						else
-							if(M.name_color)
-								parsed_msg += "<font color=[M.name_color]>[msg]</font>"
-							else
-								parsed_msg += msg
+							parsed_msg += "<font color=[M.name_color]>[msg]</font>"
 					else if(s == "$ts")
 						parsed_msg += ParseTime()
 					else if(s == "says")

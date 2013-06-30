@@ -31,6 +31,9 @@ Messenger
 
 		winset(C, "[winname].output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
 
+		winset(C, "[winname].interfacebar_3", "background-color='[TextMan.escapeQuotes(C.interface_color)]';")
+		winset(C, "[winname].interfacebar_4", "background-color='[TextMan.escapeQuotes(C.interface_color)]';")
+
 		if(!C.msgHandlers)
 			C.msgHandlers=new
 		C.msgHandlers += ckey(name)

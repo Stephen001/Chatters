@@ -6,51 +6,6 @@ mob
 
 				SetDisplay("system")
 
-			UpdateSystem()
-				set hidden = 1
-
-				SetShowTitle()
-				SetShowWelcome()
-				SetShowMotD()
-				SetShowQotD()
-				SetClearOnReboot()
-
-				var
-					maxout = winget(src, "system.max_output", "text")
-					tnpswd = winget(src, "system.telnet_pass", "text")
-					X = winget(src, "system.win_size_x", "text")
-					Y = winget(src, "system.win_size_y", "text")
-
-				SetMaxOutput(maxout)
-				SetHighlightCode()
-				SetTelnetPassword(tnpswd)
-				SetWinSizeX(X)
-				SetWinSizeY(Y)
-
-				if(Chan) winset(src, "default", "size=[winsize]")
-
-				var
-					TimeOffset = winget(src, "system.offset", "text")
-					AutoAFK = text2num(winget(src, "system.auto_afk", "text"))
-					AwayMsg = winget(src, "system.away_msg", "text")
-
-				SetTimeOffset(text2num(TimeOffset))
-				SetAutoAFK(AutoAFK)
-				SetAwayMsg(AwayMsg)
-
-				winset(src, "system.updated", "is-visible=true")
-
-				if(winget(src, "system.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "system.saved", "is-visible=true")
-
-				sleep(50)
-
-				if(src && client)
-					winset(src, "system.updated", "is-visible=false")
-					winset(src, "system.saved", "is-visible=false")
-
 			SetDefaultSystem()
 				set hidden = 1
 
@@ -68,18 +23,6 @@ mob
 				SetTimeOffset()
 				SetAutoAFK()
 				SetAwayMsg()
-
-				winset(src, "system.updated", "is-visible=true")
-
-				if(winget(src, "system.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "system.saved", "is-visible=true")
-
-				sleep(50)
-
-				winset(src, "system.updated", "is-visible=false")
-				winset(src, "system.saved", "is-visible=false")
 
 			SetShowTitle(t as text|null)
 				set hidden = 1

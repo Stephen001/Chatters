@@ -95,14 +95,15 @@ Channel
 							[window].chat.default_output.is-disabled=false;\
 							[window].topic_label.text='[TextMan.escapeQuotes(topic)]';\
 							[window].child.left=[window].chat;\
-							[window].child.right=[window].who;\
+							[window].child.right=;\
+							default.child.right=[window].who;\
 							default.size=[C.winsize];\
 							default.can-resize=true;\
 							default.title='[name] - Chatters';\
 							default.menu=menu;\
-							default.child.pos=0,0;\
-							default.child.size=[C.winsize];\
 							default.child.left=[ckey(name)];")
+							//default.child.pos=4,4;\
+							//default.child.size=[C.winsize];
 /*			winset(C, "[ckey(name)].default_input", "is-default=true;")
 			winset(C, "[ckey(name)].chat.default_output", "is-default=true;is-disabled=false.")
 			winset(C, "[ckey(name)].topic_label", "text='[TextMan.escapeQuotes(topic)]';")
@@ -145,42 +146,46 @@ Channel
 								[window].default_input.is-disabled=false;\
 								[window].child.size=[X]x[Y];\
 								[window].child.pos=0,0;")
-
+			C.SetInterface(C.interface_color)
 			winshow(C, ckey(name), 1)
 			winset(C, "[ckey(C.Chan.name)].chat.default_output", "background-color='[TextMan.escapeQuotes(C.background)]';")
 			winset(C, "[ckey(C.Chan.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
+
+			C << output("<center>- - - - - - - - - - - - - - -", "[ckey(name)].chat.default_output")
+
 			if(C.show_title)
 				if(C.show_colors)
-					C << output({"<span style='text-align: center;'><b>[TextMan.fadetext("#######################################",list("000000000","255000000","255255255"))]</b></span>
-<span style='text-align: center;'><b><font color='#0000ff'>[world.name] - Created by Xooxer</font></b></span>
+					C << output({"<span style='text-align: center;'><b><font color='#0000ff'>[world.name] - Created by Xooxer</font></b></span>
 <span style='text-align: center;'><b><font color='#0000ff'>and the BYOND Community</font></b></span>
 <span style='text-align: center;'><b>[TextMan.fadetext("Still the greatest chat program on BYOND!", list("102000000","255000000","102000000","000000000","000000255"))]</b></span>
 <span style='text-align: center;'>Source available on the <a href='http://www.github.com/Stephen001/Chatters/'>Chatters Repository</a>.</span>
 <span style='text-align: center;'>Copyright (c) 2008 Andrew "Xooxer" Arnold</span>
-<span style='text-align: center;'><b>[TextMan.fadetext("#######################################",list("000000000","255000000","255255255"))]</b></span>
 <span style='text-align: center;'><font color=red>- All Rights Reserved -</font></span>
 "}, "[ckey(name)].chat.default_output")
 
 				else
-					C << output({"<span style='text-align: center;'><b>#######################################</b></span>
-<span style='text-align: center;'><b>[world.name] - Created by Xooxer</b></span>
+					C << output({"<span style='text-align: center;'><b>[world.name] - Created by Xooxer</b></span>
 <span style='text-align: center;'><b>and the BYOND Community</b></span>
 <span style='text-align: center;'><b>Still the greatest chat program on BYOND!</b></span>
 <span style='text-align: center;'>Source available on the <a href='http://www.github.com/Stephen001/Chatters/'>Chatters Repository</a>.</span>
 <span style='text-align: center;'>Copyright (c) 2008 Andrew "Xooxer" Arnold</span>
-<span style='text-align: center;'><b>#######################################</b></span>
 <span style='text-align: center;'>- All Rights  Reserved -</span>
 "}, "[ckey(name)].chat.default_output")
 
-			if(C.show_welcome)
-				C << output("[time2text(world.realtime+C.time_offset, list2text(C.long_date_format))]\n<b>Welcome, [C.name]!</b>\n", "[ckey(name)].chat.default_output")
-
 			if(C.show_qotd) TextMan.QOTD(C)
+
+			if(C.show_welcome)
+				C << output("<center>[time2text(world.realtime+C.time_offset, list2text(C.long_date_format))]<br><b>Welcome, [C.name]!</b></center>", "[ckey(name)].chat.default_output")
+
+			C << output("<span style='text-align: center;'><b>Please report any issues with Chatters <a href='https://github.com/Stephen001/Chatters/issues?state=open'>here</a>!</b></span>", "[ckey(name)].chat.default_output")
+
+			C << output("<center>- - - - - - - - - - - - - - -</center>", "[ckey(name)].chat.default_output")
 
 			if(!chatters) chatters = new()
 			chatters += C
 			chatters = SortWho(chatters)
 
+			C.icon_state = "active"
 			UpdateWho()
 
 			world.status = "[Home.name] founded by [Home.founder] ([Home.chatters.len] chatter\s)"
@@ -217,7 +222,6 @@ Channel
 				C.Logout()
 
 		UpdateWho()
-
 			for(var/mob/chatter/C in chatters)
 				if(!ChatMan.istelnet(C.key))
 					for(var/i=1, i<=chatters.len, i++)
@@ -227,24 +231,12 @@ Channel
 							continue
 						if(C.client) winset(C, "[ckey(name)].who.grid", "current-cell=1,[i]")
 						var/n = c.name
-						if(c==C)
-							if(c.afk)
-								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:gray;font-weight:bold}'")
-								c.name += " \[AFK]"
-							else if(C.ckey in C.Chan.operators)
-								var/Op/O = C.Chan.operators[C.ckey]
-								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:[O.Rank.color];font-weight:bold}'")
-							else
-								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{font-weight:bold}'")
+						if(!ChatMan.istelnet(c.key) && c.afk)
+							if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:gray;}'")
+						else if(c.ckey in C.Chan.operators)
+							if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:[c.name_color];font-weight:bold}'")
 						else
-							if(!ChatMan.istelnet(c.key) && c.afk)
-								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:gray}'")
-								c.name += " \[AFK]"
-							else if(c.ckey in C.Chan.operators)
-								var/Op/O = C.Chan.operators[c.ckey]
-								if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:[O.Rank.color];font-weight:bold}'")
-							else
-								if(C.client) winset(C, "[ckey(name)].who.grid", "style=''")
+							if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:[c.name_color];}'")
 						C << output(c, "[ckey(name)].who.grid")
 						c.name = n
 				if(C.client)
@@ -416,6 +408,7 @@ Channel
 			msg = TextMan.FilterChat(msg)
 
 			chatters = SortWho(chatters)
+			C.icon_state = "away"
 			UpdateWho()
 			if(!ismute(C))
 				for(var/mob/chatter/c in chatters)
@@ -428,12 +421,12 @@ Channel
 							c << output("[c.ParseTime()] [c.show_colors ? "<font color=[C.name_color]>[C.name]</font>" : "[C.name]"] is now <b>AFK</b>. (Reason: [msg])", "[ckey(name)].chat.default_output")
 			C << output("Your activity status is now set to Away From Keyboard.", "[ckey(name)].chat.default_output")
 
-
 		ReturnAFK(mob/chatter/C)
 			if(!C) return
 			C.afk = FALSE
 			C.away_reason = null
 			chatters = SortWho(chatters)
+			C.icon_state = "active"
 			UpdateWho()
 			if(!ismute(C))
 				for(var/mob/chatter/c in chatters)
@@ -441,7 +434,6 @@ Channel
 						c << output("[c.ParseTime()] <font color=[C.name_color]>[C.name]</font> is back from <b>AFK</b> after [round(((world.realtime - C.away_at)/600),1)] minute\s of inactivity.", "[ckey(name)].chat.default_output")
 			C.away_at = null
 			C << output("Your activity status is now set to Active Chatter.", "[ckey(name)].chat.default_output")
-
 
 		ismute(mob/M)
 			if(mute && mute.len)

@@ -66,7 +66,7 @@ mob
 
 			Set()
 				if(telnet) return
-				ShowSet()
+				ToggleSettings()
 
 			Help()
 
@@ -146,6 +146,7 @@ Valid Commands:
 
 						M.name = name
 						M.name_color = name_color
+						M.fade_name = fade_name
 						M.text_color = text_color
 						M.fade_name = fade_name
 
@@ -469,6 +470,15 @@ Valid Commands:
 						if("No") return
 				src << output("Looking around, you see....\n\t[Chan.room_desc]", "[ckey(Chan.name)].chat.default_output")
 
+			Share()
+				if(winget(src, "showcontent", "is-visible") == "false")
+					winset(src, "showcontent.content_input", "text=")
+					winshow(src, "showcontent")
+
+				else
+					winset(src, "showcontent.content_input", "text=")
+					winshow(src, "showcontent", 0)
+
 			ShowCode(t as text|null|mob in Home.chatters)
 				if(telnet) return
 				if(afk) ReturnAFK()
@@ -478,7 +488,7 @@ Valid Commands:
 					if(ismob(t)) C = t
 					else C = ChatMan.Get(t)
 					if(!C)
-						if(src.Chan)
+						if(Chan)
 							src << output("[t] is not currently online.", "[ckey(src.Chan.name)].chat.default_output")
 						else
 							alert(src, "[t] is not currently online.", "Unable to locate chatter")
@@ -490,15 +500,22 @@ Valid Commands:
 							return
 					S.target = C.ckey
 				else
-					if(!src.Chan || Chan.ismute(src))
+					if(!Chan || Chan.ismute(src))
 						if(src.Chan) src.Chan.chanbot.Say("I'm sorry, but you appear to be muted.", src)
 						return
 
-				var/iCode = input("Paste your code below") as message | null
-				if(!iCode) {del(S); return 0}
+				var/iCode = winget(src, "showcontent.content_input", "text")
+
+				if(!iCode)
+					del(S)
+					return 0
+
 				S.owner = "[src.name]"
 				S.code = iCode
 				S.Send(1)
+
+				winshow(src, "showcontent", 0)
+				winset(src, "showcontent.content_input", "text=")
 
 			ShowText(t as text|null|mob in Home.chatters)
 				if(telnet) return
@@ -525,11 +542,19 @@ Valid Commands:
 						if(src.Chan) src.Chan.chanbot.Say("I'm sorry, but you appear to be muted.", src)
 						return
 
-				var/iCode = input("Paste your text below") as message | null
-				if(!iCode) {del(S); return 0}
+				var/iCode = winget(src, "showcontent.content_input", "text")
+
+				if(!iCode)
+					del(S)
+
+					return 0
+
 				S.owner = "[src.name]"
 				S.code = iCode
 				S.Send()
+
+				winshow(src, "showcontent", 0)
+				winset(src, "showcontent.content_input", "text=")
 
 			afk(msg as text|null)
 				if(!Chan || telnet) return
@@ -573,5 +598,4 @@ Valid Commands:
 						return
 					del(L)
 					name = telnet_key
-					fade_name = name
 					Home.UpdateWho()

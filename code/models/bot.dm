@@ -3,7 +3,7 @@ Bot
 	var
 		name = "@ChanBot"
 		name_color = "#f00"
-		text_color
+		text_color = "#000"
 		fade_name = "<font color=#f00>@ChanBot</font>"
 		Channel/Chan
 
@@ -180,11 +180,7 @@ _____________________ \[end of announcement\] _____________________
 			smsg = TextMan.ParseLinks(smsg)
 
 			msg = TextMan.ParseLinks(msg)
-			if(echoed)
-				if(name_color)
-					fade_name = "<font color=[name_color]>>[copytext(name, 2)]</font>"
-				else
-					fade_name = ">[copytext(name, 2)]"
+
 			if(C)
 				var/message
 				if(!C.filter)
@@ -226,12 +222,6 @@ _____________________ \[end of announcement\] _____________________
 						if(c.show_smileys)  message = smsg
 						message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
 						c << output(c.ParseMsg(src, message, c.say_format),"[ckey(Chan.name)].chat.default_output")
-			if(echoed)
-				if(name_color)
-					fade_name = "<font color=[name_color]>[name]</font>"
-				else
-					fade_name = "[name]"
-
 
 		RawSay(msg, mob/chatter/receiver, echoed)
 			if(receiver)
@@ -327,29 +317,18 @@ _____________________ \[end of announcement\] _____________________
 		SetName(newName,save)
 			if(!newName) newName = "ChanBot"
 			name = "@"+newName
-			fade_name = "<font color=[name_color]>[name]</font>"
 			if(save) BotMan.SaveBot(src)
-
 
 		SetNameColor(newColor,save)
 			if(!newColor) newColor = "#f00"
-			if((newColor == "#000") || (newColor == "#000000"))
-				name_color = null
-			else
-				name_color = newColor
-			if(name_color)
-				fade_name = "<font color=[name_color]>[name]</font>"
+			name_color = newColor
 			if(save) BotMan.SaveBot(src)
 
 
 		SetTextColor(newColor,save)
 			if(!newColor) newColor = "#000"
-			if((newColor == "#000") || (newColor == "#000000"))
-				text_color = null
-			else
-				text_color = newColor
+			text_color = newColor
 			if(save) BotMan.SaveBot(src)
-
 
 		SetSpamControl(newValue,save)
 			Chan.spam_control = newValue

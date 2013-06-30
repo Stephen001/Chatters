@@ -17,29 +17,29 @@ mob/chatter
 			else
 				switch(color_scope)
 					if("name")
-						if(fade_name == "<font color=[name_color]>[name]</font>") fade_name = null
-						if(color == "#000000") name_color = null
-						else name_color = color
+						if(color)
+							name_color = color
 
-						if(!fade_name || (fade_name == name))
-							if(name_color) fade_name = "<font color=[name_color]>[name]</font>"
-							else fade_name = name
+							winset(src, "style_colors.name_color_button", "background-color='[color]'")
+							winset(src, "style_colors.name_color", "text='[color]'")
 
-						winset(src, "style_colors.name_color_button", "background-color='[color]'")
-						winset(src, "style_colors.name_color", "text='[color]'")
-						src << output("<b>[fade_name]</b>", "style_colors.output")
+							src << output(null, "style_colors.output")
+
+							if(fade_name) src << output("[fade_name]", "style_colors.output")
+							else src << output("<font color=[name_color]>[name]</font>", "style_colors.output")
+
+							Chan.UpdateWho()
 
 					if("text")
-						if(color == "#000000") text_color = null
-						else text_color = color
+						text_color = color
 
 						winset(src, "style_colors.text_color_button", "background-color='[color]'")
 						winset(src, "style_colors.text_color", "text='[color]'")
 
-					if("background")
-						background = color
-						winset(src, "style_colors.background_button", "background-color='[color]'")
-						winset(src, "style_colors.background", "text='[color]'")
+					if("interface")
+						interface_color = color
+						winset(src, "style_colors.interface_button", "background-color='[color]'")
+						winset(src, "style_colors.interface", "text='[color]'")
 
 					//if("op_rank") SetOpRankColor(color)
 

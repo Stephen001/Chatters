@@ -1,10 +1,13 @@
-
 mob
 	chatter
+		icon = 'who.dmi'
+		icon_state = "active"
+
 		var
-			name_color
-			text_color
+			name_color = "#000000"
+			text_color = "#000000"
 			background
+			interface_color = "#555555"
 			fade_name
 			show_colors = TRUE
 
@@ -99,14 +102,15 @@ mob
 					winset(src, "default", "is-maximized=false;size='484x244'")
 				else
 					winset(src, "default", "size='484x244';")
-				if(!fade_name)
-					if(name_color)
-						fade_name = "<font color=[name_color]>[name]</font>"
-					else
-						fade_name = name
+
 				if(!gender) gender = client.gender
 				ChanMan.Join(src, Home)
-				spawn() Ticker()
+
+				winshow(src, "showcontent", 0)
+				winshow(src, "settings", 0)
+				RefreshAllSettings()
+
+				//spawn() Ticker()
 
 			// Telnet users login differently
 			else
@@ -118,7 +122,6 @@ mob
 				onJoin = ""
 				onQuit = ""
 
-				if(!fade_name) fade_name = name
 				if(!gender) gender = client.gender
 				ChanMan.Join(src, Home)
 

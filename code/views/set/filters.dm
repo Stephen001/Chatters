@@ -6,36 +6,6 @@ mob
 
 				SetDisplay("filters")
 
-			UpdateFilters()
-				set hidden = 1
-
-				ShowFilterList()
-				winset(src, "filters.updated", "is-visible=true")
-
-				if(winget(src, "filters.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "filters.saved", "is-visible=true")
-
-				sleep(50)
-
-				winset(src, "filters.updated", "is-visible=false")
-				winset(src, "filters.saved", "is-visible=false")
-
-			SetDefaultFilters()
-				set hidden = 1
-
-				if(winget(src, "filters.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "filters.saved", "is-visible=true")
-
-				sleep(50)
-
-				if(src && client)
-					winset(src, "filters.updated", "is-visible=false")
-					winset(src, "filters.saved", "is-visible=false")
-
 			SetFilter(t as text|null)
 				set hidden = 1
 

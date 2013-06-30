@@ -45,7 +45,7 @@ QuoteManager
 				q = quotes[qloc]
 
 			if(q)
-				var/qtxt = "\"[q.text]\"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - [q.author]"
+				var/qtxt = "\"[q.text]\"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - [q.author]"
 				if(q.link) qtxt += " ([q.link])"
 
 				return qtxt

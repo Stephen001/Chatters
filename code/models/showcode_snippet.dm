@@ -22,8 +22,9 @@
 				<head>
 				<link rel="stylesheet" href="http://yandex.st/highlightjs/6.2/styles/default.min.css">
 				<script src="http://yandex.st/highlightjs/6.2/highlight.min.js"></script>
+				<style>body {margin: 4px; overflow: auto; background-color: #ffffff}</style>
 				<script>hljs.initHighlightingOnLoad();</script>
-				<title>[owner]'s Showcode</title>
+				<title>[owner]'s Highlighted Showcode</title>
 				</head>
 				<body><pre><code>[html_encode(src.code)]</code></pre></body>
 				</html>
@@ -32,6 +33,7 @@
 			html = {"
 				<html>
 				<head>
+				<style>body {margin: 4px; overflow: auto; background-color: #ffffff}</style>
 				<title>[owner]'s Showcode</title>
 				</head>
 				<body><pre><code>[src.code]</code></pre></body>
@@ -41,6 +43,7 @@
 			html = {"
 				<html>
 				<head>
+				<style>body {margin: 4px; overflow: auto; background-color: #ffffff}</style>
 				<title>[owner]'s Showtext</title>
 				</head>
 				<body>[src.code]</body>

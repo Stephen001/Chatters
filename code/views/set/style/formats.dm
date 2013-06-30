@@ -1,39 +1,6 @@
 mob
 	chatter
 		verb
-			UpdateFormatStyle()
-				set hidden = 1
-
-				var
-					ChatFormat = winget(src, "style_formats.chat_format", "text")
-					EmoteFormat = winget(src, "style_formats.emote_format", "text")
-					InlineEmoteFormat = winget(src, "style_formats.inline_emote_format", "text")
-					TimeFormat = winget(src, "style_formats.time_format", "text")
-					DateFormat = winget(src, "style_formats.date_format", "text")
-					LongDateFormat = winget(src, "style_formats.long_date_format", "text")
-					OutputStyle = winget(src, "style_formats.output_style", "text")
-
-				SetDateFormat(DateFormat)
-				SetTimeFormat(TimeFormat)
-				SetInlineEmoteFormat(InlineEmoteFormat)
-				SetEmoteFormat(EmoteFormat)
-				SetChatFormat(ChatFormat)
-				SetLongDateFormat(LongDateFormat)
-				SetOutputStyle(OutputStyle)
-
-				winset(src, "style_formats.updated", "is-visible=true")
-
-				if(winget(src, "style_formats.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "style_formats.saved", "is-visible=true")
-
-				sleep(50)
-
-				if(src && client)
-					winset(src, "style_formats.updated", "is-visible=false")
-					winset(src, "style_formats.saved", "is-visible=false")
-
 			SetDefaultFormatStyle()
 				set hidden = 1
 
@@ -46,18 +13,6 @@ mob
 				SetDateFormat()
 				SetLongDateFormat()
 				SetOutputStyle()
-
-				winset(src, "style_formats.updated", "is-visible=true")
-
-				if(winget(src, "style_formats.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "style_formats.saved", "is-visible=true")
-
-				sleep(50)
-
-				winset(src, "style_formats.updated", "is-visible=false")
-				winset(src, "style_formats.saved", "is-visible=false")
 
 			SetForcePunctuation(t as text|null)
 				set hidden = 1

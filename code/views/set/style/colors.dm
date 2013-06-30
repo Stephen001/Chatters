@@ -1,31 +1,6 @@
 mob
 	chatter
 		verb
-			UpdateColorStyle()
-				set hidden = 1
-
-				var
-					NameColor = winget(src, "style_colors.name_color", "text")
-					TextColor = winget(src, "style_colors.text_color", "text")
-					Background = winget(src, "style_colors.background", "text")
-
-				SetNameColor(NameColor)
-				SetTextColor(TextColor)
-				SetBackground(Background)
-
-				winset(src, "style_colors.updated", "is-visible=true")
-
-				if(winget(src, "style_colors.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "style_colors.saved", "is-visible=true")
-
-				sleep(50)
-
-				if(src && client)
-					winset(src, "style_colors.updated", "is-visible=false")
-					winset(src, "style_colors.saved", "is-visible=false")
-
 			SetDefaultColorStyle()
 				set hidden = 1
 
@@ -33,24 +8,15 @@ mob
 				fade_colors[1] = "#000000"
 				fade_name = null
 
+				SetNameColor("#000000")
+				SetTextColor("#000000")
 				FadeName()
 				FadeColors(1)
 				FadeNameDone()
-				SetNameColor()
-				SetTextColor()
-				SetBackground()
+				SetInterface()
 				SetShowColors()
 
-				winset(src, "style_colors.updated", "is-visible=true")
-
-				if(winget(src, "style_colors.save", "is-checked") == "true")
-					winsize = winget(src, "default", "size")
-					ChatMan.Save(src)
-					winset(src, "style_colors.saved", "is-visible=true")
-
-				sleep(50)
-				winset(src, "style_colors.updated", "is-visible=false")
-				winset(src, "style_colors.saved", "is-visible=false")
+				Chan.UpdateWho()
 
 			FadeName()
 				set hidden = 1
@@ -98,10 +64,21 @@ mob
 
 					colors += red+grn+blu
 
-				if(!colors || !colors.len || ((colors.len==1) && (colors[1] == "000000000")))
-					if(name_color) fade_name = "<font color=[name_color]>[name]</font>"
-					else fade_name = name
+				var/invalid = FALSE
 
+				if(colors.len)
+					var
+						i = colors[1]
+						same = 1
+
+					for(var/c in colors)
+						if(c != i)
+							same = 0
+							break
+
+					if(same) invalid = TRUE
+
+				if(!colors || !colors.len || invalid || (fade_name == name)) fade_name = null
 				else fade_name = TextMan.fadetext(name, colors)
 
 				winset(src, "style_colors.fade_help", "is-visible=false")
@@ -113,48 +90,66 @@ mob
 				for(var/i=1, i<=fade_colors.len, i++)
 					winset(src, "style_colors.color[i]", "is-visible=false")
 
-				src << output("<b>[fade_name]</b>", "style_colors.output")
+				src << output(null, "style_colors.output")
+
+				if(fade_name) src << output("[fade_name]", "style_colors.output")
+				else src << output("<font color=[name_color]>[name]</font>", "style_colors.output")
 
 			SetNameColor(t as text|null)
 				set hidden = 1
 
 				if(!t) t = "#000000"
 				if(copytext(t, 1, 2) != "#") t = "#" + t
-				name_color = uppertext(t)
 
-				if(fade_name == "<font color=[name_color]>[name]</font>") fade_name = null
+				if(t && length(t) == 7)
+					name_color = uppertext(t)
 
+					winset(src, "style_colors.name_color_button", "background-color='[t]'")
+					winset(src, "style_colors.name_color", "text='[t]'")
 
-				if(!fade_name || (fade_name == name))
-					if(name_color) fade_name = "<font color=[name_color]>[name]</font>"
-					else fade_name = name
+					src << output(null, "style_colors.output")
 
-					src << output("<b>[fade_name]</b>", "style_colors.output")
+					if(fade_name) src << output("[fade_name]", "style_colors.output")
+					else src << output("<font color=[name_color]>[name]</font>", "style_colors.output")
 
-				winset(src, "style_colors.name_color_button", "background-color='[t]'")
-				winset(src, "style_colors.name_color", "text='[t]'")
+					Chan.UpdateWho()
 
 			SetTextColor(t as text|null)
 				set hidden = 1
 
 				if(!t) t = "#000000"
 				if(copytext(t, 1, 2) != "#") t = "#" + t
-				text_color = uppertext(t)
 
-				winset(src, "style_colors.text_color_button", "background-color='[t]'")
-				winset(src, "style_colors.text_color", "text='[t]'")
+				if(t && length(t) == 7)
+					text_color = uppertext(t)
 
-			SetBackground(t as text|null)
+					winset(src, "style_colors.text_color_button", "background-color='[t]'")
+					winset(src, "style_colors.text_color", "text='[t]'")
+
+			SetInterface(t as text|null)
 				set hidden = 1
 
-				if(!t) t = "#ffffff"
+				if(!t) t = "#555555"
 				if(copytext(t, 1, 2) != "#") t = "#" + t
-				background = uppertext(t)
 
-				winset(src, "style_colors.background_button", "background-color='[t]'")
-				winset(src, "style_colors.background", "text='[background]'")
+				if(t && length(t) == 7)
+					interface_color = uppertext(t)
 
-				if(Chan) winset(src, "[ckey(Chan.name)].chat.default_output", "background-color='[TextMan.escapeQuotes(background)]';")
+					winset(src, "style_colors.interface_button", "background-color='[t]'")
+					winset(src, "style_colors.interface", "text='[interface_color]'")
+
+					if(Chan)
+						winset(src, "[ckey(Chan.name)].interfacebar_1", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+						winset(src, "[ckey(Chan.name)].interfacebar_2", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+						winset(src, "cim.interfacebar_3", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+						winset(src, "cim.interfacebar_4", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+						winset(src, "settings.interfacebar_5", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+						winset(src, "showcontent.interfacebar_6", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+						winset(src, "[ckey(Chan.name)].who.interfacebar_7", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+
+						for(var/ck in msgHandlers)
+							winset(src, "cim_[ckey(ck)].interfacebar_3", "background-color='[TextMan.escapeQuotes(interface_color)]';")
+							winset(src, "cim_[ckey(ck)].interfacebar_4", "background-color='[TextMan.escapeQuotes(interface_color)]';")
 
 			SetShowColors(t as text|null)
 				set hidden = 1

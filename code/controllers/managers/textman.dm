@@ -246,10 +246,10 @@ TextManager
 			Home.QOTD = TextMan.ParseTags(qotd, Target.show_colors, Target.show_highlight)
 
 			if(Home.QOTD)
-				if(Target.show_colors) Target << output("<b>[fadetext("Developer Quote of the Day", list("102102255","255204000"))]:</b>", "[ckey(Target.Chan.name)].chat.default_output")
-				else Target << output("<b>Developer Quote of the Day:</b>", "[ckey(Target.Chan.name)].chat.default_output")
+				if(Target.show_colors) Target << output("<center><b>[fadetext("Developer Quote of the Day", list("255000000","000000000"))]</b>", "[ckey(Target.Chan.name)].chat.default_output")
+				else Target << output("<center><b>Developer Quote of the Day</b>", "[ckey(Target.Chan.name)].chat.default_output")
 
-				Target << output("<i style='font-family: Arial'>&nbsp;&nbsp;&nbsp;&nbsp;[Home.QOTD]</i>\n", "[ckey(Target.Chan.name)].chat.default_output")
+				Target << output("<center><i style='font-family: Arial'>[Home.QOTD]</i></center>", "[ckey(Target.Chan.name)].chat.default_output")
 
 
 		// Simple string matching procedure.
