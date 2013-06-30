@@ -35,6 +35,7 @@ mob
 			show_motd = TRUE
 			show_qotd = TRUE
 			show_highlight = TRUE
+			flip_panes = FALSE
 
 			clear_on_reboot = FALSE
 			max_output = 1000
@@ -99,15 +100,17 @@ mob
 				src << output("<span style='background-color:#333;color:#ccc;font-weight:bold;text-align:center;'>Description:</span>", "pub_chans.grid:3,1")
 				src << output("<span style='background-color:#333;color:#ccc;font-weight:bold;text-align:center;'>Chatters:</span>", "pub_chans.grid:4,1")
 				if(winget(src, "default", "is-maximized")=="true")
-					winset(src, "default", "is-maximized=false;size='484x244'")
+					winset(src, "default", "is-maximized=false;size='640x640'")
 				else
-					winset(src, "default", "size='484x244';")
+					winset(src, "default", "size='640x640';")
+
 
 				if(!gender) gender = client.gender
 				ChanMan.Join(src, Home)
 
 				winshow(src, "showcontent", 0)
 				winshow(src, "settings", 0)
+
 				RefreshAllSettings()
 
 				//spawn() Ticker()

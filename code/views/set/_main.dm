@@ -27,6 +27,8 @@ mob/chatter
 		SaveAllSettings()
 			set hidden = 1
 
+			winset(src, "settings.saving", "is-visible=true")
+
 			var
 				NameColor = winget(src, "style_colors.name_color", "text")
 				TextColor = winget(src, "style_colors.text_color", "text")
@@ -94,8 +96,15 @@ mob/chatter
 			winsize = winget(src, "default", "size")
 			ChatMan.Save(src)
 
+			winset(src, "settings.saving", "is-visible=false")
+
 		RefreshAllSettings()
 			set hidden = 1
+
+			winset(src, "settings.saving", "is-visible=false")
+
+			if(flip_panes) winset(src, "misc.flip_panes", "is-checked=true")
+			else winset(src, "misc.flip_panes", "is-checked=false")
 
 			winset(src, "style_colors.name_color", "text='[name_color]'")
 			winset(src, "style_colors.name_color_button", "background-color='[name_color]'")

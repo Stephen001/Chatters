@@ -8305,6 +8305,34 @@ window "misc"
 		macro = ""
 		menu = ""
 		on-close = ""
+	elem "flip_panes"
+		type = BUTTON
+		pos = 4,44
+		size = 155x20
+		anchor1 = 0,0
+		anchor2 = none
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #e9e9e9
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "Flip Who/Chat Pane"
+		image = ""
+		command = "FlipPanes"
+		is-flat = false
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = checkbox
 	elem "button12"
 		type = BUTTON
 		pos = 0,348
@@ -8512,6 +8540,32 @@ window "settings"
 		is-checked = false
 		group = "settings_group"
 		button-type = pushbutton
+	elem "saving"
+		type = LABEL
+		pos = 4,400
+		size = 441x20
+		anchor1 = 0,100
+		anchor2 = 100,100
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #ffffff
+		background-color = #d50b0b
+		is-visible = false
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "Saving!"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = center
+		text-wrap = false
 	elem "settings_child"
 		type = CHILD
 		pos = 4,28

@@ -146,7 +146,10 @@ Channel
 								[window].default_input.is-disabled=false;\
 								[window].child.size=[X]x[Y];\
 								[window].child.pos=0,0;")
+
+			if(C.flip_panes) winset(C, "default.child", "left=[ckey(C.Chan.name)].who;right=[ckey(C.Chan.name)];splitter=20")
 			C.SetInterface(C.interface_color)
+
 			winshow(C, ckey(name), 1)
 			winset(C, "[ckey(C.Chan.name)].chat.default_output", "background-color='[TextMan.escapeQuotes(C.background)]';")
 			winset(C, "[ckey(C.Chan.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
