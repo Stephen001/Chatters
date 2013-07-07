@@ -7920,8 +7920,8 @@ window "default"
 		right-click = false
 		saved-params = "splitter"
 		on-size = ""
-		left = "loading"
-		right = ""
+		left = "channel"
+		right = "who"
 		is-vert = true
 		splitter = 75
 		show-splitter = true
@@ -8622,73 +8622,6 @@ window "help"
 		align = center
 		text-wrap = false
 
-window "loading"
-	elem "loading"
-		type = MAIN
-		pos = 281,0
-		size = 407x232
-		anchor1 = none
-		anchor2 = none
-		font-family = ""
-		font-size = 0
-		font-style = ""
-		text-color = #000000
-		background-color = #e9e9e9
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = "pos;size;is-minimized;is-maximized"
-		on-size = ""
-		title = "Loading"
-		titlebar = false
-		statusbar = false
-		can-close = false
-		can-minimize = false
-		can-resize = false
-		is-pane = true
-		is-minimized = false
-		is-maximized = false
-		can-scroll = none
-		icon = ""
-		image = ""
-		image-mode = stretch
-		keep-aspect = false
-		transparent-color = none
-		alpha = 255
-		macro = ""
-		menu = ""
-		on-close = ""
-	elem "label38"
-		type = LABEL
-		pos = 4,4
-		size = 399x224
-		anchor1 = 0,0
-		anchor2 = 100,100
-		font-family = "Trebuchet MS,Arial"
-		font-size = 16
-		font-style = ""
-		text-color = #000000
-		background-color = #fafafa
-		is-visible = true
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = none
-		drop-zone = false
-		right-click = false
-		saved-params = ""
-		on-size = ""
-		text = "Chatters is loading ..."
-		image = ""
-		image-mode = center
-		keep-aspect = false
-		align = center
-		text-wrap = false
-
 window "misc"
 	elem "misc"
 		type = MAIN
@@ -8740,8 +8673,8 @@ window "misc"
 		font-style = ""
 		text-color = #000000
 		background-color = #e9e9e9
-		is-visible = true
-		is-disabled = false
+		is-visible = false
+		is-disabled = true
 		is-transparent = false
 		is-default = false
 		border = none

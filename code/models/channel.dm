@@ -147,7 +147,7 @@ Channel
 								[window].child.size=[X]x[Y];\
 								[window].child.pos=0,0;")
 
-			if(C.flip_panes) winset(C, "default.child", "left=[ckey(C.Chan.name)].who;right=[ckey(C.Chan.name)];splitter=20")
+			//if(C.flip_panes) winset(C, "default.child", "left=[ckey(C.Chan.name)].who;right=[ckey(C.Chan.name)];splitter=20")
 			C.SetInterface(C.interface_color)
 
 			winshow(C, ckey(name), 1)
