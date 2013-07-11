@@ -151,7 +151,7 @@ _____________________ \[end of announcement\] _____________________
 						C << output(announcement, "[ckey(Home.name)].chat.default_output")
 					else
 						C << output(no_color, "[ckey(Home.name)].chat.default_output")
-				ChanMan.SaveChan(Home)
+				ChanMan.SaveHome()
 				BotMan.SaveBot(Home.chanbot)
 			sleep(150)
 			for(var/mob/chatter/C in world)
@@ -332,32 +332,32 @@ _____________________ \[end of announcement\] _____________________
 
 		SetSpamControl(newValue,save)
 			Chan.spam_control = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetSpamLimit(newValue,save)
 			Chan.spam_limit = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetFloodLimit(newValue,save)
 			Chan.flood_limit = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetSmileysLimit(newValue,save)
 			Chan.smileys_limit = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetMaxMsgs(newValue,save)
 			Chan.max_msgs = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetMinDelay(newValue,save)
 			Chan.min_delay = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetPublicity(newValue,save)
@@ -372,12 +372,12 @@ _____________________ \[end of announcement\] _____________________
 				if("invisible")
 					Chan.publicity = newValue
 					world.visibility = 0
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetDesc(newValue,save)
 			Chan.desc = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetTopic(newValue,save)
@@ -386,16 +386,16 @@ _____________________ \[end of announcement\] _____________________
 				if(ChatMan.istelnet(C.key)) continue
 				if(!C.client) continue
 				winset(C, "[ckey(Chan.name)].topic_label", "text='[TextMan.escapeQuotes(newValue)]';")
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 
 		SetLocked(newValue,save)
 			Chan.locked = newValue
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 		SetRoomDesc(newValue,save)
 			call(usr, "RoomDesc")(newValue)
-			if(save) ChanMan.SaveChan(src.Chan)
+			if(save) ChanMan.SaveHome()
 
 		SpamTimer(mob/chatter/C, msg)
 			if(!C || !C.Chan || !Chan.spam_control || (C==Host)) return

@@ -95,8 +95,8 @@ mob
 
 			SetOutputStyle(t as text|null)
 				set hidden = 1
-				if(isnull(t)) t = ".code {color: #000000} .ident {color: #606} .comment {color: #666} .preproc {color: #008000} .keyword {color: #00f} .string {color: #0096b4} .number {color: #800000} body { -indent: -8px; background-color: #ffffff; }"
+				if(isnull(t)) t = "body { background-color: #ffffff; }"
 
 				default_output_style = t
-				if(Chan) winset(src, "[ckey(Home.name)].chat.default_output", "style='[TextMan.escapeQuotes(t)]';")
+				winset(src, "[ckey(Home.name)].chat.default_output", "style='[TextMan.escapeQuotes(t)]';")
 				winset(src, "style_formats.output_style", "text='[TextMan.escapeQuotes(default_output_style)]';")

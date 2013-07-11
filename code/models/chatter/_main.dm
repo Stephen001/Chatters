@@ -6,7 +6,6 @@ mob
 		var
 			name_color = "#000000"
 			text_color = "#000000"
-			background
 			interface_color = "#555555"
 			fade_name
 			show_colors = TRUE
@@ -16,7 +15,7 @@ mob
 			auto_away = 15
 			auto_reason = "I have gone auto-AFK."
 
-			default_output_style = ".code {color: #000000} .ident {color: #606} .comment {color: #666} .preproc {color: #008000} .keyword {color: #00f} .string {color: #0096b4} .number {color: #800000} body { -indent: -8px; background-color: #ffffff; }"
+			default_output_style = "body { background-color: #ffffff; }"
 
 			show_smileys = TRUE
 			show_images = TRUE

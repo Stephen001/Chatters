@@ -163,11 +163,7 @@ TextManager
 							var/code = html_decode(copytext(msg, pos+6, end))
 							var/temp = copytext(msg, 1, pos)
 							if(code && length(code))
-								if(Highlight)
-									code = HighlightCode(code)
-									code = copytext(code, 5, length(code)-6)
-									temp += "<span"+code+"</span>"
-								else temp += html_encode(code)
+								temp += html_encode(code)
 								if(end < length(msg))
 									temp += copytext(msg, end+7)
 							msg = temp

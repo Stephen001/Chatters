@@ -67,18 +67,6 @@ Channel
 		chanbot = new /Bot(src)
 
 	proc
-		LoadOps()
-			op_ranks = OpMan.op_ranks
-			var/savefile/S = new("./data/saves/channels/[ckey(name)].sav")
-			var/list/ops = null
-			S["operators"]  >> ops
-			if(ops)
-				operators = listOpen(operators)
-				for(var/Name in ops)
-					var/rankIndex = ops[Name]
-					var/OpRank/Rank = op_ranks[rankIndex]
-					operators[ckey(Name)] = new/Op(Name, Rank)
-
 		Join(mob/chatter/C)
 			if(!C || !C.client)
 				del C
@@ -127,15 +115,6 @@ Channel
 
 			if(Host == C) winset(C, "default", "menu=host")
 
-			if(C.ckey in operators)
-				if(C.telnet)
-					operators -= C.ckey
-				else
-					var/Op/O = operators[C.ckey]
-					for(var/priv in O.privileges)
-						var/OpPrivilege/P = OpMan.op_privileges[priv]
-						C.verbs += text2path("/Operator/proc/[P.command]")
-
 			if(!C.telnet && winget(C, "[ckey(name)].default_input", "is-disabled") == "true")
 						// Returning from a kick/ban
 				var/size = winget(C, "[ckey(name)].child", "size")
@@ -147,12 +126,11 @@ Channel
 								[window].child.size=[X]x[Y];\
 								[window].child.pos=0,0;")
 
-			//if(C.flip_panes) winset(C, "default.child", "left=[ckey(C.Chan.name)].who;right=[ckey(C.Chan.name)];splitter=20")
+			if(C.flip_panes) winset(C, "default.child", "left=[ckey(C.Chan.name)].who;right=[ckey(C.Chan.name)];splitter=20")
 			C.SetInterface(C.interface_color)
 
 			winshow(C, ckey(name), 1)
-			winset(C, "[ckey(C.Chan.name)].chat.default_output", "background-color='[TextMan.escapeQuotes(C.background)]';")
-			winset(C, "[ckey(C.Chan.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
+			winset(C, "[ckey(Home.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
 
 			C << output("<center>- - - - - - - - - - - - - - -", "[ckey(name)].chat.default_output")
 
@@ -212,10 +190,6 @@ Channel
 					if(!chatters[i]) chatters -= chatters[i]
 				UpdateWho()
 				return
-
-			if(C.ckey in operators)
-				var/Op/O = operators[C.ckey]
-				if(O.Rank.temp) operators -= C.ckey
 
 			if(!Home.ismute(C)) EventMan.Parse(C, C.onQuit)
 			C.Chan = null
@@ -456,255 +430,3 @@ Channel
 					if("guest" in mute) return 1
 				else
 					if(search in mute) return 1
-
-
-		TallyVotes(OpPrivilege/Priv, OpRank/Rank)
-			if(!Priv) return
-			var/list/votes = new()
-			for(var/Ballot/B in ballots)
-				if(B.privilege == Priv.name) votes += B
-			if(votes.len < Priv.min_votes) return
-			switch(Priv.name)
-				if("Promote")
-					if(!Rank) return
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						var/OpRank/R = ChatMan.Rank(B.target)
-						var/OpRank/TargetRank
-						if(R == "All") TargetRank = op_ranks[op_ranks.len]
-						else if(R.pos == 1) return
-						else TargetRank = op_ranks[R.pos-1]
-						if(TargetRank == Rank) nominations[B] = TargetRank
-					if(nominations.len < Priv.min_votes) return
-					if(Rank.max_elect)
-						var/i=0
-						for(var/op in operators)
-							var/Op/O = operators[op]
-							if(O.Rank == Rank) i++
-						if(i >= Rank.max_elect)
-							return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-
-							var/mob/chatter/T = ChatMan.Get(R)
-							if(!ismob(T)) T = null
-							else if(T.telnet) return
-							var/Op/Operator
-							var/cKey = ckey(R)
-							if(ckey(founder) == cKey) return
-							if(cKey in operators)
-								Operator = operators[cKey]
-								var/r = op_ranks.Find(Operator.Rank)
-								if(r == 1) return
-								Operator.Rank = op_ranks[r-1]
-								Operator.privileges = Operator.Rank.privs
-								Operator.RankSelect.name = Operator.Rank.name
-							else
-								if(!op_ranks) return
-								var/i = op_ranks.len
-								var/OpRank/newRank = op_ranks[i]
-								Operator = new(R, newRank)
-							if(T)
-								if(T.telnet) return
-								for(var/priv in Operator.privileges)
-									var/OpPrivilege/P = OpMan.op_privileges[priv]
-									T.verbs += text2path("/Operator/proc/[P.command]")
-								if(Operator.Rank.promote)
-									chanbot.Say("[T.name] was elected to [Operator.Rank.name].")
-								UpdateWho()
-							ChanMan.SaveChan(src)
-							break
-				if("Demote")
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						if(B.privilege == "Demote") nominations += B
-					if(nominations.len < Priv.min_votes) return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-
-							var/mob/chatter/T = ChatMan.Get(R)
-							if(!ismob(T)) T = null
-							var/cKey = ckey(R)
-							if(ckey(founder) == cKey) return
-							if(!(cKey in operators)) return
-							var/Op/Operator = operators[cKey]
-							var/r = op_ranks.Find(Operator.Rank)
-							if(r == op_ranks.len)
-								operators -= cKey
-								if(T) chanbot.Say("[T.name] was demoted by election.")
-							else
-								Operator.Rank = op_ranks[r+1]
-								Operator.privileges = Operator.Rank.privs
-								Operator.RankSelect.name = Operator.Rank.name
-								if(T)
-									if(Operator.Rank.demote)
-										chanbot.Say("[T.name] was demoted to [Operator.Rank.name] by election.")
-							if(T)
-								for(var/priv in Operator.privileges)
-									var/OpPrivilege/P = OpMan.op_privileges[priv]
-									T.verbs -= text2path("/Operator/proc/[P.command]")
-							UpdateWho()
-							ChanMan.SaveChan(src)
-							break
-				if("Mute")
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						if(B.privilege == "Mute") nominations += B
-					if(nominations.len < Priv.min_votes) return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-							if(!mute) mute = new
-							if(!(ckey(R) in mute))
-								chanbot.Say("[R] has been muted by election.")
-								mute += ckey(R)
-							ChanMan.SaveChan(src)
-							break
-				if("Voice")
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						if(B.privilege == "Voice") nominations += B
-					if(nominations.len < Priv.min_votes) return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-							if(mute && (ckey(R) in mute))
-								mute -= ckey(R)
-								chanbot.Say("[R] has been voiced by election.")
-							ChanMan.SaveChan(src)
-							break
-				if("Kick")
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						if(B.privilege == "Kick") nominations += B
-					if(nominations.len < Priv.min_votes) return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-							var/mob/chatter/C = ChatMan.Get(R)
-							if(!C) return
-							var/reason = "You were removed by a vote of your peers."
-							chanbot.Say("[C.name] has been kicked by election.")
-
-							if(!ChatMan.istelnet(C.key))
-								// clear the chat window of everything but the output
-								// to reinforce that they are really out of the program
-								winset(C, "default", "menu=")
-								C << output(null, "[ckey(name)].chat.default_output")
-								winset(C, "[ckey(name)].child", "right=")
-								winset(C, "[ckey(name)].set", "is-visible=false")
-								winset(C, "[ckey(name)].help", "is-visible=false")
-								winset(C, "[ckey(name)].default_input", "is-disabled=true")
-
-								var/size = winget(C, "[ckey(name)].child", "size")
-								var/X = copytext(size, 1, findtext(size,"x"))
-								var/Y = text2num(copytext(size, findtext(size, "x")+1))+36
-								winset(C, "[ckey(name)].child", "size=[X]x[Y];pos=0,0")
-
-								C << output("You have been kicked from [name].", "[ckey(name)].chat.default_output")
-								C << output("Reason: [reason]", "[ckey(name)].chat.default_output")
-								C << output("<font color=red>Connection closed.", "[ckey(name)].chat.default_output")
-
-							chatters -= C
-							UpdateWho()
-
-							C.Logout() // omgwtfpwnt
-				if("Ban")
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						if(B.privilege == "Ban") nominations += B
-					if(nominations.len < Priv.min_votes) return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-							var/reason = "You were removed by a vote of your peers."
-							chanbot.Say("[R] has been banned by election.")
-
-							if(!banned) banned = new
-
-							banned += ckey(R)
-
-							var/mob/chatter/C = ChatMan.Get(R)
-							if(C)
-								if(!ChatMan.istelnet(C.key))
-									// clear the chat window of everything but the output
-									// to reinforce that they are really out of the program
-									winset(C, "default", "menu=")
-									C << output(null, "[ckey(name)].chat.default_output")
-									winset(C, "[ckey(name)].child", "right=")
-									winset(C, "[ckey(name)].set", "is-visible=false")
-									winset(C, "[ckey(name)].help", "is-visible=false")
-									winset(C, "[ckey(name)].default_input", "is-disabled=true")
-
-									var/size = winget(C, "[ckey(name)].child", "size")
-									var/X = copytext(size, 1, findtext(size,"x"))
-									var/Y = text2num(copytext(size, findtext(size, "x")+1))+44
-									winset(C, "[ckey(name)].child", "size=[X]x[Y];pos=0,0")
-
-									C << output("You have been banned from [name]", "[ckey(name)].chat.default_output")
-									C << output("Reason: [reason]", "[ckey(name)].chat.default_output")
-									C << output("<font color=red>Connection closed.", "[ckey(name)].chat.default_output")
-
-								chatters -= C
-								UpdateWho()
-
-								C.Logout() // omgwtfpwnt
-							ChanMan.SaveChan(src)
-				if("Unban")
-					var/list/nominations = new()
-					for(var/Ballot/B in votes)
-						if(B.privilege == "Unban") nominations += B
-					if(nominations.len < Priv.min_votes) return
-					var/list/results = new()
-					for(var/Ballot/B in nominations)
-						if(!(B.target in results))
-							results[B.target] = 1
-						else
-							results[B.target] += 1
-						del(B)
-					for(var/R in results)
-						if((results[R]*100/nominations.len) >= Priv.margin)
-							if((ckey(R) in banned))
-								chanbot.Say("[R] has been unbanned by election.")
-
-								banned -= ckey(R)
-								ChanMan.SaveChan(src)
-

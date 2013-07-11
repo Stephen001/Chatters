@@ -12,76 +12,20 @@ mob
 
 				src << link("http://www.github.com/Stephen001/Chatters/")
 
-			Ops()
+			ListOps()
 				var
 					ops = ""
 					i = 0
 
-				for(var/op in Chan.operators)
+				for(var/op in Home.operators)
 					i ++
 
-					if(i < length(Chan.operators)) ops += "[op], "
+					if(i < length(Home.operators)) ops += "[op], "
 					else
-						if(length(Chan.operators) > 1) ops += "and [op]."
+						if(length(Home.operators) > 1) ops += "and [op]."
 						else ops += "[op]."
 
-				Chan.chanbot.Say(ops, src)
-
-			Vote(ballot as text|null)
-				var/OpRank/Rank = ChatMan.Rank(name)
-				if(!ballot)
-					usr << output("Voting Failed. usage: /Vote Privilege Name", "[ckey(Chan.name)].chat.default_output")
-					usr << output("Available privileges: Promote Demote Mute Voice Kick Ban Unban", "[ckey(Chan.name)].chat.default_output")
-					return
-				var/space = findtext(ballot, " ")
-				var/privilege = lowertext(copytext(ballot, 1, space))
-				var/target
-				if(space && (length(ballot) > space))
-					target = copytext(ballot, space+1)
-				switch(privilege)
-					if("promote") votePromote(privilege, Rank, target)
-					if("demote")  voteDemote (privilege, Rank, target)
-					if("mute")    voteMute   (privilege, Rank, target)
-					if("voice")   voteVoice  (privilege, Rank, target)
-					if("kick")    voteKick   (privilege, Rank, target)
-					if("ban")     voteBan    (privilege, Rank, target)
-					if("unban")   voteUnban  (privilege, Rank, target)
-
-			Send(target as text|null|mob in Home.chatters, file as file|null)
-				if(telnet) return
-				if(!target)
-					target = input("Who would you like to send a file to?", "Send File") as text|null
-					if(!target) return
-				var/mob/chatter/C
-				if(ismob(target)) C = target
-				else C = ChatMan.Get(target)
-				if(!C)
-					if(src.Chan)
-						src << output("[target] is not currently online.", "[ckey(src.Chan.name)].chat.default_output")
-					else
-						alert("[target] is not currently online.", "Unable to locate chatter")
-				else
-					if(ismob(C))
-						var/ign = C.ignoring(ckey)
-						if(ign & FILES_IGNORE)
-							alert("[C.name] is currently ignoring files from you.", "Unable to Transfer File")
-							return
-						if(!file)
-							file = input("Select the file you wish to send to [C.name]", "Upload File") as file|null
-							if(!file) return
-						if(length(file) > MAX_FILE_SIZE)
-							alert("This file ([fsize(file)]) exceeds the limit of [fsize(MAX_FILE_SIZE)].","File Size Limit Exceeded.")
-							fdel(file)
-							return
-					switch(alert(C, "[name] is trying to send you a file: [file] ([fsize(file)])","[name] File Transfer","Accept","Reject","Ignore"))
-						if("Accept")
-							C << ftp(file)
-							alert("File ([file]) accepted by [C.name].","File Transfer Complete")
-						if("Reject")
-							alert("File ([file]) rejected by [C.name].","File Transfer Failed")
-						if("Ignore")
-							C.Ignore(name,"files")
-							alert("File ([file]) rejected by [C.name].","File Transfer Failed")
+				if(ops) Home.chanbot.Say(ops, src)
 
 			Set()
 				if(telnet) return
@@ -460,16 +404,6 @@ mob
 						src << output("You are fully ignoring [target].", "[ckey(Home.name)].chat.default_output")
 					else
 						alert("You are fully ignoring [target].", "Ignoring chatter")
-
-			Look()
-				if(!Chan) return
-				if(!Chan.room_desc)
-					src << output("Looking around, you see....\n\tAn average looking room.", "[ckey(Chan.name)].chat.default_output")
-					return
-				if(Chan.room_desc_size >= 500)
-					switch(alert("This room description exceeds the recomended room description size. (500 characters) Would you like to view it anyways?","Room Description Size Alert! [Chan.room_desc_size] characters!","Yes","No"))
-						if("No") return
-				src << output("Looking around, you see....\n\t[Chan.room_desc]", "[ckey(Chan.name)].chat.default_output")
 
 			Share()
 				if(winget(src, "showcontent", "is-visible") == "false")

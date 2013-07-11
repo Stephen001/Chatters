@@ -90,16 +90,6 @@ ChatterManager
 					for(var/mob/chatter/C in Home.chatters)
 						if(TextMan.Match(C.ckey, chatter)) return C
 
-
-		Rank(chatter)
-			if(Home && chatter)
-				var/cKey = ckey(chatter)
-				if(cKey in Home.operators)
-					var/Op/O = Home.operators[cKey]
-					return O.Rank
-				return "All"
-
-
 		ParseFormat(format, variables[], required[])
 			if(!format || !variables || !variables.len) return FALSE
 			if(required)

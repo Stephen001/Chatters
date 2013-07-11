@@ -8,21 +8,13 @@ ChannelManager
 		..()
 		spawn()
 			LoadServerCfg()
+			LoadHome()
 
 	Del()
-		if(Home) SaveChan(Home)
+		if(Home) SaveHome()
 		..()
 
 	proc
-		NewChan(list/params)
-			var/Channel/Chan = new(params)
-			Home = Chan
-			ProcessChan()
-
-		DelChan(chan)
-			fdel("./data/saves/channels/[chan].sav")
-
-
 		Join(mob/chatter/C, Channel/Chan)
 			Chan.Join(C)
 
@@ -32,24 +24,17 @@ ChannelManager
 		Say(mob/chatter/C, msg)
 			C.Chan.Say(C, msg)
 
-		ProcessChan()
-			Home.LoadOps()
-			SaveChan(Home)
-			BotMan.SaveBot(Home.chanbot)
-			world.status = "[Home.name] founded by [Home.founder] - [(Home.chatters ? Home.chatters.len : 0)] chatter\s"
-			if(Home.publicity != "public") world.visibility = 0
+		SaveHome(Channel/Chan)
+			var/savefile/S = new("./data/saves/Home.sav")
+			S["mute"]		<< Home.mute
+			S["banned"]		<< Home.banned
+			S["operators"]  << Home.operators
 
-		SaveChan(Channel/Chan)
-			var/savefile/S = new("./data/saves/channels/[ckey(Chan.name)].sav")
-			S["mute"]		<< Chan.mute
-			S["banned"]		<< Chan.banned
-
-		LoadChan(chan)
-			var/savefile/S = new("./data/saves/channels/[ckey(chan)].sav")
-			var/Channel/Chan = new()
-			S["mute"]		>> Chan.mute
-			S["banned"]		>> Chan.banned
-			return Chan
+		LoadHome(chan)
+			var/savefile/S = new("./data/saves/Home.sav")
+			S["mute"]		>> Home.mute
+			S["banned"]		>> Home.banned
+			S["operators"]  >> Home.operators
 
 		LoadServerCfg()
 			var/list/config = Console.LoadCFG("./data/saves/server.cfg")
@@ -121,20 +106,8 @@ ChannelManager
 					for(var/i in banList)
 						Home.banned += ckey(i)
 				if(opList && opList.len)
-					Home.operators = new
+					Home.operators = list()
 					for(var/Name in opList)
-						if(!findtext(Name, "_"))
-							var/opKey = ckey(opList[Name])
-							var/rankIndex = text2num(opList["[Name]_level"])
-							var/OpRank/Rank = Home.op_ranks[rankIndex]
-							Home.operators[opKey] = new/Op(opList[Name], Rank)
-				if (fexists("./data/saves/channels/[ckey(Home.name)].sav"))
-					var/Channel/Chan = LoadChan(Home.name)
-					if (length(Chan.mute))
-						for (var/i in Chan.mute)
-							if (!Home.mute.Find(ckey(i)))
-								Home.mute += ckey(i)
-					if (length(Chan.banned))
-						for (var/i in Chan.banned)
-							if (!Home.banned.Find(ckey(i)))
-								Home.banned += ckey(i)
+						var/opKey = ckey(opList[Name])
+						Home.operators += opKey
+

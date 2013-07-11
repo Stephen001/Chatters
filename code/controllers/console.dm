@@ -6,7 +6,6 @@ ServerConsole	// main controller
 		ListMan  = new()
 		TextMan  = new()
 		BotMan   = new()
-		OpMan    = new()
 		ChanMan  = new()
 		ChatMan  = new()
 		ErrMan   = new()
@@ -16,7 +15,6 @@ ServerConsole	// main controller
 
 	Del()
 		del(BotMan)
-		del(OpMan)
 		del(ChanMan)
 		del(ChatMan)
 		del(ErrMan)
