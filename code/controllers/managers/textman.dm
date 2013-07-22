@@ -150,7 +150,7 @@ TextManager
 			return L
 
 
-		ParseTags(msg, Color, Highlight, Images)
+		ParseTags(msg, Color, Highlight)
 			if(!msg) return
 			var/i=1
 			for(var/T in tags)
@@ -187,9 +187,6 @@ TextManager
 							msg = copytext(msg, 1, pos) + copytext(msg, end + length(tags[T]))
 
 					else if(pos+length(T) < end)
-						if((T == "\[img]") && !Images)
-							pos = findtext(msg, T, pos+1)
-							continue
 						var/temp = copytext(msg, 1, pos)
 						temp += html[i]
 						temp += copytext(msg, pos+length(T), end)
@@ -469,51 +466,6 @@ TextManager
 				links -= links[1]
 
 			return L
-
-		FilterChat(msg, mob/chatter/C)
-			if(!msg) return
-			var/filter = 0
-			if(!C) filter = 2
-			else filter = C.filter
-			if(!filter) return msg
-			var/list/filter_list
-			switch(filter)
-				if(1)
-					if(!C.filtered_words || !C.filtered_words.len) return msg
-					filter_list = C.filtered_words
-				if(2)
-					if(!Home || !Home.filtered_words || !Home.filtered_words.len) return msg
-					filter_list = Home.filtered_words
-
-			if(filter_list.len)
-				for(var/word in filter_list)
-					if(!word) continue
-					var/whole
-					var/trueword
-					if(text2ascii(word)<=32)
-						trueword = copytext(word,2)
-						if(!trueword) continue
-						whole = 1
-					else
-						trueword = word
-						whole = 0
-					var/i, wl=length(trueword), rl=length(filter_list[word]), ch
-					i = findtext(msg, trueword)
-					while(i)
-						if(whole)
-							if(i>1)
-								ch = text2ascii(msg, i-1)
-								if((ch>=65 && ch<=90) || (ch>=97 && ch<=122) || (ch>=48 && ch<=57))
-									i = findtext(msg, trueword, i+wl)
-									continue
-							if(i+wl<=length(msg))
-								ch = text2ascii(msg, i+wl)
-								if((ch>=65 && ch<=90) || (ch>=97 && ch<=122) || (ch>=48 && ch<=57))
-									i = findtext(msg, trueword, i+wl)
-									continue
-						msg = copytext(msg,1,i) + ChooseCaps(filter_list[word],msg,i,wl) + copytext(msg, i+wl)
-						i = findtext(msg, trueword, i+rl)
-			return msg
 
 		ChooseCaps(replace, source, index, len)
 			var/i,ch

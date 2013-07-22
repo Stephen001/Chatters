@@ -14,11 +14,7 @@ mob
 				SetShowMotD(1)
 				SetShowQotD(1)
 				SetClearOnReboot("false")
-				SetMaxOutput("1000")
 				SetHighlightCode(1)
-				SetTelnetPassword()
-				SetWinSizeX()
-				SetWinSizeY()
 				Set24HourTime()
 				SetTimeOffset()
 				SetAutoAFK()
@@ -79,15 +75,6 @@ mob
 					if(winget(src, "system.clear_reboot", "is-checked")=="true") clear_on_reboot = TRUE
 					else clear_on_reboot = FALSE
 
-			SetMaxOutput(t as text|null)
-				set hidden = 1
-
-				t = text2num(t)
-				if(t<0) t = 0
-				max_output = t
-				winset(src, "system.max_output", "text='[max_output]';")
-				if(Home) winset(src, "[ckey(Home.name)].chat.default_output", "max-lines='[max_output]';")
-
 			SetHighlightCode(t as text|null)
 				set hidden = 1
 
@@ -98,61 +85,6 @@ mob
 				else
 					if(winget(src, "system.show_highlight", "is-checked")=="true") show_highlight = TRUE
 					else show_highlight = FALSE
-
-			SetTelnetPassword(t as text|null)
-				set hidden = 1
-
-				var
-					list/L = new()
-					telnet_key = md5(key)
-					savefile/S = new("./data/saves/tel.net")
-
-				if(t)
-					var/telnet_pass = md5(t)
-					telnet_pass = t
-					if(S && length(S))
-						S["telnet"] >> L
-
-					if(!telnet_key in L) L += telnet_key
-					L[telnet_key] = telnet_pass
-					S["telnet"] << L
-
-				else if(S && length(S))
-					if(!telnet_key in L) return
-					L[telnet_key] = null
-					S["telnet"] << L
-
-			SetWinSizeX(t as text|null)
-				set hidden = 1
-
-				var
-					X
-					Y=480
-
-				t = text2num(t)
-				if(t<=0) t = 640
-				X = t
-
-				if(winsize) Y = copytext(winsize, findtext(winsize, "x")+1)
-
-				winsize = "[X]x[Y]"
-				winset(src, "system.win_size_x", "text='[X]';")
-
-			SetWinSizeY(t as text|null)
-				set hidden = 1
-
-				var
-					Y
-					X=640
-
-				t = text2num(t)
-				if(t<=0) t = 480
-				Y = t
-
-				if(winsize) X = copytext(winsize, 1, findtext(winsize, "x"))
-
-				winsize = "[X]x[Y]"
-				winset(src, "system.win_size_y", "text='[Y]';")
 
 			Set24HourTime(t as text|null)
 				set hidden = 1

@@ -23,4 +23,5 @@ mob
 
 			SayAlias(msg as text|null)
 				set name = ">"
+				set hidden = 1
 				Say(msg)

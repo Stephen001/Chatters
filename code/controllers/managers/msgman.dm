@@ -34,7 +34,7 @@ MessageManager
 		RouteMsg(mob/chatter/From, mob/chatter/To, msg, clean)
 			if(!msg) return
 			if(To.ignoring(From) & IM_IGNORE)
-				alert(From, "[To.name] is ignoring instant messages from you.", "Unable to IM chatter.")
+				Home.chanbot.Say("[To.name] is ignoring instant messages from you.", From)
 				return
 			To.MsgHand.GetMsg(From, msg, clean)
 

@@ -22,20 +22,10 @@ mob
 				var/punctuation
 				var/msg_punctuation = copytext(msg, length(msg))
 				switch(msg_punctuation)
-					if(".")
-						punctuation = "."
-						if(forced_punctuation)
-							if(copytext(msg, length(msg)) == ".")
-								if((msg_format.Find("said") > msg_format.Find("$msg")) || (msg_format.Find("says") > msg_format.Find("$msg")))
-									msg = copytext(msg, 1, length(msg))+","
+					if(".") punctuation = "."
 					if("!") punctuation = "!"
 					if("?") punctuation = "?"
-					else
-						punctuation = "."
-						if(forced_punctuation)
-							if((msg_format.Find("said") > msg_format.Find("$msg")) || (msg_format.Find("says") > msg_format.Find("$msg")))
-								msg += ","
-							else msg += "."
+					else punctuation = "."
 
 				for(var/s in msg_format)
 					if(s == "$name")

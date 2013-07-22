@@ -4,7 +4,6 @@ mob
 			SetDefaultFormatStyle()
 				set hidden = 1
 
-				SetForcePunctuation()
 				SetNameNotify()
 				SetChatFormat()
 				SetEmoteFormat()
@@ -13,14 +12,6 @@ mob
 				SetDateFormat()
 				SetLongDateFormat()
 				SetOutputStyle()
-
-			SetForcePunctuation(t as text|null)
-				set hidden = 1
-
-				if(isnull(t)) t = "false"
-
-				if(t == "true") forced_punctuation = TRUE
-				else forced_punctuation = FALSE
 
 			SetNameNotify(t as text|null)
 				set hidden = 1

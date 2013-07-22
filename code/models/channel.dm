@@ -2,24 +2,9 @@ Channel
 	var
 		founder
 		name
-		publicity
 		desc
 		topic
-		locked
-		telnet_pass
-		telnet_attempts
 		QOTD
-
-		// spam controls
-		spam_control =1
-		spam_limit = 3
-		flood_limit = 3
-		smileys_limit = 10
-		max_msgs = 3
-		min_delay = 20
-
-		room_desc = "An average looking room."
-		room_desc_size
 
 		Bot
 			chanbot
@@ -32,34 +17,13 @@ Channel
 			ballots
 			showcodes = list()
 
-			filtered_words = list(	"fuck"	  =  "fudge",
-									"shit"	  =  "dung",
-									" ass"	  =  "donkey",
-									" asshole"=  "donkeyhole",
-									"penis"	  =  "pencil",
-									"vagina"  =  "kitty",
-									"pussy"	  =  "kitty",
-									" cunt"	  =  "kitty",
-									"bitch"	  =  "female dog",
-									"faggot"  =  "bundle of sticks",
-									" fag"	  =  "cigarette",
-									"nigger"  =  "ignorant person",
-									"nigga"   =  "homeslice",
-									" dick"	  =  "private eye",
-									" cock"	  =  "rooster",
-									"cocksuck"=  "milkdrink")
-
 	New(params[])
 		if(params)
 			founder = params["Founder"]
 			if(!founder) founder = Host.name
 			name = params["Name"]
-			publicity = params["Publicity"]
 			desc = params["Desc"]
 			topic = params["Topic"]
-			locked = text2num(params["Locked"]) ? 1 : 0
-			telnet_pass = params["TelPass"]
-			telnet_attempts = (text2num(params["TelAtmpts"]) || -1)
 		..()
 		chanbot = new /Bot(src)
 
@@ -82,7 +46,6 @@ Channel
 							[window].child.left=[window].chat;\
 							[window].child.right=;\
 							default.child.right=[window].who;\
-							default.size=[C.winsize];\
 							default.can-resize=true;\
 							default.title='[name] - Chatters';\
 							default.menu=menu;\
@@ -103,22 +66,11 @@ Channel
 
 			if(Host == C) winset(C, "default", "menu=host")
 
-			if(!C.telnet && winget(C, "[ckey(name)].default_input", "is-disabled") == "true")
-						// Returning from a kick/ban
-				var/size = winget(C, "[ckey(name)].child", "size")
-				var/X = copytext(size, 1, findtext(size,"x"))
-				var/Y = text2num(copytext(size, findtext(size, "x")+1)) - 44
-				winset(C, null, "[window].set.is-visible=true;\
-								[window].help.is-visible=true;\
-								[window].default_input.is-disabled=false;\
-								[window].child.size=[X]x[Y];\
-								[window].child.pos=0,0;")
-
 			if(C.flip_panes) winset(C, "default.child", "left=[ckey(C.Chan.name)].who;right=[ckey(C.Chan.name)];splitter=20")
 			C.SetInterface(C.interface_color)
 
 			winshow(C, ckey(name), 1)
-			winset(C, "[ckey(Home.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';max-lines='[C.max_output]';")
+			winset(C, "[ckey(Home.name)].chat.default_output", "style='[TextMan.escapeQuotes(C.default_output_style)]';")
 
 			C << output("<center>- - - - - - - - - - - - - - -", "[ckey(name)].chat.default_output")
 
@@ -170,8 +122,6 @@ Channel
 					var/mob/chatter/op = ChatMan.Get(_ck)
 					if(op) chanbot.Say("[C.name]'s IP: [C.client.address]", op)
 
-			if(!Home.ismute(C)) EventMan.Parse(C, C.onJoin)
-
 		Quit(mob/chatter/C)
 			if(!C)
 				for(var/i=1 to chatters.len)
@@ -179,7 +129,6 @@ Channel
 				UpdateWho()
 				return
 
-			if(!Home.ismute(C)) EventMan.Parse(C, C.onQuit)
 			C.Chan = null
 
 			if(chatters) chatters -= C
@@ -187,7 +136,7 @@ Channel
 
 			UpdateWho()
 
-			chanbot.Say("[C.name] has quit [name]")
+			chanbot.Say("[C.name] has quit [name].")
 
 			if(C && ChatMan.istelnet(C.key))
 				C.Logout()
@@ -203,7 +152,10 @@ Channel
 						if(C.client) winset(C, "[ckey(name)].who.grid", "current-cell=1,[i]")
 						var/n = c.name
 						if(!ChatMan.istelnet(c.key) && c.afk)
-							if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:gray;}'")
+							if(C.client)
+								if(!(c.ckey in C.Chan.operators)) winset(C, "[ckey(name)].who.grid", "style='body{color: gray;}'")
+								else winset(C, "[ckey(name)].who.grid", "style='body{color:gray;font-weight:bold}'")
+
 						else if(c.ckey in C.Chan.operators)
 							if(C.client) winset(C, "[ckey(name)].who.grid", "style='body{color:[c.name_color];font-weight:bold}'")
 						else if(c.ckey in C.Chan.mute)
@@ -234,21 +186,16 @@ Channel
 
 		Say(mob/chatter/C, msg, clean, window)
 			if(ismute(C))
-				chanbot.Say("I'm sorry, but you appear to be muted.",C)
+				chanbot.Say("I'm sorry, but you appear to be muted.", C)
 				if(kText.hasPrefix(C.ckey, "guest")) chanbot.Say("Please login with your registered key, or visit http://www.byond.com/ to create a new key now.",C)
 				return
 
-			if(length(msg)>512)
-				var/part2 = copytext(msg, 513)
-				msg = copytext(msg, 1, 513)
-				spawn(20) C.Say(part2)
+			msg = copytext(msg, 1, 1024)
 
 			if(!clean)
 				msg = TextMan.Sanitize(msg)
-				chanbot.SpamTimer(C, msg)
 
 			var/raw_msg = msg
-			msg = TextMan.FilterChat(msg)
 
 			var/smsg = TextMan.ParseSmileys(msg)
 			smsg = TextMan.ParseLinks(smsg)
@@ -259,29 +206,12 @@ Channel
 
 			for(var/mob/chatter/c in chatters)
 				if(c.ignoring(C) & CHAT_IGNORE) continue
-				var/message
-				if(!c.filter)
-					message = raw_msg
-					if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(raw_msg)
-					message = TextMan.ParseLinks(message)
-					message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-					var/Parsedmsg = c.ParseMsg(C,message,c.say_format)
-					if(Parsedmsg) c << output(Parsedmsg, "[window]")
-				else if(c.filter==1)
-					message = TextMan.FilterChat(raw_msg,c)
-					if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(message)
-					message = TextMan.ParseLinks(message)
-					message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-					var/Parsedmsg = c.ParseMsg(C,message,c.say_format)
-					if(Parsedmsg) c << output(Parsedmsg, "[window]")
-				else
-					message = msg
-					if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE))
-						message = smsg
-					message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-					var/Parsedmsg = c.ParseMsg(C,message,c.say_format)
-					if(Parsedmsg)
-						c << output(Parsedmsg, "[window]")
+				var/message = raw_msg
+				if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(raw_msg)
+				message = TextMan.ParseLinks(message)
+				message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
+				var/Parsedmsg = c.ParseMsg(C,message,c.say_format)
+				if(Parsedmsg) c << output(Parsedmsg, "[window]")
 
 
 		Me(mob/chatter/C, msg, clean, window)
@@ -289,110 +219,75 @@ Channel
 				chanbot.Say("I'm sorry, but you appear to be muted.",C)
 				return
 
+			msg = copytext(msg, 1, 1024)
+
 			if(!clean) msg = TextMan.Sanitize(msg)
 
 			var/raw_msg = msg
-			msg = TextMan.FilterChat(msg)
 
 			var/smsg = TextMan.ParseSmileys(msg)
 			smsg = TextMan.ParseLinks(smsg)
 
 			msg = TextMan.ParseLinks(msg)
-			chanbot.SpamTimer(C, msg)
 
 			if(!window) window = "[ckey(name)].chat.default_output"
 
 			for(var/mob/chatter/c in chatters)
 				if(!c.ignoring(C))
 					var/message
-					if(!c.filter)
-						if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(raw_msg)
-						message = TextMan.ParseLinks(message)
-						message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-						var/Parsedmsg = c.ParseMsg(C,message,c.me_format, 1)
-						if(Parsedmsg) c << output(Parsedmsg, "[window]")
-					else if(c.filter==1)
-						message = TextMan.FilterChat(raw_msg,c)
-						if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(message)
-						message = TextMan.ParseLinks(message)
-						message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-						var/Parsedmsg = c.ParseMsg(C,message,c.me_format, 1)
-						if(Parsedmsg) c << output(Parsedmsg, "[window]")
-					else
-						message = msg
-						if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE))
-							message = smsg
-						message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-						var/Parsedmsg = c.ParseMsg(C,message, c.me_format, 1)
-						if(Parsedmsg)
-							c << output(Parsedmsg, "[window]")
+					if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(raw_msg)
+					message = TextMan.ParseLinks(message)
+					message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
+					var/Parsedmsg = c.ParseMsg(C,message,c.me_format, 1)
+					if(Parsedmsg) c << output(Parsedmsg, "[window]")
 
 		My(mob/chatter/C, msg, clean, window)
 			if(ismute(C))
 				chanbot.Say("I'm sorry, but you appear to be muted.",C)
 				return
 
+			msg = copytext(msg, 1, 1024)
 			if(!clean) msg = TextMan.Sanitize(msg)
 
 			var/raw_msg = msg
-			msg = TextMan.FilterChat(msg)
 
 			var/smsg = TextMan.ParseSmileys(msg)
 			smsg = TextMan.ParseLinks(smsg)
 
 			msg = TextMan.ParseLinks(msg)
-			chanbot.SpamTimer(C, msg)
 
 			if(!window) window = "[ckey(name)].chat.default_output"
 
 			for(var/mob/chatter/c in chatters)
 				if(!c.ignoring(C))
 					var/message
-					if(!c.filter)
-						if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(raw_msg)
-						message = TextMan.ParseLinks(message)
-						message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-						var/Parsedmsg = c.ParseMsg(C,message,c.me_format, 2)
-						if(Parsedmsg) c << output(Parsedmsg, "[window]")
-					else if(c.filter==1)
-						message = TextMan.FilterChat(raw_msg,c)
-						if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(message)
-						message = TextMan.ParseLinks(message)
-						message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
-						var/Parsedmsg = c.ParseMsg(C,message,c.me_format, 2)
-						if(Parsedmsg) c << output(Parsedmsg, "[window]")
-					else
-						message = msg
-						if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE))
-							msg = smsg
-						msg = TextMan.ParseTags(msg, c.show_colors, c.show_highlight,0)
-						var/Parsedmsg = c.ParseMsg(C,msg, c.me_format, 2)
-						if(Parsedmsg)
-							c << output(Parsedmsg, "[window]")
+					if(c.show_smileys && !(c.ignoring(C) & SMILEY_IGNORE)) message = TextMan.ParseSmileys(raw_msg)
+					message = TextMan.ParseLinks(message)
+					message = TextMan.ParseTags(message, c.show_colors, c.show_highlight,0)
+					var/Parsedmsg = c.ParseMsg(C,message,c.me_format, 2)
+					if(Parsedmsg) c << output(Parsedmsg, "[window]")
 
 		GoAFK(mob/chatter/C, msg)
 			if(ChatMan.istelnet(C.key)) return
 			C.afk = TRUE
 			C.away_at = world.realtime
+			msg = copytext(msg, 1, 1024)
 			msg = TextMan.Sanitize(msg)
 			C.away_reason = msg
 
 			var/raw_msg = msg
-			msg = TextMan.FilterChat(msg)
 
 			chatters = SortWho(chatters)
 			C.icon_state = "away"
 			UpdateWho()
+			Home.chanbot.Say("You are now AFK.", C)
 			if(!ismute(C))
 				for(var/mob/chatter/c in chatters)
 					if(!(c.ignoring(C) & CHAT_IGNORE))
-						if(!c.filter)
-							c << output("[c.ParseTime()] [c.show_colors ? "<font color=[C.name_color]>[C.name]</font>" : "[C.name]"] is now <b>AFK</b>. (Reason: [raw_msg])", "[ckey(name)].chat.default_output")
-						else if(c.filter == 1)
-							c << output("[c.ParseTime()] [c.show_colors ? "<font color=[C.name_color]>[C.name]</font>" : "[C.name]"] is now <b>AFK</b>. (Reason: [TextMan.FilterChat(raw_msg,c)])", "[ckey(name)].chat.default_output")
-						else
-							c << output("[c.ParseTime()] [c.show_colors ? "<font color=[C.name_color]>[C.name]</font>" : "[C.name]"] is now <b>AFK</b>. (Reason: [msg])", "[ckey(name)].chat.default_output")
-			C << output("Your activity status is now set to Away From Keyboard.", "[ckey(name)].chat.default_output")
+						var/rsn = ""
+						if(ckey(raw_msg)) rsn = "([raw_msg])"
+
+						c << output("[c.ParseTime()] [c.show_colors ? "<font color=[C.name_color]>[C.name]</font>" : "[C.name]"] is now AFK. [rsn]", "[ckey(name)].chat.default_output")
 
 		ReturnAFK(mob/chatter/C)
 			if(!C) return
@@ -401,12 +296,12 @@ Channel
 			chatters = SortWho(chatters)
 			C.icon_state = "active"
 			UpdateWho()
+			Home.chanbot.Say("You are no longer AFK.", C)
 			if(!ismute(C))
 				for(var/mob/chatter/c in chatters)
 					if(!(c.ignoring(C) & CHAT_IGNORE))
 						c << output("[c.ParseTime()] <font color=[C.name_color]>[C.name]</font> is back from <b>AFK</b> after [round(((world.realtime - C.away_at)/600),1)] minute\s of inactivity.", "[ckey(name)].chat.default_output")
 			C.away_at = null
-			C << output("Your activity status is now set to Active Chatter.", "[ckey(name)].chat.default_output")
 
 		ismute(mob/M)
 			if(mute && mute.len)

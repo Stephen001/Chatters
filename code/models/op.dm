@@ -38,6 +38,114 @@ mob/chatter
 			Home.UpdateWho()
 			ChanMan.SaveHome()
 
+		SetTopic(ntopic as text)
+			set hidden = 1
+
+			if(!ntopic) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.SetTopic(ntopic, 1)
+
+		SetDesc(ndesc as text)
+			set hidden = 1
+
+			if(!ndesc) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.SetDesc(ndesc, 1)
+
+		BotSetTextColor(n as text)
+			set hidden = 1
+
+			if(!n) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.SetTextColor(n, 1)
+
+		BotSetNameColor(n as text)
+			set hidden = 1
+
+			if(!n) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.SetNameColor(n, 1)
+
+		BotSetName(n as text)
+			set hidden = 1
+
+			if(!n) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.SetName(n, 1)
+
+		BotSay(n as text)
+			set hidden = 1
+
+			if(!n) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.Say(n)
+
+		BotMe(n as text)
+			set hidden = 1
+
+			if(!n) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.Me(n)
+
+		BotMy(n as text)
+			set hidden = 1
+
+			if(!n) return
+			if(!Home.chanbot) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			Home.chanbot.My(n)
+
+		CheckIP(target as text)
+			set hidden = 1
+
+			if(!target) return
+			if(!Chan) return
+			if(!(ckey in Home.operators))
+				Home.chanbot.Say("You do not have access to this command.", src)
+				return
+
+			var/mob/chatter/C
+			if(ismob(target)) C = target
+			else C = ChatMan.Get(target)
+
+			if(!C)
+				Home.chanbot.Say("[target] is not currently in the channel.", src)
+				return
+
+			if(C.client.address) Home.chanbot.Say("[C.name]'s IP: [C.client.address]", src)
+			else Home.chanbot.Say("[C.name]'s IP is unknown.", src)
+
 		Mute(target as text)
 			set hidden = 1
 
@@ -90,12 +198,13 @@ mob/chatter
 				Home.chanbot.Say("You do not have access to this command.", src)
 				return
 
-
 			var/mob/chatter/C
 			if(ismob(target)) C = target
 			else C = ChatMan.Get(target)
 
-			if(!C) Home.chanbot.Say("[target] is not currently in the channel.", src)
+			if(!C)
+				Home.chanbot.Say("[target] is not currently in the channel.", src)
+				return
 
 			if(ckey(target) in Home.operators)
 				Home.chanbot.Say("You cannot kick an operator.", src)
@@ -118,8 +227,8 @@ mob/chatter
 				var/Y = text2num(copytext(size, findtext(size, "x")+1))+44
 				winset(C, "[ckey(Home.name)].child", "size=[X]x[Y];pos=0,0")
 
-				C << output("You have been kicked from [Home.name] by [name]", "[ckey(Home.name)].chat.default_output")
-				C << output("<font color=red>Connection closed.", "[ckey(Home.name)].chat.default_output")
+			C << output("You have been kicked from [Home.name] by [name].", "[ckey(Home.name)].chat.default_output")
+			C << output("<font color=red>Connection closed.", "[ckey(Home.name)].chat.default_output")
 
 			Home.chatters -= C
 			Home.UpdateWho()
