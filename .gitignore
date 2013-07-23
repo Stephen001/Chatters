@@ -5,6 +5,7 @@ changes
 *.lk
 *.log
 *.pid
+*.sav
 data/saves/logs
 data/saves/channels
 packet

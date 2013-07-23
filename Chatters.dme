@@ -1,57 +1,28 @@
-// DM Environment file for Chatters CS.dme.
-// All manual changes should be made outside the BEGIN_ and END_ blocks.
-// New source code should be placed in .dm files: choose File/New --> Code File.
-
 // BEGIN_INTERNALS
 // END_INTERNALS
 // BEGIN_FILE_DIR
 #define FILE_DIR .
 // END_FILE_DIR
-
 // BEGIN_PREFERENCES
+#define DEBUG
 // END_PREFERENCES
-
 // BEGIN_INCLUDE
-#include "code\_global.dm"
-#include "code\client.dm"
-#include "code\world.dm"
-#include "code\controllers\console.dm"
-#include "code\controllers\managers\botman.dm"
-#include "code\controllers\managers\chanman.dm"
-#include "code\controllers\managers\chatman.dm"
-#include "code\controllers\managers\errman.dm"
-#include "code\controllers\managers\eventman.dm"
-#include "code\controllers\managers\listman.dm"
-#include "code\controllers\managers\logman.dm"
-#include "code\controllers\managers\msghand.dm"
-#include "code\controllers\managers\msgman.dm"
-#include "code\controllers\managers\quoteman.dm"
-#include "code\controllers\managers\Server.dm"
-#include "code\controllers\managers\textman.dm"
-#include "code\libraries\ktext\kText.dm"
-#include "code\libraries\s_smiley\alphabetics.dm"
-#include "code\libraries\s_smiley\replacetext.dm"
-#include "code\libraries\s_smiley\replaceword.dm"
-#include "code\libraries\s_smiley\s_smiley.dm"
-#include "code\models\atoms.dm"
-#include "code\models\bot.dm"
-#include "code\models\channel.dm"
-#include "code\models\messenger.dm"
-#include "code\models\op.dm"
-#include "code\models\showcode_snippet.dm"
-#include "code\models\tempmob.dm"
-#include "code\models\chatter\_main.dm"
-#include "code\models\chatter\commands.dm"
-#include "code\models\chatter\controls.dm"
-#include "code\models\chatter\procs.dm"
-#include "code\views\default.dmf"
-#include "code\views\color\_main.dm"
-#include "code\views\set\_main.dm"
-#include "code\views\set\misc.dm"
-#include "code\views\set\style.dm"
-#include "code\views\set\system.dm"
-#include "code\views\set\style\colors.dm"
-#include "code\views\set\style\formats.dm"
+#include "rsc\default.dmf"
+#include "src\global.dm"
+#include "src\libraries\ktext\kText.dm"
+#include "src\libraries\s_smiley\alphabetics.dm"
+#include "src\libraries\s_smiley\replaceword.dm"
+#include "src\libraries\s_smiley\s_smiley.dm"
+#include "src\struct\Bot.dm"
+#include "src\struct\Channel.dm"
+#include "src\struct\chatter.dm"
+#include "src\struct\ChatterManager.dm"
+#include "src\struct\client.dm"
+#include "src\struct\MessageHandler.dm"
+#include "src\struct\Messenger.dm"
+#include "src\struct\QuoteManager.dm"
+#include "src\struct\ServerManager.dm"
+#include "src\struct\ShowcodeSnippet.dm"
+#include "src\struct\TextManager.dm"
+#include "src\struct\world.dm"
 // END_INCLUDE
-
-
