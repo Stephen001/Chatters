@@ -16,7 +16,6 @@ var/global
 	kText/textutil = new
 
 	ServerManager/server_manager
-	ChannelManager/channel_manager
 	ChatterManager/chatter_manager
 	TextManager/text_manager
 	QuoteManager/quote_manager

@@ -109,10 +109,6 @@ Bot
 			text_color = new_color
 			if(save) server_manager.saveBot(src)
 
-		setDesc(new_value, save = 1)
-			server_manager.home.desc = new_value
-			if(save) server_manager.saveHome()
-
 		setTopic(new_value, save)
 			server_manager.home.topic = new_value
 

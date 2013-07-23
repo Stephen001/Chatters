@@ -726,17 +726,6 @@ mob
 
 				server_manager.bot.setTopic(ntopic, 1)
 
-			setDesc(ndesc as text)
-				set hidden = 1
-
-				if(!ndesc) return
-				if(!server_manager.bot) return
-				if(!(ckey in server_manager.home.operators))
-					server_manager.bot.say("You do not have access to this command.", src)
-					return
-
-				server_manager.bot.setDesc(ndesc, 1)
-
 			botSetTextColor(n as text)
 				set hidden = 1
 

@@ -1,7 +1,6 @@
 Channel
 	var
 		name
-		desc
 		topic
 		qotd
 
@@ -15,7 +14,6 @@ Channel
 	New(params[])
 		if(params)
 			name = params["name"]
-			desc = params["desc"]
 			topic = params["topic"]
 
 		..()
