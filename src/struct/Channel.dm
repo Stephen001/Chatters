@@ -125,9 +125,6 @@ Channel
 
 			server_manager.bot.say("[C.name] has quit [name].")
 
-			if(C && chatter_manager.isTelnet(C.key))
-				C.Logout()
-
 		updateWho()
 			for(var/mob/chatter/C in chatters)
 				if(!chatter_manager.isTelnet(C.key))

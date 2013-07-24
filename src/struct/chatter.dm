@@ -88,7 +88,7 @@ mob
 
 		proc
 			inactivityLoop()
-				while(src)
+				while(src && client)
 					if(auto_away && (auto_away < client.inactivity/600) && !afk) afk(auto_reason)
 					sleep(100)
 
