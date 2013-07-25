@@ -25,3 +25,8 @@ client
 			c.say(command)
 
 		..(command)
+
+	New()
+		..()
+
+		assoc_manager.addClient(src)

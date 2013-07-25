@@ -7931,7 +7931,7 @@ window "help"
 	elem "help"
 		type = MAIN
 		pos = 281,0
-		size = 714x431
+		size = 714x521
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -7970,7 +7970,7 @@ window "help"
 	elem "label51"
 		type = LABEL
 		pos = 359,4
-		size = 351x399
+		size = 351x489
 		anchor1 = none
 		anchor2 = none
 		font-family = "Trebuchet MS,Arial"
@@ -7992,6 +7992,84 @@ window "help"
 		image-mode = center
 		keep-aspect = false
 		align = top
+		text-wrap = false
+	elem "label58"
+		type = LABEL
+		pos = 363,407
+		size = 343x20
+		anchor1 = none
+		anchor2 = none
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #e9e9e9
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "/purgeAssoc <key, ip, cid>: remove data from all entries"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = center
+		text-wrap = false
+	elem "label57"
+		type = LABEL
+		pos = 363,431
+		size = 343x20
+		anchor1 = none
+		anchor2 = none
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #e9e9e9
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "/geolocate <user, ip>: geolocation"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = center
+		text-wrap = false
+	elem "label56"
+		type = LABEL
+		pos = 363,383
+		size = 343x20
+		anchor1 = none
+		anchor2 = none
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #e9e9e9
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "/checkAssoc <key, ip, cid>: check user associations"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = center
 		text-wrap = false
 	elem "label55"
 		type = LABEL
@@ -8351,7 +8429,7 @@ window "help"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		text = "/demote <user>: remote an operator (host only)"
+		text = "/demote <user>: demote an operator (host only)"
 		image = ""
 		image-mode = center
 		keep-aspect = false
@@ -8386,7 +8464,7 @@ window "help"
 	elem "label2"
 		type = LABEL
 		pos = 4,121
-		size = 351x282
+		size = 351x372
 		anchor1 = none
 		anchor2 = none
 		font-family = "Trebuchet MS,Arial"
@@ -8697,7 +8775,7 @@ window "help"
 		text-wrap = false
 	elem "button14"
 		type = BUTTON
-		pos = 4,407
+		pos = 4,497
 		size = 706x20
 		anchor1 = none
 		anchor2 = none

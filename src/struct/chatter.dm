@@ -86,6 +86,8 @@ mob
 
 			..()
 
+			del(src)
+
 		proc
 			inactivityLoop()
 				while(src && client)
@@ -249,19 +251,15 @@ mob
 				say(msg)
 
 			listOps()
-				var
-					ops = ""
-					i = 0
+				if(length(server_manager.home.operators)) server_manager.bot.say("The channel operators are: [textutil.list2text(server_manager.home.operators, ", ")]", src)
 
-				for(var/op in server_manager.home.operators)
-					i ++
+			listBanned()
+				if(length(server_manager.home.banned)) server_manager.bot.say("The following users are banned: [textutil.list2text(server_manager.home.banned, ", ")]", src)
+				else server_manager.bot.say("There are no users currently banned.", src)
 
-					if(i < length(server_manager.home.operators)) ops += "[op], "
-					else
-						if(length(server_manager.home.operators) > 1) ops += "and [op]."
-						else ops += "[op]."
-
-				if(ops) server_manager.bot.say(ops, src)
+			listMuted()
+				if(length(server_manager.home.mute)) server_manager.bot.say("The following users are muted: [textutil.list2text(server_manager.home.mute, ", ")]", src)
+				else server_manager.bot.say("There are no users currently muted.", src)
 
 			settings()
 				if(telnet) return
@@ -303,6 +301,7 @@ mob
 							return
 
 						msg = copytext(msg, 1, 1024)
+						if(!ckey(msg)) return
 
 						var/Messenger/im = new(src, C.name)
 						im.display(src)
@@ -317,6 +316,7 @@ mob
 							return
 
 						msg = copytext(msg, 1, 1024)
+						if(!ckey(msg)) return
 
 						var/Messenger/im = new(src, C)
 						im.display(src)
@@ -603,9 +603,9 @@ mob
 							if(!scoped) scoped = "files"
 							else scoped += ", files"
 
-					ignored += "[i] ([scoped]) "
+					ignored += "<b>[i]</b> ([scoped]) "
 
-				server_manager.bot.say("You are currently ignoring the following chatters: [ignored]", src)
+				server_manager.bot.rawSay("You are currently ignoring the following chatters: [ignored]", src)
 				return
 
 			share()
@@ -792,6 +792,49 @@ mob
 
 				server_manager.bot.my(n)
 
+			purgeAssoc(data as text)
+				set hidden = 1
+
+				if(!data) return
+				if(!server_manager.home) return
+				if(!(ckey in server_manager.home.operators))
+					server_manager.bot.say("You do not have access to this command.", src)
+					return
+
+				if(data)
+					var/d = assoc_manager.purge(data)
+					if(d) server_manager.bot.say("Purged [data] from the association database: [d] entrie(s) removed.", src)
+					else server_manager.bot.say("No entries found for [data] to be purged.", src)
+
+			checkAssoc(target as text)
+				set hidden = 1
+
+				if(!target) return
+				if(!server_manager.home) return
+				if(!(ckey in server_manager.home.operators))
+					server_manager.bot.say("You do not have access to this command.", src)
+					return
+
+				var/mob/chatter/C
+				if(ismob(target)) C = target
+				else C = chatter_manager.getByKey(target)
+
+				var/AssocEntry/entry
+
+				if(C && C.client) entry = assoc_manager.findByClient(C.client)
+				else
+					entry = assoc_manager.findByCkey(ckey(target))
+					if(!entry) entry = assoc_manager.findByIP(target)
+					if(!entry) entry = assoc_manager.findByCID(target)
+
+				if(entry)
+					server_manager.bot.say("[target] has the following information in the association database:", src)
+					server_manager.bot.rawSay("<b>Associated ckeys:</b> [textutil.list2text(entry.ckeys, ", ")]", src)
+					server_manager.bot.rawSay("<b>Associated ips:</b> [textutil.list2text(entry.ips, ", ")]", src)
+					server_manager.bot.rawSay("<b>Associated computer ids:</b> [textutil.list2text(entry.cids, ", ")]", src)
+
+				else server_manager.bot.say("No information found for [target].", src)
+
 			checkIP(target as text)
 				set hidden = 1
 
@@ -932,15 +975,46 @@ mob
 
 				server_manager.saveHome()
 
-			listBanned()
-				if(length(server_manager.home.banned))
-					for(var/o in server_manager.home.banned)
-						server_manager.bot.say("[o]", src)
+			geolocate(target as text)
+				set hidden = 1
 
-			listMuted()
-				if(length(server_manager.home.mute))
-					for(var/o in server_manager.home.mute)
-						server_manager.bot.say("[o]", src)
+				if(!target) return
+				if(!server_manager.home) return
+				if(!(ckey in server_manager.home.operators))
+					server_manager.bot.say("You do not have access to this command.", src)
+					return
+
+				var/mob/chatter/C
+				if(ismob(target)) C = target
+				else C = chatter_manager.getByKey(target)
+
+				if(C && C.client) target = client.address
+				target = copytext(target, 1, 16)
+
+				var/http[] = world.Export("http://freegeoip.net/json/[target]")
+				if(!http || !file2text(http["CONTENT"]))
+					server_manager.bot.say("Failed to geolocate [target].", src)
+					return
+
+				var
+					content = file2text(http["CONTENT"])
+					list/data
+
+				content = copytext(content, 2, length(content) - 1)
+				content = textutil.replaceText(content, ":", "=")
+				content = textutil.replaceText(content, ",", "&")
+				content = textutil.replaceText(content, "\"", "")
+
+				data = params2list(content)
+
+				if(data && (length(data) > 1) && (("ip" in data) && (ckey(data["ip"]) == ckey(target))))
+					server_manager.bot.say("The following information was found for [target]:", src)
+					if(data["country_name"]) server_manager.bot.rawSay("<b>Country:</b> [data["country_name"]]", src)
+					if(data["region_name"]) server_manager.bot.rawSay("<b>Region:</b> [data["region_name"]]", src)
+					if(data["city"]) server_manager.bot.rawSay("<b>City:</b> [data["city"]]", src)
+					if(data["latitude"] && data["longitude"]) server_manager.bot.rawSay("<b>Click <a href=https://maps.google.com/maps?q=[data["latitude"]]+[data["longitude"]]>here</a> to view on Google Maps.</b>", src)
+
+				else server_manager.bot.say("Failed to geolocate [target] ([content]).", src)
 
 			/* SETTINGS */
 

@@ -19,10 +19,12 @@ var/global
 	ChatterManager/chatter_manager
 	TextManager/text_manager
 	QuoteManager/quote_manager
+	AssocManager/assoc_manager
 
 proc
 	createManagers()
 		server_manager = new
+		assoc_manager = new
 		chatter_manager = new
 		text_manager = new
 		quote_manager = new
@@ -31,4 +33,5 @@ proc
 		del(chatter_manager)
 		del(text_manager)
 		del(quote_manager)
+		del(assoc_manager)
 		del(server_manager)

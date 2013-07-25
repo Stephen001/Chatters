@@ -13,6 +13,7 @@
 #include "src\libraries\s_smiley\alphabetics.dm"
 #include "src\libraries\s_smiley\replaceword.dm"
 #include "src\libraries\s_smiley\s_smiley.dm"
+#include "src\struct\AssocManager.dm"
 #include "src\struct\Bot.dm"
 #include "src\struct\Channel.dm"
 #include "src\struct\chatter.dm"
