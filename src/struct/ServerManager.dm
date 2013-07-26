@@ -4,27 +4,44 @@ ServerManager
 
 		Channel/home
 		Bot/bot
+		Logger/logger
 
 	New()
-		loadServerCfg()
+		createLogger()
+
+		if(!loadServerCfg())
+			CRASH("Failed to properly load server.cfg! Check the log file for more information.")
+			return
+
 		loadHome()
 		loadBot()
 
-		..()
+		logger.info("ServerManager successfully created.")
 
 	Del()
 		saveHome()
 		saveBot()
 
-		..()
+		logger.info("ServerManager successfully deleted.")
+		log4dm.endLogging()
 
 	proc
+		createLogger()
+			logger = log4dm.getLogger("log")
+			var/time = time2text(world.realtime, "DDD, MMM YYYY")
+			logger.htmlFileConfig("./data/logs/[time].html") // Set up a generic HTML file appender.
+
+			log4dm.startLogging()
+
 		saveHome(Channel/Chan)
 			var/savefile/S = new("./data/server_home.sav")
 
 			S["mute"]		<< home.mute
 			S["banned"]		<< home.banned
 			S["operators"]  << home.operators
+
+			if(fexists("./data/server_home.sav")) logger.info("Successfully saved server_home.sav.")
+			else logger.error("server_home.sav does not exist after saving.")
 
 		loadHome(chan)
 			if(fexists("./data/server_home.sav"))
@@ -41,12 +58,19 @@ ServerManager
 				S["operators"] >> temp
 				if(length(temp)) home.operators |= temp
 
+				logger.info("Successfully loaded server_home.sav.")
+
+			else logger.info("server_home.sav does not exist to be loaded.")
+
 		saveBot()
 			var/savefile/S = new("./data/server_bot.sav")
 
 			S["name"]		<< bot.name
 			S["name_color"]	<< bot.name_color
 			S["text_color"]	<< bot.text_color
+
+			if(fexists("./data/server_bot.sav")) logger.info("Successfully saved server_bot.sav.")
+			else logger.error("server_bot.sav does not exist after saving.")
 
 		loadBot(Channel/Chan)
 			bot = new
@@ -62,14 +86,24 @@ ServerManager
 				if(!bot.name_color) bot.name_color = "#000000"
 				if(!bot.text_color) bot.text_color = "#000000"
 
+				logger.info("Successfully saved server_bot.sav.")
+
+			else logger.info("server_bot.sav does not exist to be loaded.")
+
 		loadServerCfg()
-			if(!fexists("./data/server.cfg")) CRASH("You must have a server.cfg file in /data!")
+			if(!fexists("./data/server.cfg"))
+				logger.fatal("server.cfg not found.")
+				return
 
 			var/list/config = parseCFGFile("./data/server.cfg")
-			if(!config || !length(config)) return
+			if(!config || !length(config))
+				logger.fatal("Failed to parse server.cfg. Is the file empty?")
+				return
 
 			var/list/main = params2list(config["main"])
-			if(!main || !length(main)) return
+			if(!main || !length(main))
+				logger.fatal("No main header found in server.cfg.")
+				return
 
 			host = ckey(main["host"])
 
@@ -101,6 +135,12 @@ ServerManager
 					for(var/name in op_list)
 						var/op_key = ckey(op_list[name])
 						home.operators += op_key
+
+				logger.info("Successfully loaded server.cfg.")
+
+				return TRUE
+
+			else logger.fatal("No server header found in server.cfg.")
 
 		parseCFGFile(cfg)
 			if(!cfg || !fexists(cfg)) return

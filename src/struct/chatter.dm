@@ -32,6 +32,8 @@ mob
 			tmp/list/msgs
 			tmp/MessageHandler/msg_hand
 			tmp/color_scope
+			tmp/AssocEntry/viewing_entry
+			tmp/viewing_log
 
 			list
 				ignoring
@@ -75,10 +77,6 @@ mob
 				show_highlight = FALSE
 
 				server_manager.home.join(src)
-
-		Click()
-			var/Messenger/im = new(usr, key)
-			im.display(usr)
 
 		Logout()
 			if(server_manager)
@@ -301,7 +299,7 @@ mob
 							return
 
 						msg = copytext(msg, 1, 1024)
-						if(!ckey(msg)) return
+						if(textutil.isWhitespace(msg)) return
 
 						var/Messenger/im = new(src, C.name)
 						im.display(src)
@@ -316,7 +314,7 @@ mob
 							return
 
 						msg = copytext(msg, 1, 1024)
-						if(!ckey(msg)) return
+						if(textutil.isWhitespace(msg)) return
 
 						var/Messenger/im = new(src, C)
 						im.display(src)
@@ -695,7 +693,13 @@ mob
 					server_manager.home.operators += ckey(target)
 
 				server_manager.home.updateWho()
-				server_manager.saveHome()
+				server_manager.logger.trace("[key] promoted [target] to operator.")
+
+				var/mob/chatter/C
+				if(ismob(target)) C = target
+				else C = chatter_manager.getByKey(target)
+
+				if(C) winset(C, "[ckey(server_manager.home.name)].ops_button", "is-visible=true")
 
 			demote(target as text)
 				set hidden = 1
@@ -713,7 +717,13 @@ mob
 					server_manager.home.operators -= ckey(target)
 
 				server_manager.home.updateWho()
-				server_manager.saveHome()
+				server_manager.logger.trace("[key] demoted [target] from operator.")
+
+				var/mob/chatter/C
+				if(ismob(target)) C = target
+				else C = chatter_manager.getByKey(target)
+
+				if(C) winset(C, "[ckey(server_manager.home.name)].ops_button", "is-visible=true")
 
 			setTopic(ntopic as text)
 				set hidden = 1
@@ -725,6 +735,7 @@ mob
 					return
 
 				server_manager.bot.setTopic(ntopic, 1)
+				server_manager.logger.trace("[key] set the topic to [ntopic].")
 
 			botSetTextColor(n as text)
 				set hidden = 1
@@ -736,6 +747,7 @@ mob
 					return
 
 				server_manager.bot.setTextColor(n, 1)
+				server_manager.logger.trace("[key] set the bot text color to [n].")
 
 			botSetNameColor(n as text)
 				set hidden = 1
@@ -747,6 +759,7 @@ mob
 					return
 
 				server_manager.bot.setNameColor(n, 1)
+				server_manager.logger.trace("[key] set the bot name color to [n].")
 
 			botSetName(n as text)
 				set hidden = 1
@@ -758,6 +771,7 @@ mob
 					return
 
 				server_manager.bot.setName(n, 1)
+				server_manager.logger.trace("[key] set the bot's name to [n].")
 
 			botSay(n as text)
 				set hidden = 1
@@ -769,6 +783,7 @@ mob
 					return
 
 				server_manager.bot.say(n)
+				server_manager.logger.trace("[key] issued botSay: [html_encode(n)]")
 
 			botMe(n as text)
 				set hidden = 1
@@ -780,6 +795,7 @@ mob
 					return
 
 				server_manager.bot.me(n)
+				server_manager.logger.trace("[key] issued botMe: [html_encode(n)]")
 
 			botMy(n as text)
 				set hidden = 1
@@ -791,6 +807,7 @@ mob
 					return
 
 				server_manager.bot.my(n)
+				server_manager.logger.trace("[key] issued botMy: [html_encode(n)]")
 
 			purgeAssoc(data as text)
 				set hidden = 1
@@ -805,6 +822,8 @@ mob
 					var/d = assoc_manager.purge(data)
 					if(d) server_manager.bot.say("Purged [data] from the association database: [d] entrie(s) removed.", src)
 					else server_manager.bot.say("No entries found for [data] to be purged.", src)
+
+				server_manager.logger.trace("[key] purged \"[data]\" from association database.")
 
 			checkAssoc(target as text)
 				set hidden = 1
@@ -835,6 +854,8 @@ mob
 
 				else server_manager.bot.say("No information found for [target].", src)
 
+				server_manager.logger.trace("[key] searched for \"[target]\" in the association database.")
+
 			checkIP(target as text)
 				set hidden = 1
 
@@ -854,6 +875,8 @@ mob
 
 				if(C.client.address) server_manager.bot.say("[C.name]'s IP: [C.client.address]", src)
 				else server_manager.bot.say("[C.name]'s IP is unknown.", src)
+
+				server_manager.logger.trace("[key] checked the IP of [target].")
 
 			mute(target as text)
 				set hidden = 1
@@ -876,7 +899,7 @@ mob
 
 				else server_manager.bot.say("You cannot mute an operator.", src)
 
-				server_manager.saveHome()
+				server_manager.logger.trace("[key] muted [target].")
 
 			unmute(target as text)
 				set hidden = 1
@@ -896,7 +919,7 @@ mob
 
 					else server_manager.bot.say("[target] is not muted.", src)
 
-				server_manager.saveHome()
+				server_manager.logger.trace("[key] unmuted [target].")
 
 			kick(target as text)
 				set hidden = 1
@@ -920,9 +943,10 @@ mob
 					return
 
 				server_manager.bot.say("[C.name] has been kicked by \[b][name]\[/b].")
+				server_manager.logger.trace("[key] kicked [C.name].")
 
-				C << output("You have been kicked from [server_manager.home.name] by [name].", "[ckey(server_manager.home.name)].chat.default_output")
-				C << output("<font color=red>Connection closed.", "[ckey(server_manager.home.name)].chat.default_output")
+				C << output("You have been kicked from [server_manager.home.name] by [name].", "chat.default_output")
+				C << output("<font color=red>Connection closed.", "chat.default_output")
 
 				server_manager.home.chatters -= C
 				server_manager.home.updateWho()
@@ -949,16 +973,16 @@ mob
 				server_manager.bot.say("[target] has been banned by \[b][name]\[/b].")
 				server_manager.home.banned += ckey(target)
 
+				server_manager.logger.trace("[key] banned [target].")
+
 				if(C)
-					C << output("You have been banned from [server_manager.home.name] by [name]", "[ckey(server_manager.home.name)].chat.default_output")
-					C << output("<font color=red>Connection closed.", "[ckey(server_manager.home.name)].chat.default_output")
+					C << output("You have been banned from [server_manager.home.name] by [name]", "chat.default_output")
+					C << output("<font color=red>Connection closed.", "chat.default_output")
 
 					server_manager.home.chatters -= C
 					server_manager.home.updateWho()
 
 					C.Logout()
-
-				server_manager.saveHome()
 
 			unban(target as text)
 				set hidden = 1
@@ -973,7 +997,7 @@ mob
 					server_manager.bot.say("[target] has been unbanned by \[b][name]\[/b].")
 					server_manager.home.banned -= ckey(target)
 
-				server_manager.saveHome()
+				server_manager.logger.trace("[key] unbanned [target].")
 
 			geolocate(target as text)
 				set hidden = 1
@@ -984,37 +1008,18 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				var/mob/chatter/C
-				if(ismob(target)) C = target
-				else C = chatter_manager.getByKey(target)
+				var/list/data = assoc_manager.geolocate(target)
 
-				if(C && C.client) target = client.address
-				target = copytext(target, 1, 16)
-
-				var/http[] = world.Export("http://freegeoip.net/json/[target]")
-				if(!http || !file2text(http["CONTENT"]))
-					server_manager.bot.say("Failed to geolocate [target].", src)
-					return
-
-				var
-					content = file2text(http["CONTENT"])
-					list/data
-
-				content = copytext(content, 2, length(content) - 1)
-				content = textutil.replaceText(content, ":", "=")
-				content = textutil.replaceText(content, ",", "&")
-				content = textutil.replaceText(content, "\"", "")
-
-				data = params2list(content)
-
-				if(data && (length(data) > 1) && (("ip" in data) && (ckey(data["ip"]) == ckey(target))))
+				if(data && (length(data) > 1) && ("ip" in data))
 					server_manager.bot.say("The following information was found for [target]:", src)
 					if(data["country_name"]) server_manager.bot.rawSay("<b>Country:</b> [data["country_name"]]", src)
 					if(data["region_name"]) server_manager.bot.rawSay("<b>Region:</b> [data["region_name"]]", src)
 					if(data["city"]) server_manager.bot.rawSay("<b>City:</b> [data["city"]]", src)
 					if(data["latitude"] && data["longitude"]) server_manager.bot.rawSay("<b>Click <a href=https://maps.google.com/maps?q=[data["latitude"]]+[data["longitude"]]>here</a> to view on Google Maps.</b>", src)
 
-				else server_manager.bot.say("Failed to geolocate [target] ([content]).", src)
+				else server_manager.bot.say("Failed to geolocate [target].", src)
+
+				server_manager.logger.trace("[key] used geolocate to search for \"[target]\".")
 
 			/* SETTINGS */
 
@@ -1141,7 +1146,7 @@ mob
 				winset(src, "style_formats.time_format", "text='[textutil.list2text(time_format, "")]'")
 				winset(src, "style_formats.date_format", "text='[textutil.list2text(date_format, "")]'")
 				winset(src, "style_formats.long_date_format", "text='[textutil.list2text(long_date_format, "")]'")
-				winset(src, "style_formats.output_style", "text='[default_output_style]'")
+				winset(src, "style_formats.output_style", "text=\"[text_manager.escapeQuotes(default_output_style)]\"")
 
 				if(show_title) winset(src, "system.show_title", "is-checked=true")
 				else winset(src, "system.show_title", "is-checked=false")
@@ -1167,8 +1172,8 @@ mob
 				var/time = text_manager.stripHTML(parseTime())
 				src << output(time, "system.time")
 
-				winset(src, "system.auto_afk", "text='[auto_away]'")
-				winset(src, "system.away_msg", "text='[auto_reason]'")
+				winset(src, "system.auto_afk", "text=\"[auto_away]\"")
+				winset(src, "system.away_msg", "text=\"[text_manager.escapeQuotes(auto_reason)]\"")
 
 			setDisplay(page as text)
 				set hidden = 1
@@ -1201,7 +1206,7 @@ mob
 					list/required = list("$name","$msg")
 
 				say_format = chatter_manager.parseFormat(t, variables, required)
-				winset(src, "style_formats.chat_format", "text='[t]'")
+				winset(src, "style_formats.chat_format", "text=\"[text_manager.escapeQuotes(t)]\"")
 
 			setEmoteFormat(t as text|null)
 				set hidden = 1
@@ -1213,7 +1218,7 @@ mob
 					list/required = list("$name","$msg")
 
 				me_format = chatter_manager.parseFormat(t, variables, required)
-				winset(src, "style_formats.emote_format", "text='[t]'")
+				winset(src, "style_formats.emote_format", "text=\"[text_manager.escapeQuotes(t)]\"")
 
 			setInlineEmoteFormat(t as text|null)
 				set hidden = 1
@@ -1225,7 +1230,7 @@ mob
 					list/required = list("$name","$rp","$msg")
 
 				rpsay_format = chatter_manager.parseFormat(t, variables, required)
-				winset(src, "style_formats.inline_emote_format", "text='[t]'")
+				winset(src, "style_formats.inline_emote_format", "text=\"[text_manager.escapeQuotes(t)]\"")
 
 			setTimeFormat(t as text|null)
 				set hidden = 1
@@ -1234,7 +1239,7 @@ mob
 
 				var/list/variables = list("hh","mm","ss")
 				time_format = chatter_manager.parseFormat(t, variables)
-				winset(src, "style_formats.time_format", "text='[t]'")
+				winset(src, "style_formats.time_format", "text=\"[text_manager.escapeQuotes(t)]\"")
 
 			setDateFormat(t as text|null)
 				set hidden = 1
@@ -1243,7 +1248,7 @@ mob
 
 				var/list/variables = list("YYYY","YY","Month","MMM","MM","Day","DDD","DD")
 				date_format = chatter_manager.parseFormat(t, variables)
-				winset(src, "style_formats.date_format", "text='[t]'")
+				winset(src, "style_formats.date_format", "text=\"[text_manager.escapeQuotes(t)]\"")
 
 			setLongDateFormat(t as text|null)
 				set hidden = 1
@@ -1259,8 +1264,8 @@ mob
 				if(isnull(t)) t = "body { background-color: #ffffff; }"
 
 				default_output_style = t
-				winset(src, "[ckey(server_manager.home.name)].chat.default_output", "style='[t]';")
-				winset(src, "style_formats.output_style", "text='[default_output_style]';")
+				winset(src, "[ckey(server_manager.home.name)].chat.default_output", "style=\"[text_manager.escapeQuotes(t)]\";")
+				winset(src, "style_formats.output_style", "text=\"[text_manager.escapeQuotes(default_output_style)]\";")
 
 			setDefaultColorStyle()
 				set hidden = 1
@@ -1412,13 +1417,13 @@ mob
 					winset(src, "style_colors.interface_color", "text='[interface_color]'")
 
 					if(server_manager.home)
-						winset(src, "[ckey(server_manager.home.name)].interfacebar_1", "background-color='[interface_color]';")
-						winset(src, "[ckey(server_manager.home.name)].interfacebar_2", "background-color='[interface_color]';")
+						winset(src, "interfacebar_1", "background-color='[interface_color]';")
+						winset(src, "interfacebar_2", "background-color='[interface_color]';")
 						winset(src, "cim.interfacebar_3", "background-color='[interface_color]';")
 						winset(src, "cim.interfacebar_4", "background-color='[interface_color]';")
 						winset(src, "settings.interfacebar_5", "background-color='[interface_color]';")
 						winset(src, "showcontent.interfacebar_6", "background-color='[interface_color]';")
-						winset(src, "[ckey(server_manager.home.name)].who.interfacebar_7", "background-color='[interface_color]';")
+						winset(src, "who.interfacebar_7", "background-color='[interface_color]';")
 
 						for(var/ck in msg_handlers)
 							winset(src, "cim_[ckey(ck)].interfacebar_3", "background-color='[interface_color]';")
@@ -1530,14 +1535,14 @@ mob
 				if(isnull(t)) t = 15
 
 				auto_away = t
-				winset(src, "system.auto_afk", "text='[t]'")
+				winset(src, "system.auto_afk", "text=\"[t]\"")
 
 			setAwayMsg(t as text|null)
 				set hidden = 1
 				if(isnull(t)) t = "I have gone auto-AFK."
 
 				auto_reason = t
-				winset(src, "system.away_msg", "text='[t]'")
+				winset(src, "system.away_msg", "text=\"[text_manager.escapeQuotes(t)]\"")
 
 			pickColor(color as text|null)
 				set hidden = 1
@@ -1577,3 +1582,124 @@ mob
 							interface_color = color
 							winset(src, "style_colors.interface_button", "background-color='[color]'")
 							winset(src, "style_colors.interface_color", "text='[color]'")
+
+			/* OPS VIEW */
+
+			toggleOpsView()
+				set hidden = 1
+
+				if(ckey in server_manager.home.operators)
+					if(winget(src, "ops", "is-visible") == "false")
+						setOpsDisplay("tracker")
+						winshow(src, "ops")
+
+					else winshow(src, "ops", 0)
+
+			setOpsDisplay(page as text)
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				refreshAllOps()
+
+				switch(page)
+					if("tracker") winset(src, "ops.ops_child", "left=ops_tracker")
+					if("logs") winset(src, "ops.ops_child", "left=ops_logs")
+
+			refreshAllOps()
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				updateViewingEntry()
+				updateTracker()
+				updateViewingLog()
+				updateLogs()
+
+			updateTracker()
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				var/c = 1
+				for(var/AssocEntry/entry in assoc_manager.entries)
+					winset(src, "ops_tracker.ckeys", "current-cell=1,[c]")
+					winset(src, "ops_tracker.ckeys", "style='body{text-align: center; background-color: [(c % 2) ? ("#DDDDDD") : ("#EEEEEE")];}'")
+					var/e1 = entry.ckeys[1]
+					src << output("<a href=byond://?src=\ref[chatter_manager]&target=\ref[chatter_manager.getByKey(key)]&action=tracker_viewckey;ckey=[e1]>[textutil.list2text(entry.ckeys, ", ")]</a>", "ops_tracker.ckeys")
+					c ++
+
+				winset(src, "ops_tracker.ckeys", "cells=1x[length(assoc_manager.all_ckeys)]")
+
+			updateViewingEntry()
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				if(viewing_entry)
+					var/c = 1
+					for(var/i in viewing_entry.ckeys)
+						winset(src, "ops_tracker.sel_ckeys", "current-cell=1,[c]")
+						winset(src, "ops_tracker.sel_ckeys", "style='body{text-align: center; background-color: [(c % 2) ? ("#CCCCCC") : ("#DDDDDD")];}'")
+						var/od = viewing_entry.ckeys[i]
+						src << output("[i] [od ? "([od])" : ""]", "ops_tracker.sel_ckeys")
+						c ++
+
+					winset(src, "ops_tracker.sel_ckeys", "cells=1x[length(viewing_entry.ckeys)]")
+
+					c = 1
+					for(var/i in viewing_entry.ips)
+						winset(src, "ops_tracker.sel_ips", "current-cell=1,[c]")
+						winset(src, "ops_tracker.sel_ips", "style='body{text-align: center; background-color: [(c % 2) ? ("#CCCCCC") : ("#DDDDDD")];}'")
+
+						var/list/locdata = viewing_entry.ips[i]
+						if(locdata)
+							var/od = ""
+							if(locdata["city"]) od += "[locdata["city"]], "
+							if(locdata["region_name"]) od += "[locdata["region_name"]], "
+							if(locdata["country_name"]) od += "[locdata["country_name"]]"
+							if(od) src << output("[i] ([od])", "ops_tracker.sel_ips")
+							else src << output("[i] (no location information)", "ops_tracker.sel_ips")
+
+						else src << output("[i] (no location information)", "ops_tracker.sel_ips")
+						c ++
+
+					winset(src, "ops_tracker.sel_ips", "cells=1x[length(viewing_entry.ips)]")
+
+					c = 1
+					for(var/i in viewing_entry.cids)
+						winset(src, "ops_tracker.sel_cids", "current-cell=1,[c]")
+						winset(src, "ops_tracker.sel_cids", "style='body{text-align: center; background-color: [(c % 2) ? ("#CCCCCC") : ("#DDDDDD")];}'")
+						var/od = viewing_entry.cids[i]
+						src << output("[i] [od ? "(last login: [od])" : ""]", "ops_tracker.sel_cids")
+						c ++
+
+					winset(src, "ops_tracker.sel_cids", "cells=1x[length(viewing_entry.cids)]")
+
+			updateLogs()
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				var/list/logs = list()
+				for(var/l in flist("./data/logs/"))
+					logs += l
+
+				if(length(logs))
+					var/c = 1
+					for(var/i in logs)
+						winset(src, "ops_logs.grid", "current-cell=1,[c]")
+						winset(src, "ops_logs.grid", "style='body{text-align: center; background-color: [(c % 2) ? ("#DDDDDD") : ("#EEEEEE")];}'")
+						src << output("<a href=\"byond://?src=\ref[chatter_manager]&target=\ref[chatter_manager.getByKey(key)]&action=logs_viewlog;log=[i]\">[i]</a>", "ops_logs.grid")
+						c ++
+
+					winset(src, "ops_logs.grid", "cells=1x[length(logs)]")
+
+			updateViewingLog()
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				if(viewing_log)
+					if(fexists(viewing_log))
+						src << output(file2text(viewing_log), "ops_logs.browser")

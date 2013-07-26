@@ -1,12 +1,19 @@
 ChatterManager
+	New()
+		server_manager.logger.info("Successfully created ChatterManager.")
+
+	Del()
+		server_manager.logger.info("Successfully deleted ChatterManager.")
+
 	Topic(href, href_list)
 		..()
 
+		var/mob/chatter/trg
+		if(href_list["target"]) trg = locate(href_list["target"])
+
 		switch(href_list["action"])
 			if("showcode")
-				var
-					mob/chatter/trg = locate(href_list["target"])
-					ShowcodeSnippet/snippet = server_manager.home.showcodes[text2num(href_list["index"])]
+				var/ShowcodeSnippet/snippet = server_manager.home.showcodes[text2num(href_list["index"])]
 
 				if(snippet.target && snippet.target != usr.ckey && usr.ckey != trg.ckey)
 					// This is a private message they are not allowed to view.
@@ -15,15 +22,47 @@ ChatterManager
 				else usr << browse(snippet.returnHTML(trg, 1), "window=showcode_[snippet.id];display=1;size=800x500;border=1;can_close=1;can_resize=1;titlebar=1")
 
 			if("showtext")
-				var
-					mob/chatter/trg = locate(href_list["target"])
-					ShowcodeSnippet/snippet = server_manager.home.showcodes[text2num(href_list["index"])]
+				var/ShowcodeSnippet/snippet = server_manager.home.showcodes[text2num(href_list["index"])]
 
 				if (snippet.target && snippet.target != usr.ckey && usr.ckey != trg.ckey)
 					// This is a private message they are not allowed to view.
 					return
 
 				else usr << browse(snippet.returnHTML(trg), "window=showtext_[snippet.id];display=1;size=800x500;border=1;can_close=1;can_resize=1;titlebar=1")
+
+			if("tracker_viewckey")
+				if(trg && trg.ckey in server_manager.home.operators)
+					var/ckey = href_list["ckey"]
+					if(ckey)
+						var/AssocEntry/entry = assoc_manager.findByCkey(ckey)
+						if(entry)
+							trg.viewing_entry = entry
+							trg.updateViewingEntry()
+
+			if("tracker_viewip")
+				if(trg && trg.ckey in server_manager.home.operators)
+					var/ip = href_list["ip"]
+					if(ip)
+						var/AssocEntry/entry = assoc_manager.findByIP(ip)
+						if(entry)
+							trg.viewing_entry = entry
+							trg.updateViewingEntry()
+
+			if("tracker_viewcid")
+				if(trg && trg.ckey in server_manager.home.operators)
+					var/cid = href_list["cid"]
+					if(cid)
+						var/AssocEntry/entry = assoc_manager.findByCID(cid)
+						if(entry)
+							trg.viewing_entry = entry
+							trg.updateViewingEntry()
+
+			if("logs_viewlog")
+				if(trg && trg.ckey in server_manager.home.operators)
+					var/log = href_list["log"]
+					if(log && fexists("./data/logs/[log]"))
+						trg.viewing_log = "./data/logs/[log]"
+						trg.updateViewingLog()
 
 	proc
 		usher(mob/chatter/C)

@@ -6,8 +6,9 @@ changes
 *.log
 *.pid
 *.sav
-data/saves/logs
-data/saves/channels
+*.zip
+*.7z
+data/logs
+data/channels
 packet
-data/saves/tel.net
 Thumbs.db

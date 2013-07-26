@@ -13,6 +13,7 @@
 
 // Global variables and procedures
 var/global
+	Logger/log4dm = new
 	kText/textutil = new
 
 	ServerManager/server_manager
