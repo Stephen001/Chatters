@@ -16,19 +16,19 @@ ServerManager
 		loadHome()
 		loadBot()
 
-		logger.info("ServerManager successfully created.")
+		logger.info("Created ServerManager")
 
 	Del()
 		saveHome()
 		saveBot()
 
-		logger.info("ServerManager successfully deleted.")
+		logger.info("Deleted ServerManager.")
 		log4dm.endLogging()
 
 	proc
 		createLogger()
 			logger = log4dm.getLogger("log")
-			var/time = time2text(world.realtime, "DDD, MMM YYYY")
+			var/time = time2text(world.realtime, "DD.MM.YY")
 			logger.htmlFileConfig("./data/logs/[time].html") // Set up a generic HTML file appender.
 
 			log4dm.startLogging()
@@ -39,8 +39,9 @@ ServerManager
 			S["mute"]		<< home.mute
 			S["banned"]		<< home.banned
 			S["operators"]  << home.operators
+			S["topic"]      << home.topic
 
-			if(fexists("./data/server_home.sav")) logger.info("Successfully saved server_home.sav.")
+			if(fexists("./data/server_home.sav")) logger.info("Saved server_home.sav.")
 			else logger.error("server_home.sav does not exist after saving.")
 
 		loadHome(chan)
@@ -58,7 +59,9 @@ ServerManager
 				S["operators"] >> temp
 				if(length(temp)) home.operators |= temp
 
-				logger.info("Successfully loaded server_home.sav.")
+				if(S["topic"]) S["topic"] >> home.topic
+
+				logger.info("Loaded server_home.sav.")
 
 			else logger.info("server_home.sav does not exist to be loaded.")
 
@@ -69,7 +72,7 @@ ServerManager
 			S["name_color"]	<< bot.name_color
 			S["text_color"]	<< bot.text_color
 
-			if(fexists("./data/server_bot.sav")) logger.info("Successfully saved server_bot.sav.")
+			if(fexists("./data/server_bot.sav")) logger.info("Saved server_bot.sav.")
 			else logger.error("server_bot.sav does not exist after saving.")
 
 		loadBot(Channel/Chan)
@@ -86,7 +89,7 @@ ServerManager
 				if(!bot.name_color) bot.name_color = "#000000"
 				if(!bot.text_color) bot.text_color = "#000000"
 
-				logger.info("Successfully saved server_bot.sav.")
+				logger.info("Saved server_bot.sav.")
 
 			else logger.info("server_bot.sav does not exist to be loaded.")
 
@@ -136,7 +139,7 @@ ServerManager
 						var/op_key = ckey(op_list[name])
 						home.operators += op_key
 
-				logger.info("Successfully loaded server.cfg.")
+				logger.info("Loaded server.cfg.")
 
 				return TRUE
 

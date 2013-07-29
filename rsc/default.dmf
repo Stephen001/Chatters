@@ -9440,7 +9440,7 @@ window "ops_tracker"
 	elem "ops_tracker"
 		type = MAIN
 		pos = 281,0
-		size = 722x448
+		size = 821x448
 		anchor1 = none
 		anchor2 = none
 		font-family = ""
@@ -9476,10 +9476,90 @@ window "ops_tracker"
 		macro = ""
 		menu = ""
 		on-close = ""
+	elem "button6"
+		type = BUTTON
+		pos = 617,424
+		size = 200x20
+		anchor1 = 100,100
+		anchor2 = none
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #c8c8c8
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = "is-checked"
+		on-size = ""
+		text = "Edit Entry Notes"
+		image = ""
+		command = "editEntryNotes"
+		is-flat = true
+		stretch = false
+		is-checked = false
+		group = ""
+		button-type = pushbutton
+	elem "label66"
+		type = LABEL
+		pos = 617,4
+		size = 200x416
+		anchor1 = 100,0
+		anchor2 = 100,100
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = "bold"
+		text-color = #000000
+		background-color = #e9e9e9
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "Entry Notes"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = top
+		text-wrap = false
+	elem "notes_browser"
+		type = BROWSER
+		pos = 621,24
+		size = 192x392
+		anchor1 = 100,0
+		anchor2 = 100,100
+		font-family = ""
+		font-size = 0
+		font-style = ""
+		text-color = #000000
+		background-color = none
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		show-history = false
+		show-url = false
+		auto-format = true
+		use-title = false
+		on-show = ""
+		on-hide = ""
 	elem "label64"
 		type = LABEL
 		pos = 208,300
-		size = 510x144
+		size = 404x144
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -9496,7 +9576,7 @@ window "ops_tracker"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		text = "Computer IDs"
+		text = "Entry Computer IDs"
 		image = ""
 		image-mode = center
 		keep-aspect = false
@@ -9505,7 +9585,7 @@ window "ops_tracker"
 	elem "label63"
 		type = LABEL
 		pos = 208,152
-		size = 510x144
+		size = 405x144
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -9522,7 +9602,7 @@ window "ops_tracker"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		text = "IPs"
+		text = "Entry IPs"
 		image = ""
 		image-mode = center
 		keep-aspect = false
@@ -9531,7 +9611,7 @@ window "ops_tracker"
 	elem "label65"
 		type = LABEL
 		pos = 208,4
-		size = 510x144
+		size = 405x144
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -9548,7 +9628,7 @@ window "ops_tracker"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		text = "Keys"
+		text = "Entry Keys"
 		image = ""
 		image-mode = center
 		keep-aspect = false
@@ -9557,7 +9637,7 @@ window "ops_tracker"
 	elem "sel_cids"
 		type = GRID
 		pos = 212,320
-		size = 502x120
+		size = 396x120
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -9588,7 +9668,7 @@ window "ops_tracker"
 	elem "sel_ips"
 		type = GRID
 		pos = 212,172
-		size = 502x120
+		size = 397x120
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -9619,7 +9699,7 @@ window "ops_tracker"
 	elem "sel_ckeys"
 		type = GRID
 		pos = 212,24
-		size = 502x120
+		size = 397x120
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"

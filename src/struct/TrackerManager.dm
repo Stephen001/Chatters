@@ -1,4 +1,4 @@
-AssocManager
+TrackerManager
 	var
 		list/entries = list()
 		list/all_ips = list()
@@ -8,29 +8,29 @@ AssocManager
 	New()
 		loadDB()
 
-		server_manager.logger.info("Successfully created AssocManager.")
+		server_manager.logger.info("Created TrackerManager.")
 
 	Del()
 		saveDB()
 
-		server_manager.logger.info("Successfully deleted AssocManager.")
+		server_manager.logger.info("Deleted TrackerManager.")
 
 	proc
 		saveDB()
-			var/savefile/f = new("./data/assoc_db.sav")
+			var/savefile/f = new("./data/tracker_db.sav")
 			Write(f)
 
-			if(fexists("./data/assoc_db.sav")) server_manager.logger.info("Successfully saved assoc_db.sav.")
-			else server_manager.logger.error("assoc_db.sav does not exist after saving.")
+			if(fexists("./data/tracker_db.sav")) server_manager.logger.info("Saved tracker_db.sav.")
+			else server_manager.logger.error("tracker_db.sav does not exist after saving.")
 
 		loadDB()
-			if(fexists("./data/assoc_db.sav"))
-				var/savefile/f = new("./data/assoc_db.sav")
+			if(fexists("./data/tracker_db.sav"))
+				var/savefile/f = new("./data/tracker_db.sav")
 				Read(f)
 
-				server_manager.logger.info("Successfully loaded assoc_db.sav.")
+				server_manager.logger.info("Loaded tracker_db.sav.")
 
-			else server_manager.logger.info("assoc_db.sav does not exist to be loaded.")
+			else server_manager.logger.info("tracker_db.sav does not exist to be loaded.")
 
 			if(!entries) entries = list()
 			if(!all_ips) all_ips = list()
@@ -66,7 +66,7 @@ AssocManager
 			all_ckeys -= ckey(data)
 			all_cids -= data
 
-			for(var/AssocEntry/entry in entries)
+			for(var/TrackerEntry/entry in entries)
 				if(data in entry.ips)
 					entry.ips -= data
 					. ++
@@ -82,14 +82,14 @@ AssocManager
 				if(!length(entry.ips) && !length(entry.ckeys) && !length(entry.cids))
 					entries -= entry
 
-			server_manager.logger.trace("[data] purged from association database.")
+			server_manager.logger.trace("[data] purged from tracker database.")
 
 		combineEntries(list/sentries)
 			if(!length(sentries)) return
 
-			var/AssocEntry/entry = new
+			var/TrackerEntry/entry = new
 
-			for(var/AssocEntry/e in sentries)
+			for(var/TrackerEntry/e in sentries)
 				for(var/ip in e.ips)
 					if(!(ip in all_ips)) all_ips += ip
 					all_ips[ip] = entry
@@ -120,6 +120,9 @@ AssocManager
 
 					else if(!entry.ckeys[ckey]) if(e.ckeys[ckey]) entry.ckeys[ckey] = e.ckeys[ckey]
 
+				if(ckey(e.notes) && (ckey(e.notes) != ckey(entry.notes)))
+					entry.notes += "[e.notes]"
+
 				entries -= e
 				del(e)
 
@@ -131,7 +134,7 @@ AssocManager
 			if(!ip) return
 
 			var/list/sentries = list()
-			for(var/AssocEntry/entry in entries)
+			for(var/TrackerEntry/entry in entries)
 				if(ip in entry.ips)
 					sentries += entry
 
@@ -144,7 +147,7 @@ AssocManager
 			if(!ckey) return
 
 			var/list/sentries = list()
-			for(var/AssocEntry/entry in entries)
+			for(var/TrackerEntry/entry in entries)
 				if(ckey in entry.ckeys)
 					sentries += entry
 
@@ -156,7 +159,7 @@ AssocManager
 			if(!cid) return
 
 			var/list/sentries = list()
-			for(var/AssocEntry/entry in entries)
+			for(var/TrackerEntry/entry in entries)
 				if(cid in entry.cids)
 					sentries += entry
 
@@ -186,18 +189,18 @@ AssocManager
 				var/list/sentries = list()
 
 				if(c.ckey in all_ckeys)
-					var/AssocEntry/entry = all_ckeys[c.ckey]
+					var/TrackerEntry/entry = all_ckeys[c.ckey]
 					sentries += entry
 
 				if(c.computer_id && (c.computer_id in all_cids))
-					var/AssocEntry/entry = all_cids[c.computer_id]
+					var/TrackerEntry/entry = all_cids[c.computer_id]
 					if(!(entry in sentries)) sentries += entry
 
 				if(c.address && (c.address in all_ips))
-					var/AssocEntry/entry = all_ips[c.address]
+					var/TrackerEntry/entry = all_ips[c.address]
 					if(!(entry in sentries)) sentries += entry
 
-				for(var/AssocEntry/entry in sentries)
+				for(var/TrackerEntry/entry in sentries)
 					if(!(c.ckey in entry.ckeys)) entry.ckeys += c.ckey
 					entry.ckeys[c.ckey] = c.key
 
@@ -213,7 +216,7 @@ AssocManager
 				else return sentries[1]
 
 			else
-				var/AssocEntry/entry = new
+				var/TrackerEntry/entry = new
 
 				if(c.address)
 					entry.ips += c.address
@@ -235,10 +238,11 @@ AssocManager
 
 				entries += entry
 
-				server_manager.logger.trace("New client added to association manager: [c.key]")
+				server_manager.logger.trace("New client added to tracker: [c.key]")
 
-AssocEntry
+TrackerEntry
 	var
 		list/ips = list()
 		list/cids = list()
 		list/ckeys = list()
+		notes = ""

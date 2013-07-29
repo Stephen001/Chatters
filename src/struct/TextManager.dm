@@ -1,9 +1,9 @@
 TextManager
 	New()
-		server_manager.logger.info("Successfully created TextManager.")
+		server_manager.logger.info("Created TextManager.")
 
 	Del()
-		server_manager.logger.info("Successfully deleted TextManager.")
+		server_manager.logger.info("Deleted TextManager.")
 
 	var
 		list

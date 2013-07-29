@@ -112,4 +112,4 @@ Bot
 			for(var/mob/chatter/C in server_manager.home.chatters)
 				if(chatter_manager.isTelnet(C.key)) continue
 				if(!C.client) continue
-				winset(C, "[ckey(server_manager.home.name)].topic_label", "text=\"[text_manager.escapeQuotes(new_value)]\";")
+				winset(C, "channel.topic_label", "text=\"[text_manager.escapeQuotes(new_value)]\";")

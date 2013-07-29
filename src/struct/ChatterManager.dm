@@ -1,9 +1,9 @@
 ChatterManager
 	New()
-		server_manager.logger.info("Successfully created ChatterManager.")
+		server_manager.logger.info("Created ChatterManager.")
 
 	Del()
-		server_manager.logger.info("Successfully deleted ChatterManager.")
+		server_manager.logger.info("Deleted ChatterManager.")
 
 	Topic(href, href_list)
 		..()
@@ -34,25 +34,7 @@ ChatterManager
 				if(trg && trg.ckey in server_manager.home.operators)
 					var/ckey = href_list["ckey"]
 					if(ckey)
-						var/AssocEntry/entry = assoc_manager.findByCkey(ckey)
-						if(entry)
-							trg.viewing_entry = entry
-							trg.updateViewingEntry()
-
-			if("tracker_viewip")
-				if(trg && trg.ckey in server_manager.home.operators)
-					var/ip = href_list["ip"]
-					if(ip)
-						var/AssocEntry/entry = assoc_manager.findByIP(ip)
-						if(entry)
-							trg.viewing_entry = entry
-							trg.updateViewingEntry()
-
-			if("tracker_viewcid")
-				if(trg && trg.ckey in server_manager.home.operators)
-					var/cid = href_list["cid"]
-					if(cid)
-						var/AssocEntry/entry = assoc_manager.findByCID(cid)
+						var/TrackerEntry/entry = tracker_manager.findByCkey(ckey)
 						if(entry)
 							trg.viewing_entry = entry
 							trg.updateViewingEntry()

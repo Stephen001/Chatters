@@ -32,7 +32,7 @@ mob
 			tmp/list/msgs
 			tmp/MessageHandler/msg_hand
 			tmp/color_scope
-			tmp/AssocEntry/viewing_entry
+			tmp/TrackerEntry/viewing_entry
 			tmp/viewing_log
 
 			list
@@ -299,7 +299,6 @@ mob
 							return
 
 						msg = copytext(msg, 1, 1024)
-						if(textutil.isWhitespace(msg)) return
 
 						var/Messenger/im = new(src, C.name)
 						im.display(src)
@@ -314,7 +313,6 @@ mob
 							return
 
 						msg = copytext(msg, 1, 1024)
-						if(textutil.isWhitespace(msg)) return
 
 						var/Messenger/im = new(src, C)
 						im.display(src)
@@ -699,7 +697,7 @@ mob
 				if(ismob(target)) C = target
 				else C = chatter_manager.getByKey(target)
 
-				if(C) winset(C, "[ckey(server_manager.home.name)].ops_button", "is-visible=true")
+				if(C) winset(C, "channel.ops_button", "is-visible=true")
 
 			demote(target as text)
 				set hidden = 1
@@ -723,7 +721,7 @@ mob
 				if(ismob(target)) C = target
 				else C = chatter_manager.getByKey(target)
 
-				if(C) winset(C, "[ckey(server_manager.home.name)].ops_button", "is-visible=true")
+				if(C) winset(C, "channel.ops_button", "is-visible=true")
 
 			setTopic(ntopic as text)
 				set hidden = 1
@@ -819,11 +817,11 @@ mob
 					return
 
 				if(data)
-					var/d = assoc_manager.purge(data)
-					if(d) server_manager.bot.say("Purged [data] from the association database: [d] entrie(s) removed.", src)
+					var/d = tracker_manager.purge(data)
+					if(d) server_manager.bot.say("Purged [data] from the tracker database: [d] entrie(s) removed.", src)
 					else server_manager.bot.say("No entries found for [data] to be purged.", src)
 
-				server_manager.logger.trace("[key] purged \"[data]\" from association database.")
+				server_manager.logger.trace("[key] purged \"[data]\" from the tracker database.")
 
 			checkAssoc(target as text)
 				set hidden = 1
@@ -838,23 +836,23 @@ mob
 				if(ismob(target)) C = target
 				else C = chatter_manager.getByKey(target)
 
-				var/AssocEntry/entry
+				var/TrackerEntry/entry
 
-				if(C && C.client) entry = assoc_manager.findByClient(C.client)
+				if(C && C.client) entry = tracker_manager.findByClient(C.client)
 				else
-					entry = assoc_manager.findByCkey(ckey(target))
-					if(!entry) entry = assoc_manager.findByIP(target)
-					if(!entry) entry = assoc_manager.findByCID(target)
+					entry = tracker_manager.findByCkey(ckey(target))
+					if(!entry) entry = tracker_manager.findByIP(target)
+					if(!entry) entry = tracker_manager.findByCID(target)
 
 				if(entry)
-					server_manager.bot.say("[target] has the following information in the association database:", src)
+					server_manager.bot.say("[target] has the following information in the tracker database:", src)
 					server_manager.bot.rawSay("<b>Associated ckeys:</b> [textutil.list2text(entry.ckeys, ", ")]", src)
 					server_manager.bot.rawSay("<b>Associated ips:</b> [textutil.list2text(entry.ips, ", ")]", src)
 					server_manager.bot.rawSay("<b>Associated computer ids:</b> [textutil.list2text(entry.cids, ", ")]", src)
 
 				else server_manager.bot.say("No information found for [target].", src)
 
-				server_manager.logger.trace("[key] searched for \"[target]\" in the association database.")
+				server_manager.logger.trace("[key] searched for \"[target]\" in the tracker database.")
 
 			checkIP(target as text)
 				set hidden = 1
@@ -1008,7 +1006,7 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				var/list/data = assoc_manager.geolocate(target)
+				var/list/data = tracker_manager.geolocate(target)
 
 				if(data && (length(data) > 1) && ("ip" in data))
 					server_manager.bot.say("The following information was found for [target]:", src)
@@ -1045,8 +1043,8 @@ mob
 				if(winget(src, "misc.flip_panes", "is-checked")=="true") flip_panes = TRUE
 				else flip_panes = FALSE
 
-				if(!flip_panes) winset(src, "default.child", "left=[ckey(server_manager.home.name)];right=[ckey(server_manager.home.name)].who;splitter=80")
-				else winset(src, "default.child", "left=[ckey(server_manager.home.name)].who;right=[ckey(server_manager.home.name)];splitter=20")
+				if(!flip_panes) winset(src, "default.child", "left=channel;right=channel.who;splitter=80")
+				else winset(src, "default.child", "left=who;right=channel;splitter=20")
 
 			toggleSettings()
 				set hidden = 1
@@ -1264,7 +1262,7 @@ mob
 				if(isnull(t)) t = "body { background-color: #ffffff; }"
 
 				default_output_style = t
-				winset(src, "[ckey(server_manager.home.name)].chat.default_output", "style=\"[text_manager.escapeQuotes(t)]\";")
+				winset(src, "chat.default_output", "style=\"[text_manager.escapeQuotes(t)]\";")
 				winset(src, "style_formats.output_style", "text=\"[text_manager.escapeQuotes(default_output_style)]\";")
 
 			setDefaultColorStyle()
@@ -1613,7 +1611,6 @@ mob
 
 				updateViewingEntry()
 				updateTracker()
-				updateViewingLog()
 				updateLogs()
 
 			updateTracker()
@@ -1621,15 +1618,20 @@ mob
 
 				if(!(ckey in server_manager.home.operators)) return
 
-				var/c = 1
-				for(var/AssocEntry/entry in assoc_manager.entries)
-					winset(src, "ops_tracker.ckeys", "current-cell=1,[c]")
-					winset(src, "ops_tracker.ckeys", "style='body{text-align: center; background-color: [(c % 2) ? ("#DDDDDD") : ("#EEEEEE")];}'")
-					var/e1 = entry.ckeys[1]
-					src << output("<a href=byond://?src=\ref[chatter_manager]&target=\ref[chatter_manager.getByKey(key)]&action=tracker_viewckey;ckey=[e1]>[textutil.list2text(entry.ckeys, ", ")]</a>", "ops_tracker.ckeys")
-					c ++
+				winset(src, "ops_tracker.ckeys", "cells=1x[length(tracker_manager.all_ckeys)]")
 
-				winset(src, "ops_tracker.ckeys", "cells=1x[length(assoc_manager.all_ckeys)]")
+				var/c = 1
+				for(var/TrackerEntry/entry in tracker_manager.entries)
+					winset(src, "ops_tracker.ckeys", "current-cell=1,[length(tracker_manager.all_ckeys) - c + 1]")
+					winset(src, "ops_tracker.ckeys", "style='body{text-align: center; background-color: [(c % 2) ? ("#DDDDDD") : ("#EEEEEE")];}'")
+
+					var/list/ekeys = list()
+					for(var/ck in entry.ckeys)
+						if(entry.ckeys[ck]) ekeys += entry.ckeys[ck]
+						else ekeys += ck
+
+					src << output("<a href=byond://?src=\ref[chatter_manager]&target=\ref[chatter_manager.getByKey(key)]&action=tracker_viewckey;ckey=[entry.ckeys[1]]>[textutil.list2text(ekeys, ", ")]</a>", "ops_tracker.ckeys")
+					c ++
 
 			updateViewingEntry()
 				set hidden = 1
@@ -1637,6 +1639,8 @@ mob
 				if(!(ckey in server_manager.home.operators)) return
 
 				if(viewing_entry)
+					winset(src, "ops_tracker.sel_ckeys", "cells=1x[length(viewing_entry.ckeys)]")
+
 					var/c = 1
 					for(var/i in viewing_entry.ckeys)
 						winset(src, "ops_tracker.sel_ckeys", "current-cell=1,[c]")
@@ -1645,7 +1649,7 @@ mob
 						src << output("[i] [od ? "([od])" : ""]", "ops_tracker.sel_ckeys")
 						c ++
 
-					winset(src, "ops_tracker.sel_ckeys", "cells=1x[length(viewing_entry.ckeys)]")
+					winset(src, "ops_tracker.sel_ips", "cells=1x[length(viewing_entry.ips)]")
 
 					c = 1
 					for(var/i in viewing_entry.ips)
@@ -1655,26 +1659,46 @@ mob
 						var/list/locdata = viewing_entry.ips[i]
 						if(locdata)
 							var/od = ""
+
 							if(locdata["city"]) od += "[locdata["city"]], "
 							if(locdata["region_name"]) od += "[locdata["region_name"]], "
 							if(locdata["country_name"]) od += "[locdata["country_name"]]"
-							if(od) src << output("[i] ([od])", "ops_tracker.sel_ips")
-							else src << output("[i] (no location information)", "ops_tracker.sel_ips")
+							if((locdata["latitude"] != "0") && (locdata["longitude"] != "0")) od = "<a href=https://maps.google.com/maps?q=[locdata["latitude"]]+[locdata["longitude"]]>[od]</a>"
 
-						else src << output("[i] (no location information)", "ops_tracker.sel_ips")
+							if(od) src << output("[i] ([od])", "ops_tracker.sel_ips")
+							else src << output("[i] (N/A)", "ops_tracker.sel_ips")
+
+						else src << output("[i] (N/A)", "ops_tracker.sel_ips")
 						c ++
 
-					winset(src, "ops_tracker.sel_ips", "cells=1x[length(viewing_entry.ips)]")
+					winset(src, "ops_tracker.sel_cids", "cells=1x[length(viewing_entry.cids)]")
 
 					c = 1
 					for(var/i in viewing_entry.cids)
 						winset(src, "ops_tracker.sel_cids", "current-cell=1,[c]")
 						winset(src, "ops_tracker.sel_cids", "style='body{text-align: center; background-color: [(c % 2) ? ("#CCCCCC") : ("#DDDDDD")];}'")
 						var/od = viewing_entry.cids[i]
-						src << output("[i] [od ? "(last login: [od])" : ""]", "ops_tracker.sel_cids")
+						src << output("[i] [od ? "(Last Login: [od])" : ""]", "ops_tracker.sel_cids")
 						c ++
 
-					winset(src, "ops_tracker.sel_cids", "cells=1x[length(viewing_entry.cids)]")
+					src << output("<html><head><style>body {margin: 0px; margin-left: 4px; margin-right: 4px; font-size: 13px; font-family: \"Trebuchet MS\";}</style></head><body>[viewing_entry.notes ? viewing_entry.notes : "No notes."]</body></html>", "ops_tracker.notes_browser")
+
+			editEntryNotes()
+				set hidden = 1
+
+				if(!(ckey in server_manager.home.operators)) return
+
+				if(viewing_entry)
+					var/nnotes = input(src, "Edit this entry's notes below.", "Edit Entry Notes", viewing_entry.notes) as null|message
+					if(nnotes)
+						viewing_entry.notes = nnotes
+						server_manager.logger.trace("[key] changed [viewing_entry.ckeys[1]]'s entry notes to [nnotes].")
+
+					else
+						viewing_entry.notes = ""
+						server_manager.logger.trace("[key] cleared [viewing_entry.ckeys[1]]'s entry notes.")
+
+					updateViewingEntry()
 
 			updateLogs()
 				set hidden = 1

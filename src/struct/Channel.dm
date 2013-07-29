@@ -26,16 +26,7 @@ Channel
 
 			winset(C, null, "channel.default_input.is-default=true;channel.topic_label.text=\"[text_manager.escapeQuotes(topic)]\";")
 
-			var/is_banned = 0
-			if(C.ckey in banned) is_banned = 1
-			else
-				var/AssocEntry/entry = assoc_manager.findByClient(C.client)
-				for(var/ck in entry.ckeys)
-					if(ckey(ck) in banned)
-						is_banned = 1
-						break
-
-			if(is_banned)
+			if(isBanned(C))
 				C << output("<font color='red'>Sorry, you are banned from this channel.</font>", "chat.default_output")
 				C << output("<font color='red'>Connection closed.</font>", "chat.default_output")
 
@@ -48,20 +39,6 @@ Channel
 				del(C)
 
 				return
-
-			if(textutil.hasPrefix(C.ckey, "guest"))
-				if("guest" in banned)
-					C << output("<font color='red'>Please login with your registered key, or visit <a href=\"http://www.byond.com/?invite=Cbgames\">http://www.byond.com/</a> to create a new key now.</font>", "[ckey(name)].chat.default_output")
-					C << output("<font color='red'>Connection closed.</font>", "chat.default_output")
-					del(C)
-
-					for(var/_ck in operators)
-						var/mob/chatter/op = chatter_manager.getByKey(_ck)
-						if(op) server_manager.bot.say("[C.name] attempted to log in, but all guest accounts are currently banned.", op)
-
-					server_manager.logger.info("[C.name] attempted to log in, but all guest accounts are currently banned.")
-
-					return
 
 			if(C.flip_panes) winset(C, "default.child", "left=who;right=channel;splitter=20")
 			C.setInterfaceColor(C.interface_color)
@@ -119,8 +96,6 @@ Channel
 					var/mob/chatter/op = chatter_manager.getByKey(_ck)
 					if(op) server_manager.bot.say("[C.name]'s IP: [C.client.address]", op)
 
-			server_manager.logger.info("[C.key] successfully logged in.")
-
 		quit(mob/chatter/C)
 			if(!C)
 				for(var/i = 1 to length(chatters))
@@ -136,8 +111,6 @@ Channel
 			updateWho()
 
 			server_manager.bot.say("[C.name] has quit [name].")
-
-			server_manager.logger.info("[C.key] successfully quit.")
 
 		updateWho()
 			for(var/i = 1, i <= length(chatters), i ++)
@@ -238,8 +211,6 @@ Channel
 			smsg = text_manager.parseLinks(smsg)
 			msg = text_manager.parseLinks(msg)
 
-			if(textutil.isWhitespace(msg)) return
-
 			if(!window) window = "chat.default_output"
 
 			for(var/mob/chatter/c in chatters)
@@ -271,8 +242,6 @@ Channel
 			smsg = text_manager.parseLinks(smsg)
 			msg = text_manager.parseLinks(msg)
 
-			if(textutil.isWhitespace(msg)) return
-
 			if(!window) window = "chat.default_output"
 
 			for(var/mob/chatter/c in chatters)
@@ -300,8 +269,6 @@ Channel
 
 			smsg = text_manager.parseLinks(smsg)
 			msg = text_manager.parseLinks(msg)
-
-			if(textutil.isWhitespace(msg)) return
 
 			if(!window) window = "chat.default_output"
 
@@ -356,7 +323,7 @@ Channel
 
 			C.away_at = null
 
-		isMute(mob/M)
+		isMute(mob/chatter/M)
 			if(mute && length(mute))
 				var/search = ""
 
@@ -366,3 +333,25 @@ Channel
 
 				if(textutil.hasPrefix(search, "guest")) if("guest" in mute) return 1
 				else if(search in mute) return 1
+
+		isBanned(mob/chatter/M)
+			if(M.ckey in banned) return 1
+			else
+				var/search = ""
+
+				if(istext(M)) search = ckey(M)
+				else if(ismob(M)) search = M.ckey
+				else return 1
+
+				if(textutil.hasPrefix(search, "guest")) if("guest" in banned) return 1
+				else if(search in banned) return 1
+
+				var/TrackerEntry/entry
+
+				if(M.client) entry = tracker_manager.findByClient(M.client)
+				else entry = tracker_manager.findByCkey(search)
+
+				if(entry)
+					for(var/ck in entry.ckeys)
+						if(ckey(ck) in banned)
+							return 1

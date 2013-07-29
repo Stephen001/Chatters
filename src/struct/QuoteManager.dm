@@ -2,10 +2,10 @@ QuoteManager
 	New()
 		loadQuotes()
 
-		server_manager.logger.info("Successfully created QuoteManager.")
+		server_manager.logger.info("Created QuoteManager.")
 
 	Del()
-		server_manager.logger.info("Successfully deleted QuoteManager.")
+		server_manager.logger.info("Deleted QuoteManager.")
 
 	var
 		list/quotes = null
@@ -31,7 +31,7 @@ QuoteManager
 
 							quotes += quote
 
-				server_manager.logger.info("Successfully loaded [length(quotes)] quote(s) from quotes.txt.")
+				server_manager.logger.info("Loaded [length(quotes)] quote(s) from quotes.txt.")
 
 			else
 				server_manager.logger.warn("quotes.txt does not exist to be loaded.")

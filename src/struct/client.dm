@@ -28,17 +28,17 @@ client
 
 	Click(object, location, control, params)
 		if(control == "who.grid")
-			var/Messenger/im = new(mob, key)
-			im.display(mob)
+			if(object && istype(object, /mob/chatter))
+				var
+					mob/chatter/M = object
+					Messenger/im = new(mob, M.key)
+
+				im.display(mob)
 
 	New()
 		..()
 
-		server_manager.logger.info("Client [key] successfully created.")
-		assoc_manager.addClient(src)
+		tracker_manager.addClient(src)
 
 	Del()
-		if(server_manager.logger)
-			server_manager.logger.info("Client [key] successfully deleted.")
-
 		..()
