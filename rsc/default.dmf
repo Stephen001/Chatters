@@ -41,7 +41,7 @@ window "channel"
 		on-close = ""
 	elem "button13"
 		type = BUTTON
-		pos = 620,308
+		pos = 620,304
 		size = 16x20
 		anchor1 = 100,100
 		anchor2 = none
@@ -69,8 +69,8 @@ window "channel"
 		button-type = pushbutton
 	elem "interfacebar_1"
 		type = LABEL
-		pos = 0,20
-		size = 636x4
+		pos = 4,24
+		size = 632x4
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = ""
@@ -95,8 +95,8 @@ window "channel"
 		text-wrap = false
 	elem "interfacebar_2"
 		type = LABEL
-		pos = 0,328
-		size = 636x4
+		pos = 4,324
+		size = 632x4
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = ""
@@ -121,8 +121,8 @@ window "channel"
 		text-wrap = false
 	elem "label16"
 		type = LABEL
-		pos = 0,308
-		size = 512x20
+		pos = 4,304
+		size = 508x20
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = "Arial"
@@ -147,7 +147,7 @@ window "channel"
 		text-wrap = false
 	elem "ops_button"
 		type = BUTTON
-		pos = 0,308
+		pos = 4,304
 		size = 69x20
 		anchor1 = 0,100
 		anchor2 = none
@@ -175,7 +175,7 @@ window "channel"
 		button-type = pushbutton
 	elem "button4"
 		type = BUTTON
-		pos = 512,308
+		pos = 512,304
 		size = 45x20
 		anchor1 = 100,100
 		anchor2 = none
@@ -203,7 +203,7 @@ window "channel"
 		button-type = pushbutton
 	elem "button1"
 		type = BUTTON
-		pos = 557,308
+		pos = 557,304
 		size = 63x20
 		anchor1 = 100,100
 		anchor2 = none
@@ -231,8 +231,8 @@ window "channel"
 		button-type = pushbutton
 	elem "topic_label"
 		type = LABEL
-		pos = 0,0
-		size = 636x20
+		pos = 4,4
+		size = 632x20
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -257,15 +257,15 @@ window "channel"
 		text-wrap = false
 	elem "default_input"
 		type = INPUT
-		pos = 0,332
-		size = 636x20
+		pos = 4,328
+		size = 632x20
 		anchor1 = 0,100
 		anchor2 = 100,100
 		font-family = "Trebuchet MS,Arial"
 		font-size = 10
 		font-style = ""
 		text-color = #000000
-		background-color = #ffffff
+		background-color = #fafafa
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -275,14 +275,14 @@ window "channel"
 		right-click = false
 		saved-params = ""
 		on-size = ""
-		command = "!> \""
+		command = "!> "
 		multi-line = false
 		is-password = false
 		no-command = false
 	elem "child"
 		type = CHILD
-		pos = 0,24
-		size = 636x280
+		pos = 4,28
+		size = 632x272
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
@@ -605,7 +605,7 @@ window "chat"
 		font-size = 10
 		font-style = ""
 		text-color = #000000
-		background-color = #ffffff
+		background-color = #fafafa
 		is-visible = true
 		is-disabled = false
 		is-transparent = false
@@ -7902,36 +7902,10 @@ window "default"
 		keep-aspect = false
 		align = center
 		text-wrap = false
-	elem "output"
-		type = OUTPUT
-		pos = 4,88
-		size = 240x132
-		anchor1 = none
-		anchor2 = none
-		font-family = ""
-		font-size = 0
-		font-style = ""
-		text-color = #000000
-		background-color = #ffffff
-		is-visible = false
-		is-disabled = false
-		is-transparent = false
-		is-default = false
-		border = sunken
-		drop-zone = false
-		right-click = false
-		saved-params = "max-lines"
-		on-size = ""
-		link-color = #0000ff
-		visited-color = #ff00ff
-		style = ""
-		enable-http-images = false
-		max-lines = 1000
-		image = ""
 	elem "child"
 		type = CHILD
-		pos = 4,4
-		size = 792x592
+		pos = 0,0
+		size = 800x600
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = ""
@@ -12128,10 +12102,36 @@ window "who"
 		macro = ""
 		menu = ""
 		on-close = ""
+	elem "sysclock"
+		type = LABEL
+		pos = 4,216
+		size = 112x20
+		anchor1 = 0,100
+		anchor2 = 100,100
+		font-family = "Trebuchet MS,Arial"
+		font-size = 10
+		font-style = ""
+		text-color = #000000
+		background-color = #fafafa
+		is-visible = true
+		is-disabled = false
+		is-transparent = false
+		is-default = false
+		border = none
+		drop-zone = false
+		right-click = false
+		saved-params = ""
+		on-size = ""
+		text = "0:00:00"
+		image = ""
+		image-mode = center
+		keep-aspect = false
+		align = center
+		text-wrap = false
 	elem "label5"
 		type = LABEL
-		pos = 4,24
-		size = 116x6
+		pos = 4,28
+		size = 112x6
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = ""
@@ -12156,8 +12156,8 @@ window "who"
 		text-wrap = false
 	elem "interfacebar_7"
 		type = LABEL
-		pos = 4,20
-		size = 116x4
+		pos = 4,24
+		size = 112x4
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = ""
@@ -12182,8 +12182,8 @@ window "who"
 		text-wrap = false
 	elem "topic_label"
 		type = LABEL
-		pos = 4,0
-		size = 116x20
+		pos = 4,4
+		size = 112x20
 		anchor1 = 0,0
 		anchor2 = 100,0
 		font-family = "Trebuchet MS,Arial"
@@ -12208,15 +12208,15 @@ window "who"
 		text-wrap = false
 	elem "grid"
 		type = GRID
-		pos = 4,30
-		size = 116x210
+		pos = 4,34
+		size = 112x182
 		anchor1 = 0,0
 		anchor2 = 100,100
 		font-family = "Trebuchet MS,Arial"
 		font-size = 10
 		font-style = ""
 		text-color = #000000
-		background-color = #ffffff
+		background-color = #fafafa
 		is-visible = true
 		is-disabled = false
 		is-transparent = false

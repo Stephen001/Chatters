@@ -44,7 +44,7 @@ QuoteManager
 				month = text2num(copytext(t, 1, 3))
 				day = text2num(copytext(t, 3))
 
-				qloc = ((month - 1) * 12) + day // compute the location of today's quote in the quote list
+				qloc = ((month - 1) * 30) + day // compute the location of today's quote in the quote list
 				Quote/q
 				qlen = length(quotes)
 

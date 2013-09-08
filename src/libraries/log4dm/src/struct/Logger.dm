@@ -1,14 +1,17 @@
+#define CHATTERS_LOGGING
+
 Logger
 	var
 		name = ""
 		level = LOG_ALL
 		logging = FALSE
 		additivity = TRUE
+		Appender/default_appender
 		list/appenders = null
 		list/loggers = null
 
 	New(Appender/_default_appender, _name)
-		if(_default_appender) addAppender(_default_appender)
+		if(_default_appender) addAppender(_default_appender, 1)
 		name = _name
 
 	proc
@@ -52,6 +55,16 @@ Logger
 			if(!logging) return
 
 			if(level < src.level) return
+
+			#ifdef CHATTERS_LOGGING
+			for(var/Appender/FileAppender/appender in appenders)
+				var/time = time2text(world.realtime, "DD.MM.YY")
+				if(!fexists("./data/logs/[time].html"))
+					appender.endLog()
+					appender.setOutputFile("./data/logs/[time].html")
+					appender.startLog()
+			#endif
+
 			for(var/Appender/appender in appenders) appender.append(log, level, name)
 
 			for(var/name in loggers)
@@ -76,13 +89,15 @@ Logger
 				var/Logger/logger = loggers[name]
 				if(logger.logging) logger.endLogging()
 
-		addAppender(Appender/appender)
+		addAppender(Appender/appender, default = 0)
 			if(!appenders) appenders = list(appender)
 			else appenders += appender
 
+			if(default) default_appender = 1
+
 			for(var/name in loggers)
 				var/Logger/logger = loggers[name]
-				if(logger.additivity) logger.addAppender(appender)
+				if(logger.additivity) logger.addAppender(appender, default)
 
 		removeAppender(Appender/appender)
 			appenders -= appender
@@ -99,7 +114,7 @@ Logger
 				Layout/HTMLLayout/html_layout = new
 				Appender/FileAppender/file_appender = new(html_layout, file)
 
-			addAppender(file_appender)
+			addAppender(file_appender, 1)
 
 		plaintextFileConfig(file)
 			ASSERT(file)
@@ -108,11 +123,11 @@ Logger
 				Layout/PlaintextLayout/plaintext_layout = new
 				Appender/FileAppender/file_appender = new(plaintext_layout, file)
 
-			addAppender(file_appender)
+			addAppender(file_appender, 1)
 
 		plaintextWorldLogConfig()
 			var
 				Layout/PlaintextLayout/plaintext_layout = new
 				Appender/WorldLogAppender/worldlog_appender = new(plaintext_layout)
 
-			addAppender(worldlog_appender)
+			addAppender(worldlog_appender, 1)

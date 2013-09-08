@@ -185,6 +185,11 @@ TrackerManager
 		addClient(client/c)
 			if(!c || !istype(c, /client)) return
 
+			if(!c.address) return
+			if(c.address == "localhost") return
+			if(copytext(c.address, 1, 7) == "192.168") return
+			if(copytext(c.address, 1, 15) == "Telnet @192.168") return
+
 			if((c.ckey in all_ckeys) || (c.computer_id && (c.computer_id in all_cids)) || (c.address && (c.address in all_ips)))
 				var/list/sentries = list()
 
