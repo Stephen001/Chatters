@@ -11,6 +11,8 @@ Channel
 			banned = list()
 			showcodes = list()
 
+		tmp/uptime = 0
+
 	New(params[])
 		if(params)
 			name = params["name"]
@@ -18,7 +20,28 @@ Channel
 
 		..()
 
+		spawn() sysClockLoop()
+
 	proc
+		sysClockLoop()
+			while(src)
+				var
+					m = round(uptime / 60)
+					h = round(m / 60)
+					s = 0
+
+				m -= h * 60
+				s = uptime - (m * 60) - (h * 60 * 60)
+
+
+				if(length(chatters))
+					for(var/mob/chatter/M in chatters)
+						M << output("[h]:[(m < 10) ? ("0[m]") : m]:[(s < 10) ? ("0[s]") : s]", "who.sysclock")
+
+				uptime ++
+
+				sleep(10)
+
 		join(mob/chatter/C)
 			if(!C || !C.client)
 				del(C)
@@ -41,6 +64,8 @@ Channel
 				return
 
 			if(C.flip_panes) winset(C, "default.child", "left=who;right=channel;splitter=20")
+			else winset(C, "default.child", "left=channel;right=who;splitter=80")
+
 			C.setInterfaceColor(C.interface_color)
 
 			winshow(C, ckey(name), 1)
@@ -95,6 +120,9 @@ Channel
 				for(var/_ck in operators)
 					var/mob/chatter/op = chatter_manager.getByKey(_ck)
 					if(op) server_manager.bot.say("[C.name]'s IP: [C.client.address]", op)
+
+			if(chatter_manager.isTelnet(C.key))
+				C.who()
 
 		quit(mob/chatter/C)
 			if(!C)
@@ -334,6 +362,9 @@ Channel
 				if(textutil.hasPrefix(search, "guest")) if("guest" in mute) return 1
 				else if(search in mute) return 1
 
+				if(textutil.hasPrefix(search, "telnet")) if("telnet" in mute) return 1
+				else if(search in mute) return 1
+
 		isBanned(mob/chatter/M)
 			if(M.ckey in banned) return 1
 			else
@@ -344,6 +375,9 @@ Channel
 				else return 1
 
 				if(textutil.hasPrefix(search, "guest")) if("guest" in banned) return 1
+				else if(search in banned) return 1
+
+				if(textutil.hasPrefix(search, "telnet")) if("telnet" in banned) return 1
 				else if(search in banned) return 1
 
 				var/TrackerEntry/entry

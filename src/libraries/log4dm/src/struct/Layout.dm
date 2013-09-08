@@ -9,7 +9,7 @@ Layout
 
 		formatLog(log, level, name = "root")
 			if(log)
-				log = "\[[name]\] {[world.time] ([time2text(world.timeofday, "hh:mm:ss")])} {[level2text(level)] ([level])}: [log]\n"
+				log = "\[[name]\] {[num2text(world.time, 32)] ([time2text(world.timeofday, "hh:mm:ss")])} {[level2text(level)] ([level])}: [log]\n"
 
 				return log
 
@@ -22,7 +22,7 @@ Layout
 
 		formatLog(log, level, name = "root")
 			var
-				time_format = "[world.time] ([time2text(world.timeofday, "hh:mm:ss")])"
+				time_format = "[num2text(world.time, 32)] ([time2text(world.timeofday, "hh:mm:ss")])"
 				level_format = "[level2text(level)] ([level])"
 				name_format = "[name]"
 				log_format = "[log]"
