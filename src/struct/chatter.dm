@@ -225,6 +225,24 @@ mob
 							else return ign
 
 		verb
+			ping()
+				set hidden = 1
+
+				src << output("<font color=red face=Courier>Pong ([time2text(world.timeofday, "hh:mm:ss")])!</font>", "chat.default_output")
+
+			who()
+				set hidden = 1
+
+				var/list/names = list()
+				for(var/mob/chatter/C in server_manager.home.chatters)
+					var/n = C.key
+					if(C.afk) n += " (afk)"
+					if(C.ckey in server_manager.home.mute) n += " (muted)"
+					if(C.ckey in ignoring) n += " (ignored)"
+					names += n
+
+				server_manager.bot.say("The following users are online: [textutil.list2text(names, ", ")]", src)
+
 			viewHelp()
 				set hidden = 1
 
@@ -1043,7 +1061,7 @@ mob
 				if(winget(src, "misc.flip_panes", "is-checked")=="true") flip_panes = TRUE
 				else flip_panes = FALSE
 
-				if(!flip_panes) winset(src, "default.child", "left=channel;right=channel.who;splitter=80")
+				if(!flip_panes) winset(src, "default.child", "left=channel;right=who;splitter=80")
 				else winset(src, "default.child", "left=who;right=channel;splitter=20")
 
 			toggleSettings()
@@ -1618,20 +1636,21 @@ mob
 
 				if(!(ckey in server_manager.home.operators)) return
 
-				winset(src, "ops_tracker.ckeys", "cells=1x[length(tracker_manager.all_ckeys)]")
-
 				var/c = 1
 				for(var/TrackerEntry/entry in tracker_manager.entries)
-					winset(src, "ops_tracker.ckeys", "current-cell=1,[length(tracker_manager.all_ckeys) - c + 1]")
-					winset(src, "ops_tracker.ckeys", "style='body{text-align: center; background-color: [(c % 2) ? ("#DDDDDD") : ("#EEEEEE")];}'")
+					if(length(entry.ckeys) && length(ckey(entry.ckeys[1])))
+						winset(src, "ops_tracker.ckeys", "current-cell=1,[c]")
+						winset(src, "ops_tracker.ckeys", "style='body{text-align: center; background-color: [(c % 2) ? ("#DDDDDD") : ("#EEEEEE")];}'")
 
-					var/list/ekeys = list()
-					for(var/ck in entry.ckeys)
-						if(entry.ckeys[ck]) ekeys += entry.ckeys[ck]
-						else ekeys += ck
+						var/list/ekeys = list()
+						for(var/ck in entry.ckeys)
+							if(entry.ckeys[ck]) ekeys += entry.ckeys[ck]
+							else ekeys += ck
 
-					src << output("<a href=byond://?src=\ref[chatter_manager]&target=\ref[chatter_manager.getByKey(key)]&action=tracker_viewckey;ckey=[entry.ckeys[1]]>[textutil.list2text(ekeys, ", ")]</a>", "ops_tracker.ckeys")
-					c ++
+						src << output("<a href=byond://?src=\ref[chatter_manager]&target=\ref[chatter_manager.getByKey(key)]&action=tracker_viewckey;ckey=[entry.ckeys[1]]>[textutil.list2text(ekeys, ", ")]</a>", "ops_tracker.ckeys")
+						c ++
+
+				winset(src, "ops_tracker.ckeys", "cells=1x[c]")
 
 			updateViewingEntry()
 				set hidden = 1
