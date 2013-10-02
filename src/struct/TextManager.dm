@@ -46,7 +46,8 @@ TextManager
 						 "bbash"	    = "http://gazoot.byondhome.com/bbash/?quote=$s",
 						 "bash"		    = "http://www.bash.org/?$s",
 						 "condo"	    = "http://gazoot.byondhome.com/condo/site.dmb?browse&owner=$s",
-						 "issue"	    = "https://github.com/Stephen001/Chatters/issues/$s")
+						 "issue"	    = "https://github.com/Stephen001/Chatters/issues/$s",
+						 "dm"			= "http://www.byond.com/docs/ref/info.html#$s")
 
 	proc
 		sanitize(msg)
@@ -462,7 +463,7 @@ TextManager
 					link_hold = ""
 
 					for(var/i = length(link), i > 0, i--)
-						link_hold += "E"
+						link_hold += "ï¿½E"
 
 					pos1 = findtext(part2, "http://")
 
@@ -493,7 +494,7 @@ TextManager
 				for(var/l = pos, l <= length(L) + 1, l++)
 					pos = l
 
-					if(!findtext(L[l], "E")) continue
+					if(!findtext(L[l], "ï¿½E")) continue
 					else
 						L[l] = links[1]
 
