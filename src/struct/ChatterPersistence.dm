@@ -79,7 +79,7 @@ ChatterPersistenceHandler/Database
 			sql += "autoafkmessage = [server_manager.database.quote(C.auto_reason)], "
 			sql += "flippanes = [C.flip_panes ? 1 : 0], "
 			sql += "fadecolors = [server_manager.database.quote(list2params(C.fade_colors))], "
-			sql += "fadename = [server_manager.database.quote(list2params(C.fade_name))] "
+			sql += "fadename = [server_manager.database.quote(C.fade_name)] "
 			return sql
 
 ChatterPersistenceHandler/Fallback
