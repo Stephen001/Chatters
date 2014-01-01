@@ -47,7 +47,7 @@ TrackerManager
 
 			var/http[] = world.Export("http://freegeoip.net/json/[target]")
 			if(!http || !file2text(http["CONTENT"]))
-				server_manager.bot.say("Failed to geolocate [target].", src)
+				server_manager.logger.warn("Failed to geolocate [target].")
 				return
 
 			var/content = file2text(http["CONTENT"])
