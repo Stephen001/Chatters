@@ -37,28 +37,6 @@ TrackerManager
 			if(!all_cids) all_cids = list()
 			if(!all_ckeys) all_ckeys = list()
 
-		geolocate(target)
-			var/mob/chatter/C
-			if(ismob(target)) C = target
-			else C = chatter_manager.getByKey(target)
-
-			if(C && C.client) target = C.client.address
-			target = copytext(target, 1, 16)
-
-			var/http[] = world.Export("http://freegeoip.net/json/[target]")
-			if(!http || !file2text(http["CONTENT"]))
-				server_manager.logger.warn("Failed to geolocate [target].")
-				return
-
-			var/content = file2text(http["CONTENT"])
-
-			content = copytext(content, 2, length(content) - 1)
-			content = textutil.replaceText(content, ":", "=")
-			content = textutil.replaceText(content, ",", "&")
-			content = textutil.replaceText(content, "\"", "")
-
-			return params2list(content)
-
 		purge(data)
 			. = 0
 
@@ -96,11 +74,11 @@ TrackerManager
 					if(!(ip in entry.ips))
 						entry.ips += ip
 						if(e.ips[ip]) entry.ips[ip] = e.ips[ip]
-						else entry.ips[ip] = geolocate(ip)
+						else entry.ips[ip] = server_manager.geolocator.geolocate(ip)
 
 					else if(!entry.ips[ip])
 						if(e.ips[ip]) entry.ips[ip] = e.ips[ip]
-						else entry.ips[ip] = geolocate(ip)
+						else entry.ips[ip] = server_manager.geolocator.geolocate(ip)
 
 				for(var/cid in e.cids)
 					if(!(cid in all_cids)) all_cids += cid
@@ -215,7 +193,7 @@ TrackerManager
 
 					if(c.address)
 						if(!(c.address in entry.ips)) entry.ips += c.address
-						if(!entry.ips[c.address]) entry.ips[c.address] = geolocate(c.address)
+						if(!entry.ips[c.address]) entry.ips[c.address] = server_manager.geolocator.geolocate(c.address)
 
 				if(length(sentries) > 1) return combineEntries(sentries)
 				else return sentries[1]
@@ -225,7 +203,7 @@ TrackerManager
 
 				if(c.address)
 					entry.ips += c.address
-					entry.ips[c.address] = geolocate(c.address)
+					entry.ips[c.address] = server_manager.geolocator.geolocate(c.address)
 					all_ips += c.address
 					all_ips[c.address] = entry
 

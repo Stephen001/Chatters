@@ -11,6 +11,7 @@ ServerManager
 			Logger/logger     = null
 			EventScheduler/global_scheduler = new()
 			ChatterPersistenceHandler/persistenceHandler = new/ChatterPersistenceHandler/Fallback()
+			Geolocator/geolocator = null
 
 	New()
 		server_manager = src
@@ -125,6 +126,7 @@ ServerManager
 				list/op_list = params2list(config["ops"])
 				list/server = params2list(config["server"])
 				list/database_list = params2list(config["database"])
+				list/geolocate_list = params2list(config["geolocate"])
 
 			if(server && length(server))
 				var
@@ -166,6 +168,11 @@ ServerManager
 						logger.info("Installed schema version is [database.installedSchema()], latest available in config is [database.latestAvailableSchema()], needs upgrade? [database.needsUpgrade()]")
 					else
 						logger.warn("Could not connect to database on [database.user]@[database.host]:[database.port], reason: [database.connection.ErrorMsg()]")
+
+				if (length(geolocate_list))
+					geolocator = new(geolocate_list["url"])
+				else
+					geolocator = new(null)
 
 				logger.info("Loaded server.cfg.")
 

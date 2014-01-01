@@ -7,7 +7,6 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
-#include "rsc\default.dmf"
 #include "src\global.dm"
 #include "src\libraries\db\constants.dm"
 #include "src\libraries\db\core.dm"
@@ -31,6 +30,7 @@
 #include "src\struct\ChatterPersistence.dm"
 #include "src\struct\client.dm"
 #include "src\struct\Database.dm"
+#include "src\struct\Geolocator.dm"
 #include "src\struct\MessageHandler.dm"
 #include "src\struct\Messenger.dm"
 #include "src\struct\QuoteManager.dm"
@@ -39,4 +39,5 @@
 #include "src\struct\TextManager.dm"
 #include "src\struct\TrackerManager.dm"
 #include "src\struct\world.dm"
+#include "rsc\default.dmf"
 // END_INCLUDE

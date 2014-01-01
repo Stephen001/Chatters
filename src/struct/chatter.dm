@@ -1021,7 +1021,7 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				var/list/data = tracker_manager.geolocate(target)
+				var/list/data = server_manager.geolocator.geolocate(target)
 
 				if(data && (length(data) > 1) && ("ip" in data))
 					server_manager.bot.say("The following information was found for [target]:", src)
