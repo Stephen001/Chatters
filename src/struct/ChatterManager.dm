@@ -116,5 +116,6 @@ Event/Timer/Watchdog
 		src.C = C
 
 	fire()
-		..()
-		winget(C, "main", "is-visible")
+		if (C && C.client)
+			..()
+			winget(C, "main", "is-visible")
