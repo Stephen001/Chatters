@@ -53,6 +53,24 @@ Database
 		needsUpgrade()
 			return sorttext(src.latestAvailableSchema(), src.installedSchema()) > 0
 
+		select(var/text)
+			if (src.isConnected())
+				server_manager.logger.trace("Selecting: [text]")
+				var/DBQuery/query = src.connection.NewQuery(text)
+				var/list/results = new()
+				var/i = 0
+				if (query.Execute())
+					while (query.NextRow())
+						i++
+						var/result = query.GetRowData()
+						server_manager.logger.trace("Select results: [list2params(result)]")
+						results[i] = result
+				else
+					server_manager.logger.error("Error: [query.ErrorMsg()]")
+				query.Close()
+				server_manager.logger.trace("No result from single select")
+			return list()
+
 		singleSelect(var/text)
 			if (src.isConnected())
 				server_manager.logger.trace("Single selecting: [text]")

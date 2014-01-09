@@ -832,8 +832,8 @@ mob
 
 				if(data)
 					var/d = tracker_manager.purge(data)
-					if(d) server_manager.bot.say("Purged [data] from the tracker database: [d] entrie(s) removed.", src)
-					else server_manager.bot.say("No entries found for [data] to be purged.", src)
+					if(d) server_manager.bot.say("Purged [data] from the tracker database.", src)
+					else server_manager.bot.say("Could not purge [data] from the tracker database.", src)
 
 				server_manager.logger.trace("[key] purged \"[data]\" from the tracker database.")
 
