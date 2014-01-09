@@ -231,9 +231,9 @@ TrackerDB/Database
 
 	addClient(var/client/C)
 		if(C.address)
-			server_manager.database.sendUpdate("INSERT INTO USER_IP_ADDRESS SET ckey = [server_manager.database.quote(C.ckey)], ipaddress = [server_manager.database.quote(C.address)] ON DUPLICATE KEY UPDATE")
+			server_manager.database.sendUpdate("INSERT IGNORE INTO USER_IP_ADDRESS SET ckey = [server_manager.database.quote(C.ckey)], ipaddress = [server_manager.database.quote(C.address)]")
 		if(C.computer_id)
-			server_manager.database.sendUpdate("INSERT INTO USER_COMPUTER_ID SET ckey = [server_manager.database.quote(C.ckey)], computerid = [server_manager.database.quote(C.computer_id)] ON DUPLICATE KEY UPDATE")
+			server_manager.database.sendUpdate("INSERT IGNORE INTO USER_COMPUTER_ID SET ckey = [server_manager.database.quote(C.ckey)], computerid = [server_manager.database.quote(C.computer_id)]")
 		return TRUE
 
 	findByIP(ip)
