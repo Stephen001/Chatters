@@ -54,10 +54,10 @@ Database
 			return sorttext(src.latestAvailableSchema(), src.installedSchema()) > 0
 
 		select(var/text)
+			var/list/results = new()
 			if (src.isConnected())
 				server_manager.logger.trace("Selecting: [text]")
 				var/DBQuery/query = src.connection.NewQuery(text)
-				var/list/results = new()
 				if (query.Execute())
 					while (query.NextRow())
 						var/result = query.GetRowData()
@@ -66,8 +66,8 @@ Database
 				else
 					server_manager.logger.error("Error: [query.ErrorMsg()]")
 				query.Close()
-				server_manager.logger.trace("No result from single select")
-			return list()
+				server_manager.logger.trace("[length(results)] rows from select")
+			return results
 
 		singleSelect(var/text)
 			if (src.isConnected())
