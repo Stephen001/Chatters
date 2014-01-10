@@ -292,9 +292,12 @@ TrackerDB/Database
 				ckeys.Remove(entry.ckeys)
 				ips.Remove(entry.ips)
 				cids.Remove(entry.cids)
-				entry.ckeys += ckeys
-				entry.ips += ips
-				entry.cids += cids
+				if (length(ckeys))
+					entry.ckeys.Add(ckeys)
+				if (length(ips))
+					entry.ips.Add(ips)
+				if (length(cids))
+					entry.cids.Add(cids)
 				if(length(ckeys) || length(ips) || length(cids))
 					return __expandEntry(entry)
 			return entry
