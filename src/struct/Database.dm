@@ -62,7 +62,12 @@ Database
 					while (query.NextRow())
 						var/result = query.GetRowData()
 						server_manager.logger.trace("Select results: [list2params(result)]")
-						results += result
+						for(var/key in result)
+							var/list/L = results["[key]"]
+							if (isnull(L))
+								L = list()
+								results["[key]"] = L
+							L += result["[key]"]
 				else
 					server_manager.logger.error("Error: [query.ErrorMsg()]")
 				query.Close()
