@@ -2,6 +2,13 @@
 // END_INTERNALS
 // BEGIN_FILE_DIR
 #define FILE_DIR .
+#define FILE_DIR "rsc"
+#define FILE_DIR "rsc/icons"
+#define FILE_DIR "src"
+#define FILE_DIR "src/libraries"
+#define FILE_DIR "src/libraries/event-scheduling"
+#define FILE_DIR "src/libraries/event-scheduling/demo"
+#define FILE_DIR "src/libraries/event-scheduling/demo/basic"
 // END_FILE_DIR
 // BEGIN_PREFERENCES
 #define DEBUG
@@ -16,10 +23,10 @@
 #include "src\libraries\event-scheduling\Event.dm"
 #include "src\libraries\event-scheduling\EventScheduler.dm"
 #include "src\libraries\ktext\kText.dm"
-#include "src\libraries\log4dm\src\global.dm"
-#include "src\libraries\log4dm\src\struct\Appender.dm"
-#include "src\libraries\log4dm\src\struct\Layout.dm"
-#include "src\libraries\log4dm\src\struct\Logger.dm"
+#include "src\libraries\log4dm\# Defines.dm"
+#include "src\libraries\log4dm\Appender.dm"
+#include "src\libraries\log4dm\Layout.dm"
+#include "src\libraries\log4dm\Logger.dm"
 #include "src\libraries\quicksort\QuickSort.dm"
 #include "src\libraries\s_smiley\alphabetics.dm"
 #include "src\libraries\s_smiley\replaceword.dm"
