@@ -1,3 +1,6 @@
 [submodule "src/libraries/event-scheduling"]
 	path = src/libraries/event-scheduling
 	url = https://github.com/BYOND/event-scheduling.git
+[submodule "src/libraries/log4dm"]
+	path = src/libraries/log4dm
+	url = https://github.com/BYOND/log4dm.git
