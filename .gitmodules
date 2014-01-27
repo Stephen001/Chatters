@@ -1,0 +1,3 @@
+[submodule "src/libraries/event-scheduling"]
+	path = src/libraries/event-scheduling
+	url = https://github.com/BYOND/event-scheduling.git
