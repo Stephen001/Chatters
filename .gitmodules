@@ -4,3 +4,6 @@
 [submodule "src/libraries/log4dm"]
 	path = src/libraries/log4dm
 	url = https://github.com/BYOND/log4dm.git
+[submodule "src/libraries/text-util"]
+	path = src/libraries/text-util
+	url = https://github.com/BYOND/text-util.git
