@@ -294,7 +294,7 @@ TrackerDB/Database
 				__setUnion(entry.cids, cids)
 				if(length(ckeys) || length(ips) || length(cids))
 					return __expandEntry(entry)
-			return entry
+			return __removeDuplicates(entry)
 
 
 		__sqlList(var/list/L)
@@ -309,3 +309,20 @@ TrackerDB/Database
 		__setUnion(var/list/L1, var/list/L2)
 			L2.Remove(L1)
 			L1.Add(L2)
+
+		__removeDuplicates(var/TrackerEntry/entry)
+			var/list/L = new()
+			for (var/data in entry.ckeys)
+				if (!(data in L))
+					L.Add(data)
+			entry.ckeys = L
+			L = new()
+			for (var/data in entry.ips)
+				if (!(data in L))
+					L.Add(data)
+			entry.ckeys = L
+			L = new()
+			for (var/data in entry.cids)
+				if (!(data in L))
+					L.Add(data)
+			entry.ckeys = L

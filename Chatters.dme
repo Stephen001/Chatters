@@ -2,13 +2,6 @@
 // END_INTERNALS
 // BEGIN_FILE_DIR
 #define FILE_DIR .
-#define FILE_DIR "rsc"
-#define FILE_DIR "rsc/icons"
-#define FILE_DIR "src"
-#define FILE_DIR "src/libraries"
-#define FILE_DIR "src/libraries/event-scheduling"
-#define FILE_DIR "src/libraries/event-scheduling/demo"
-#define FILE_DIR "src/libraries/event-scheduling/demo/basic"
 // END_FILE_DIR
 // BEGIN_PREFERENCES
 #define DEBUG
