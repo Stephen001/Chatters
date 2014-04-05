@@ -846,7 +846,7 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				entry = tracker_manager.findByCkey(target)
+				var/TrackerEntry/entry = tracker_manager.findByCkey(target)
 				if(!entry) entry = tracker_manager.findByIP(target)
 				if(!entry) entry = tracker_manager.findByCID(target)
 
