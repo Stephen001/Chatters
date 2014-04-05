@@ -847,16 +847,16 @@ mob
 					return
 
 				var/TrackerEntry/entry = tracker_manager.findByCkey(target)
-				if(!entry) entry = tracker_manager.findByIP(target)
-				if(!entry) entry = tracker_manager.findByCID(target)
+				if(!length(entry.ckeys) && !length(entry.ips) && !length(entry.cids)) entry = tracker_manager.findByIP(target)
+				if(!length(entry.ckeys) && !length(entry.ips) && !length(entry.cids)) entry = tracker_manager.findByCID(target)
 
-				if(entry)
+				if(!length(entry.ckeys) && !length(entry.ips) && !length(entry.cids))
+					server_manager.bot.say("No information found for [target].", src)
+				else
 					server_manager.bot.say("[target] has the following information in the tracker database:", src)
 					server_manager.bot.rawSay("<b>Associated ckeys:</b> [textutil.list2text(entry.ckeys, ", ")]", src)
 					server_manager.bot.rawSay("<b>Associated ips:</b> [textutil.list2text(entry.ips, ", ")]", src)
 					server_manager.bot.rawSay("<b>Associated computer ids:</b> [textutil.list2text(entry.cids, ", ")]", src)
-				else
-					server_manager.bot.say("No information found for [target].", src)
 
 				server_manager.logger.trace("[key] searched for \"[target]\" in the tracker database.")
 
