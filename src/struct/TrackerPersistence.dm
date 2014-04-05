@@ -320,9 +320,9 @@ TrackerDB/Database
 			for (var/data in entry.ips)
 				if (!(data in L))
 					L.Add(data)
-			entry.ckeys = L
+			entry.ips = L
 			L = new()
 			for (var/data in entry.cids)
 				if (!(data in L))
 					L.Add(data)
-			entry.ckeys = L
+			entry.cids = L
