@@ -21,20 +21,20 @@ TrackerManager
 			return FALSE
 
 		findByIP(ip)
-			if(!ip) return
+			if(!ip) return new/TrackerEntry()
 			return trackerDB.findByIP(ip)
 
 		findByCkey(ckey)
 			ckey = ckey(ckey)
-			if(!ckey) return
+			if(!ckey) return new/TrackerEntry()
 			return trackerDB.findByCkey(ckey)
 
 		findByCID(cid)
-			if(!cid) return
+			if(!cid) return new/TrackerEntry()
 			return trackerDB.findByCID(cid)
 
 		findByClient(client/c)
-			if(!c || !istype(c, /client)) return
+			if(!c || !istype(c, /client)) return new/TrackerEntry()
 			return trackerDB.findByClient(c)
 
 		addClient(client/c)

@@ -13,13 +13,13 @@ TrackerDB
 			return FALSE
 
 		findByIP(var/ip)
-			return list()
+			return new/TrackerEntry()
 
 		findByCkey(var/ckey)
-			return list()
+			return new/TrackerEntry()
 
 		findByCID(var/cid)
-			return list()
+			return new/TrackerEntry()
 
 		findByClient(var/client/C)
 			return findByIP(C.address)
@@ -81,6 +81,7 @@ TrackerDB/Savefile
 			if(length(sentries))
 				if(length(sentries) > 1) return __combineEntries(sentries)
 			else return sentries[1]
+		return new/TrackerEntry()
 
 	findByCkey(ckey)
 		var/list/sentries = list()
@@ -91,6 +92,7 @@ TrackerDB/Savefile
 		if(length(sentries))
 			if(length(sentries) > 1) return __combineEntries(sentries)
 			else return sentries[1]
+		return new/TrackerEntry()
 
 	findByCID(cid)
 		var/list/sentries = list()
@@ -101,6 +103,7 @@ TrackerDB/Savefile
 		if(length(sentries))
 			if(length(sentries) > 1) return __combineEntries(sentries)
 			else return sentries[1]
+		return new/TrackerEntry()
 
 	findByClient(client/c)
 		addClient(c)
@@ -114,6 +117,7 @@ TrackerDB/Savefile
 		if(length(sentries))
 			if(length(sentries) > 1) return __combineEntries(sentries)
 			else return sentries[1]
+		return new/TrackerEntry()
 
 	addClient(client/c)
 		if((c.ckey in all_ckeys) || (c.computer_id && (c.computer_id in all_cids)) || (c.address && (c.address in all_ips)))
