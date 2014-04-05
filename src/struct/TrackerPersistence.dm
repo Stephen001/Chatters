@@ -330,3 +330,4 @@ TrackerDB/Database
 				if (!L.Find(data))
 					L.Add(data)
 			entry.cids = L
+			return entry
