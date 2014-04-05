@@ -313,16 +313,16 @@ TrackerDB/Database
 		__removeDuplicates(var/TrackerEntry/entry)
 			var/list/L = new()
 			for (var/data in entry.ckeys)
-				if (!(data in L))
+				if (!L.Find(data))
 					L.Add(data)
 			entry.ckeys = L
 			L = new()
 			for (var/data in entry.ips)
-				if (!(data in L))
+				if (!L.Find(data))
 					L.Add(data)
 			entry.ips = L
 			L = new()
 			for (var/data in entry.cids)
-				if (!(data in L))
+				if (!L.Find(data))
 					L.Add(data)
 			entry.cids = L

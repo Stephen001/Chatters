@@ -846,25 +846,17 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				var/mob/chatter/C
-				if(ismob(target)) C = target
-				else C = chatter_manager.getByKey(target)
-
-				var/TrackerEntry/entry
-
-				if(C && C.client) entry = tracker_manager.findByClient(C.client)
-				else
-					entry = tracker_manager.findByCkey(ckey(target))
-					if(!entry) entry = tracker_manager.findByIP(target)
-					if(!entry) entry = tracker_manager.findByCID(target)
+				entry = tracker_manager.findByCkey(target)
+				if(!entry) entry = tracker_manager.findByIP(target)
+				if(!entry) entry = tracker_manager.findByCID(target)
 
 				if(entry)
 					server_manager.bot.say("[target] has the following information in the tracker database:", src)
 					server_manager.bot.rawSay("<b>Associated ckeys:</b> [textutil.list2text(entry.ckeys, ", ")]", src)
 					server_manager.bot.rawSay("<b>Associated ips:</b> [textutil.list2text(entry.ips, ", ")]", src)
 					server_manager.bot.rawSay("<b>Associated computer ids:</b> [textutil.list2text(entry.cids, ", ")]", src)
-
-				else server_manager.bot.say("No information found for [target].", src)
+				else
+					server_manager.bot.say("No information found for [target].", src)
 
 				server_manager.logger.trace("[key] searched for \"[target]\" in the tracker database.")
 
