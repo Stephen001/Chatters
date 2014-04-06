@@ -38,8 +38,9 @@ ServerManager
 	proc
 		createLogger()
 			logger = log4dm.getLogger("log")
-			var/time = time2text(world.realtime, "YYYY.MM.DD")
-			logger.htmlFileConfig("./data/logs/[time].html") // Set up a generic HTML file appender.
+			var/Layout/HTMLLayout/html_layout = new()
+			var/Appender/FileAppender/DailyFileAppender/appender = new(html_layout, "./data/logs")
+			logger.addAppender(appender)
 
 			log4dm.startLogging()
 
