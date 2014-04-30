@@ -17,6 +17,7 @@ ServerManager
 	New()
 		server_manager = src
 		createLogger()
+		ban_manager.start()
 
 		if(!loadServerCfg())
 			CRASH("Failed to properly load server.cfg! Check the log file for more information.")
@@ -24,7 +25,6 @@ ServerManager
 
 		loadHome()
 		loadBot()
-		ban_manager.start()
 		global_scheduler.start()
 
 		logger.info("Created ServerManager")
