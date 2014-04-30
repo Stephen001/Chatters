@@ -25,6 +25,8 @@
 #include "src\libraries\s_smiley\s_smiley.dm"
 #include "src\libraries\text-util\global.dm"
 #include "src\libraries\text-util\text-util.dm"
+#include "src\struct\BanManager.dm"
+#include "src\struct\BanPersistence.dm"
 #include "src\struct\Bot.dm"
 #include "src\struct\Channel.dm"
 #include "src\struct\chatter.dm"

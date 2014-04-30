@@ -11,6 +11,7 @@ ServerManager
 			Logger/logger     = null
 			EventScheduler/global_scheduler = new()
 			ChatterPersistenceHandler/persistenceHandler = new/ChatterPersistenceHandler/Fallback()
+			BanManager/ban_manager = new()
 			Geolocator/geolocator = null
 
 	New()
@@ -47,8 +48,6 @@ ServerManager
 		saveHome(Channel/Chan)
 			var/savefile/S = new("./data/server_home.sav")
 
-			S["mute"]		<< home.mute
-			S["banned"]		<< home.banned
 			S["operators"]  << home.operators
 			S["topic"]      << home.topic
 
@@ -60,12 +59,6 @@ ServerManager
 				var
 					savefile/S = new("./data/server_home.sav")
 					list/temp = null
-
-				S["mute"] >> temp
-				if(length(temp)) home.mute |= temp
-
-				S["banned"]	>> temp
-				if(length(temp)) home.banned |= temp
 
 				S["operators"] >> temp
 				if(length(temp)) home.operators |= temp
@@ -141,14 +134,12 @@ ServerManager
 				home = new(list("name" = chan_name, "topic" = chan_topic))
 
 				if(length(mute_list))
-					home.mute = new
 					for(var/i in mute_list)
-						home.mute += ckey(i)
+						server_manager.ban_manager.mute(ckey(i))
 
 				if(length(ban_list))
-					home.banned = new
 					for(var/i in ban_list)
-						home.banned += ckey(i)
+						server_manager.ban_manager.ban(ckey(i))
 
 				if(length(op_list))
 					home.operators = list()

@@ -239,7 +239,7 @@ mob
 				for(var/mob/chatter/C in server_manager.home.chatters)
 					var/n = C.key
 					if(C.afk) n += " (afk)"
-					if(C.ckey in server_manager.home.mute) n += " (muted)"
+					if(server_manager.ban_manager.isMuted(C.ckey)) n += " (muted)"
 					if(C.ckey in ignoring) n += " (ignored)"
 					names += n
 
@@ -272,11 +272,13 @@ mob
 				if(length(server_manager.home.operators)) server_manager.bot.say("The channel operators are: [textutil.list2text(server_manager.home.operators, ", ")]", src)
 
 			listBanned()
-				if(length(server_manager.home.banned)) server_manager.bot.say("The following users are banned: [textutil.list2text(server_manager.home.banned, ", ")]", src)
+				var/list/banned = server_manager.ban_manager.getAllBanned()
+				if(length(banned)) server_manager.bot.say("The following users are banned: [textutil.list2text(banned, ", ")]", src)
 				else server_manager.bot.say("There are no users currently banned.", src)
 
 			listMuted()
-				if(length(server_manager.home.mute)) server_manager.bot.say("The following users are muted: [textutil.list2text(server_manager.home.mute, ", ")]", src)
+				var/list/muted= server_manager.ban_manager.getAllMuted()
+				if(length(muted)) server_manager.bot.say("The following users are muted: [textutil.list2text(muted, ", ")]", src)
 				else server_manager.bot.say("There are no users currently muted.", src)
 
 			settings()
@@ -891,12 +893,10 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				if(!server_manager.home.mute) server_manager.home.mute = list()
-
 				if(!(ckey(target) in server_manager.home.operators))
-					if(!(ckey(target) in server_manager.home.mute))
+					if(!server_manager.ban_manager.isMuted(ckey(target)))
+						server_manager.ban_manager.mute(ckey(target))
 						server_manager.bot.say("[target] has been muted by \[b][name]\[/b].")
-						server_manager.home.mute += ckey(target)
 						server_manager.home.updateWho()
 
 					else server_manager.bot.say("[target] is already mute.", src)
@@ -914,11 +914,10 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				if(!server_manager.home.mute) server_manager.home.mute = new
 				if(!(ckey(target) in server_manager.home.operators))
-					if(ckey(target) in server_manager.home.mute)
+					if(server_manager.ban_manager.isMuted(ckey(target)))
+						server_manager.ban_manager.unmute(ckey(target))
 						server_manager.bot.say("[target] has been unmuted by \[b][name]\[/b].")
-						server_manager.home.mute -= ckey(target)
 						server_manager.home.updateWho()
 
 					else server_manager.bot.say("[target] is not muted.", src)
@@ -973,10 +972,8 @@ mob
 					server_manager.bot.say("You cannot ban an operator.", src)
 					return
 
-				if(!server_manager.home.banned) server_manager.home.banned = list()
-
 				server_manager.bot.say("[target] has been banned by \[b][name]\[/b].")
-				server_manager.home.banned += ckey(target)
+				server_manager.ban_manager.ban(ckey(target))
 
 				server_manager.logger.info("[key] banned [target].")
 
@@ -998,9 +995,9 @@ mob
 					server_manager.bot.say("You do not have access to this command.", src)
 					return
 
-				if(ckey(target) in server_manager.home.banned)
+				if(server_manager.ban_manager.isBanned(ckey(target)))
 					server_manager.bot.say("[target] has been unbanned by \[b][name]\[/b].")
-					server_manager.home.banned -= ckey(target)
+					server_manager.ban_manager.unban(ckey(target))
 
 				server_manager.logger.info("[key] unbanned [target].")
 

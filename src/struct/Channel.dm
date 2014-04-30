@@ -7,8 +7,6 @@ Channel
 		list
 			chatters = list()
 			operators = list()
-			mute = list()
-			banned = list()
 			snippets = list()
 
 	New(params[])
@@ -133,7 +131,7 @@ Channel
 								c.icon_state = "active"
 								winset(C, "who.grid", "style='body{color:[c.name_color];font-weight:bold}'")
 
-							else if(c.ckey in server_manager.home.mute)
+							else if(server_manager.ban_manager.isMuted(c.ckey))
 								c.icon_state = "active"
 								winset(C, "who.grid", "style='body{color:[c.name_color];text-decoration:line-through;}'")
 
@@ -320,21 +318,20 @@ Channel
 			C.away_at = null
 
 		isMute(mob/chatter/M)
-			if(mute && length(mute))
-				var/search = ""
+			var/search = ""
 
-				if(istext(M)) search = ckey(M)
-				else if(ismob(M)) search = M.ckey
-				else return 1
+			if(istext(M)) search = ckey(M)
+			else if(ismob(M)) search = M.ckey
+			else return 1
 
-				if(textutil.hasPrefix(search, "guest")) if("guest" in mute) return 1
-				else if(search in mute) return 1
+			if(textutil.hasPrefix(search, "guest")) if(server_manager.ban_manager.isMuted("guest")) return 1
+			else if(server_manager.ban_manager.isMuted("search")) return 1
 
-				if(textutil.hasPrefix(search, "telnet")) if("telnet" in mute) return 1
-				else if(search in mute) return 1
+			if(textutil.hasPrefix(search, "telnet")) if(server_manager.ban_manager.isMuted("telnet")) return 1
+			else if(server_manager.ban_manager.isMuted("search")) return 1
 
 		isBanned(mob/chatter/M)
-			if(M.ckey in banned) return 1
+			if(server_manager.ban_manager.isBanned(M.ckey)) return 1
 			else
 				var/search = ""
 
@@ -342,11 +339,11 @@ Channel
 				else if(ismob(M)) search = M.ckey
 				else return 1
 
-				if(textutil.hasPrefix(search, "guest")) if("guest" in banned) return 1
-				else if(search in banned) return 1
+				if(textutil.hasPrefix(search, "guest")) if(server_manager.ban_manager.isBanned("guest")) return 1
+				else if(server_manager.ban_manager.isBanned(search)) return 1
 
-				if(textutil.hasPrefix(search, "telnet")) if("telnet" in banned) return 1
-				else if(search in banned) return 1
+				if(textutil.hasPrefix(search, "telnet")) if(server_manager.ban_manager.isBanned("telnet")) return 1
+				else if(server_manager.ban_manager.isBanned(search)) return 1
 
 				var/TrackerEntry/entry
 
@@ -355,5 +352,5 @@ Channel
 
 				if(entry)
 					for(var/ck in entry.ckeys)
-						if(ckey(ck) in banned)
+						if(server_manager.ban_manager.isBanned(ckey(ck)))
 							return 1
