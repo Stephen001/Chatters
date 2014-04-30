@@ -2,6 +2,12 @@ BanManager
 	var/BanPersistence/banDB = new/BanPersistence/Savefile(new/savefile("data/bans.sav"))
 
 	proc
+		start()
+			banDB.start()
+
+		stop()
+			banDB.stop()
+
 		isBanned(var/T as text)
 			return banDB.isBanned(T)
 

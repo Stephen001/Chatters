@@ -325,10 +325,10 @@ Channel
 			else return 1
 
 			if(textutil.hasPrefix(search, "guest")) if(server_manager.ban_manager.isMuted("guest")) return 1
-			else if(server_manager.ban_manager.isMuted("search")) return 1
+			else if(server_manager.ban_manager.isMuted(search)) return 1
 
 			if(textutil.hasPrefix(search, "telnet")) if(server_manager.ban_manager.isMuted("telnet")) return 1
-			else if(server_manager.ban_manager.isMuted("search")) return 1
+			else if(server_manager.ban_manager.isMuted(search)) return 1
 
 		isBanned(mob/chatter/M)
 			if(server_manager.ban_manager.isBanned(M.ckey)) return 1

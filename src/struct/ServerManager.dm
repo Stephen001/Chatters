@@ -24,12 +24,14 @@ ServerManager
 
 		loadHome()
 		loadBot()
+		ban_manager.start()
 		global_scheduler.start()
 
 		logger.info("Created ServerManager")
 
 	Del()
 		global_scheduler.stop()
+		ban_manager.stop()
 		saveHome()
 		saveBot()
 

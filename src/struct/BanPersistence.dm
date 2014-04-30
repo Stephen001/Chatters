@@ -1,9 +1,17 @@
 BanPersistence
 	var
-		list/banned = new()
-		list/muted  = new()
+		list/banned
+		list/muted
 
 	proc
+		start()
+			src.banned = new()
+			src.muted = new()
+
+		stop()
+			src.banned = null
+			src.muted = null
+
 		isBanned(var/C as text)
 			return (C in src.banned)
 
@@ -41,6 +49,8 @@ BanPersistence
 
 		New(var/savefile/F)
 			src.database = F
+
+		start()
 			src.database["banned"] >> src.banned
 			if (isnull(src.banned))
 				src.banned = new()
@@ -48,9 +58,10 @@ BanPersistence
 			if (isnull(src.muted))
 				src.muted = new()
 
-		Del()
+		stop()
 			src.database["banned"] << src.banned
 			src.database["muted"] << src.muted
+			sleep(10) // We need this to let the save go through.
 			..()
 
 		ban(var/C as text)
