@@ -42,7 +42,11 @@ BanPersistence
 		New(var/savefile/F)
 			src.database = F
 			src.database["banned"] >> src.banned
+			if (isnull(src.banned))
+				src.banned = new()
 			src.database["muted"] >> src.muted
+			if (isnull(src.muted))
+				src.muted = new()
 
 		Del()
 			src.database["banned"] << src.banned
