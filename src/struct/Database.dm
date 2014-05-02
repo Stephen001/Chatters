@@ -55,38 +55,60 @@ Database
 
 		select(var/text)
 			var/list/results = new()
+			var/attempt = 0
 			if (src.isConnected())
-				server_manager.logger.trace("Selecting: [text]")
-				var/DBQuery/query = src.connection.NewQuery(text)
-				if (query.Execute())
-					while (query.NextRow())
-						var/result = query.GetRowData()
-						server_manager.logger.trace("Select results: [list2params(result)]")
-						for(var/key in result)
-							var/list/L = results["[key]"]
-							if (isnull(L))
-								L = list()
-								results["[key]"] = L
-							L += result["[key]"]
-				else
-					server_manager.logger.error("Error: [query.ErrorMsg()]")
-				query.Close()
-				server_manager.logger.trace("[length(results)] rows from select")
+				while (attempt < 5)
+					server_manager.logger.trace("Selecting: [text]")
+					var/DBQuery/query = src.connection.NewQuery(text)
+					if (query.Execute())
+						while (query.NextRow())
+							var/result = query.GetRowData()
+							server_manager.logger.trace("Select results: [list2params(result)]")
+							for(var/key in result)
+								var/list/L = results["[key]"]
+								if (isnull(L))
+									L = list()
+									results["[key]"] = L
+								L += result["[key]"]
+						server_manager.logger.trace("[length(results)] rows from select")
+						query.Close()
+						break
+					else
+						server_manager.logger.error("Error: [query.ErrorMsg()]")
+						if (query.ErrorMsg() != "MySQL server has gone away")
+							query.Close()
+							break
+						src.connection = null
+						src.connect()
+						attempt++
+					query.Close()
 			return results
 
 		singleSelect(var/text)
+			var/attempt = 0
 			if (src.isConnected())
-				server_manager.logger.trace("Single selecting: [text]")
-				var/DBQuery/query = src.connection.NewQuery(text)
-				if (query.Execute())
-					if (query.NextRow())
-						var/result = query.GetRowData()
-						server_manager.logger.trace("Single select results: [list2params(result)]")
-						return result
-				else
-					server_manager.logger.error("Error: [query.ErrorMsg()]")
-				query.Close()
-				server_manager.logger.trace("No result from single select")
+				while (attempt < 5)
+					server_manager.logger.trace("Single selecting: [text]")
+					var/DBQuery/query = src.connection.NewQuery(text)
+					if (query.Execute())
+						if (query.NextRow())
+							var/result = query.GetRowData()
+							server_manager.logger.trace("Single select results: [list2params(result)]")
+							query.Close()
+							return result
+						else
+							server_manager.logger.trace("No result from single select")
+							query.Close()
+							return null
+					else
+						server_manager.logger.error("Error: [query.ErrorMsg()]")
+						if (query.ErrorMsg() != "MySQL server has gone away")
+							query.Close()
+							break
+						src.connection = null
+						src.connect()
+						attempt++
+					query.Close()
 			return null
 
 		sendUpdate(var/text)
