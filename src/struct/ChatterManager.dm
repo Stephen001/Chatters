@@ -119,3 +119,4 @@ Event/Timer/Watchdog
 		if (C && C.client)
 			..()
 			winget(C, "main", "is-visible")
+			server_manager.logger.trace("Watchdog fired for [C.key]")

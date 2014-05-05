@@ -66,6 +66,10 @@ mob
 				winshow(src, "settings", 0)
 
 				refreshAllSettings()
+				if (watchdog)
+					server_manager.global_scheduler.cancel(watchdog)
+				watchdog = new(server_manager.global_scheduler, src)
+				server_manager.global_scheduler.schedule(watchdog, 600)
 
 				spawn() inactivityLoop()
 
