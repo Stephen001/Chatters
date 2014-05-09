@@ -6,7 +6,6 @@ ServerManager
 		Bot/bot
 
 		tmp
-			qotd_current = 1
 			Database/database = null
 			Logger/logger     = null
 			EventScheduler/global_scheduler = new()
