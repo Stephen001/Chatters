@@ -19,7 +19,7 @@ QuoteManager
 
 	proc
 		loadQuotes()
-			if (length(quotes))
+			if (!length(quotes))
 				server_manager.logger.info("Loading quote(s) from quotes.txt.")
 				if(fexists("./data/quotes.txt"))
 					quotes = list()
