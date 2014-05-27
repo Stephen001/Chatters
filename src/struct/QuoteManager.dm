@@ -1,7 +1,12 @@
 QuoteManager
 	New()
 		quote_changer_event = new(server_manager.global_scheduler)
-		server_manager.global_scheduler.schedule(quote_changer_event, 864000)
+		// server_manager.global_scheduler.schedule(quote_changer_event, 864000)
+		// TODO: Debug the scheduler issue that loses events sometimes.
+		spawn(864000)
+			while(src)
+				src.set_new_quote()
+				sleep(864000)
 
 		server_manager.logger.info("Created QuoteManager.")
 

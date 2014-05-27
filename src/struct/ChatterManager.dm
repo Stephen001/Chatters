@@ -48,7 +48,13 @@ ChatterManager
 				save(C) // This offers the ability to save to new mediums on login, like DBs.
 				if(server_manager)
 					C.watchdog = new(server_manager.global_scheduler, C)
-					server_manager.global_scheduler.schedule(C.watchdog, 600)
+					// server_manager.global_scheduler.schedule(C.watchdog, 600)
+					// TODO: Debug the scheduler issue that loses events sometimes.
+					spawn(600)
+						while(C && C.client)
+							winget(C, "main", "is-visible")
+							sleep(600)
+
 
 		// Tests if the key is a telnet key eg: Telnet @127.000.000.001
 		isTelnet(key)
