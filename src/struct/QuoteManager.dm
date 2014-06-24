@@ -65,9 +65,10 @@ QuoteManager
 
 		set_new_quote()
 			if (length(quotes))
-				if (qotd_current >= length(quotes) || !qotd_current)
+				if (qotd_current >= length(quotes) || qotd_current < 1)
 					qotd_current = 1
-
+				else
+					qotd_current++
 			else
 				qotd_current = 0
 			server_manager.logger.info("QuoteManager set current quote number to [qotd_current] of [length(quotes)].")
