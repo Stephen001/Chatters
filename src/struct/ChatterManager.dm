@@ -18,7 +18,19 @@ ChatterManager
 					// This is a private message they are not allowed to view.
 					return
 
-				else usr << browse(snippet.getContent(trg, 1), "window=showcontent_[snippet.id];display=1;size=800x500;border=1;can_close=1;can_resize=1;titlebar=1")
+				else 	
+					// To make sure the popup doesn't appear offscreen, move it somewhere.
+					// e.g. centered with the default window like it should do by default. 
+					var params = params2list(winget(usr, "default;[window_id]", "pos;size"))
+					var x = text2num(params["default.pos"])
+					var y = text2num(copytext(params["default.pos"], length("[x]") + 2))
+					var width1 = text2num(params["default.size"])
+					var height1 = text2num(copytext(params["default.size"], length("[width1]") + 2))
+					var width2 = text2num(params["[window_id].size"])
+					var height2 = text2num(copytext(params["[window_id].size"], length("[width2]") + 2))
+					var new_x = x + (width1 - width2) / 2
+					var new_y = y + (height1 - height2) / 2
+					winset(src, window_id, "pos=[new_x],[new_y]")
 
 			if("tracker_viewckey")
 				if(trg && trg.ckey in server_manager.home.operators)
